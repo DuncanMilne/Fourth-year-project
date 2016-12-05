@@ -2,7 +2,7 @@
 m lines each of the following type:
 <project ID> <capacity>
 n lines each of the following type:
-<student ID> : <pref 1> <pref 2> <pref 3> ...
+<student ID> : <pref 1> <pref 2> <pref 3> ... #TODO add capacity
 q lines each of the following type:
 <lecturer ID> : <capacity> : <pref 1> <pref 2> <pref 3> ...
 now follows lines of an optional matching

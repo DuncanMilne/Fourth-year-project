@@ -7,6 +7,8 @@ public class Project {
 
 	ArrayList<Student> currentlyAssignedStudents;
 
+	ArrayList<Student> currentlyAssignedPromotedStudents;
+
 	int capacity;
 
 
@@ -21,6 +23,6 @@ public class Project {
 		this.name = name;
 		this.capacity = capacity;
 		currentlyAssignedStudents = new ArrayList<Student>();
-		//could make capacity random int between 1-3
+		currentlyAssignedPromotedStudents = new ArrayList<Student>();
 	}
 }

@@ -17,9 +17,19 @@ public class Student {
 	//personal details
 	String name;
 
+	// applicable to Spa P Approx Promotion only
+	boolean promoted;
+
 	public Student(String name) {
 		rankingListTracker = 0;
 		this.name = name;
-		this.preferenceList = new ArrayList<Project>();
+		promoted = false;
+		preferenceList = new ArrayList<Project>();
+	}
+
+	public void promote() {
+		promoted = true;
+		preferenceList = new ArrayList<Project>(untouchedPreferenceList);
+		rankingListTracker = 0;
 	}
 }

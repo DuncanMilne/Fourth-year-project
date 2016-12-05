@@ -129,6 +129,56 @@ public class Algorithm {
 		}
 	}
 
+	protected void spaPApproxPromotion() {
+		// while there exists an unassigned student that has a non empty list of is unpromoted.
+		// Simply check when adding back to unassigned if their list is non empty or if they are unpromoted. If unpromoted, promote them and re-add all items to their list
+		// otherwise add them to projectless
+
+		Project studentsFirstProject;
+		Lecturer firstProjectsLecturer;
+		Student currentStudent;
+		int currentIndex; // used to locate students favourite 	project
+		boolean wasStudentPromoted;
+		Project lecturersWorstNonEmptyProject;
+		Random randomStudent = new Random();
+		while (!unassignedStudents.isEmpty()) {
+			lecturersWorstNonEmptyProject = emptyProject;
+			currentStudent = unassignedStudents.get(randomStudent.nextInt(unassignedStudents.size()));
+			wasStudentPromoted = false;
+			if (currentStudent.rankingListTracker == -1) { // if currentstudent has empty preference list and is not promoted
+				if (!currentStudent.promoted){
+					currentStudent.promote();
+				} else {
+					unassignedStudents.remove(currentStudent);
+					projectlessStudents.add(currentStudent);
+					wasStudentPromoted = true;
+				}
+			}
+			if (!wasStudentPromoted) { // used to ignore function runthrough if we promote the student
+				currentIndex = currentStudent.rankingListTracker;
+				studentsFirstProject = currentStudent.preferenceList.get(currentIndex);
+				firstProjectsLecturer = studentsFirstProject.lecturer;
+				if (firstProjectsLecturer.numberOfAssignees != 0) {
+					lecturersWorstNonEmptyProject = firstProjectsLecturer.projectList.get(firstProjectsLecturer.projectList.size() - 1); //initially set it to worst project
+				}
+				if (lecturersWorstNonEmptyProject!= emptyProject && ((studentsFirstProject.currentlyAssignedStudents.size() +studentsFirstProject.currentlyAssignedPromotedStudents.size()) == studentsFirstProject.capacity || (firstProjectsLecturer.numberOfAssignees == firstProjectsLecturer.capacity && lecturersWorstNonEmptyProject == studentsFirstProject))){  //do check for if empty project, if empty project then lecturer has no worst non empty project
+					// if student is unpromoted or there is no unpromoted student assigned to studentsFirstProject
+					if (!currentStudent.promoted || studentsFirstProject.currentlyAssignedStudents.size()==0){
+						// reject student
+					} else {
+						// get random unpromoted student from currently assigned students
+						Student removeStudent = studentsFirstProject.currentlyAssignedStudents.get(randomStudent.nextInt(studentsFirstProject.currentlyAssignedStudents.size()));
+						assignedStudents.remove(removeStudent);
+						unassignedStudents.add(removeStudent);
+						studentsFirstProject.currentlyAssignedPromotedStudents.add(currentStudent);
+					}
+				}
+			} else {   // line 16 in pseudo code. Start from here tomorrow
+
+			}
+		}
+	}
+
 	protected void findNextFavouriteProject(Student currentStudent) {
 		int max = -1;
 		for (int k = 0; k < currentStudent.rankingList.length; k++) { 	//always iterates over students full ranking list
