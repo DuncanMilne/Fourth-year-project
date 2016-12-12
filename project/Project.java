@@ -16,6 +16,7 @@ public class Project {
 		this.name = name;
 		this.capacity = 1;
 		currentlyAssignedStudents = new ArrayList<Student>();
+		currentlyAssignedPromotedStudents = new ArrayList<Student>();
 		//could make capacity random int between 1-3
 	}
 

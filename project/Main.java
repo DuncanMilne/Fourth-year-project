@@ -153,7 +153,7 @@ public class Main {
   }
 
   static void go(int[] arguments) {
-      algorithm = new Algorithm();
+      Approx algorithm = new Approx();
 
       populate(arguments); // args0 is number of students to generate
       assignCapacity(arguments[3], arguments[4]);	//assigns capacity to the projects, args are lecturer capacity and project capacity
