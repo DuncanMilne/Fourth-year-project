@@ -8,72 +8,72 @@ public class Approx extends Algorithm{
 
   protected void assignProjectsToStudents() {
 
-		//could use random value to randomise which student in unassignedStudents we use
+		//could use random value to randomise which student in unassigned we use
 		Project studentsFirstProject;
-		Lecturer firstProjectsLecturer;
+		Lecturer fPL;
 		Project lecturersWorstNonEmptyProject;
-		Student currentStudent;
+		Student student;
 		Project redundantProject;
 		int currentIndex; // used to locate students favourite 	project
 		Random randomStudent = new Random();
-		while (!unassignedStudents.isEmpty()) {
-			currentStudent = unassignedStudents.get(randomStudent.nextInt(unassignedStudents.size()));
-			currentIndex = currentStudent.rankingListTracker;
-			studentsFirstProject = currentStudent.preferenceList.get(currentIndex);
-			firstProjectsLecturer = studentsFirstProject.lecturer;
-			lecturersWorstNonEmptyProject = firstProjectsLecturer.projectList.get(firstProjectsLecturer.projectList.size() - 1); //initially set it to worst project
-			if (firstProjectsLecturer.numberOfAssignees != 0) {
+		while (!unassigned.isEmpty()) {
+			student = unassigned.get(randomStudent.nextInt(unassigned.size()));
+			currentIndex = student.rankingListTracker;
+			studentsFirstProject = student.preferenceList.get(currentIndex);
+			fPL = studentsFirstProject.lecturer;
+			lecturersWorstNonEmptyProject = fPL.projects.get(fPL.projects.size() - 1); //initially set it to worst project
+			if (fPL.assigned != 0) {
 				//iterate over all lecturers projects backwards to find worst nonEmptyProject
-				lecturersWorstNonEmptyProject = lecturersWorstNonEmptyProject(firstProjectsLecturer, lecturersWorstNonEmptyProject);
+				lecturersWorstNonEmptyProject = lecturersWorstNonEmptyProject(fPL, lecturersWorstNonEmptyProject);
 			}
 
 			// if project is full || lecturer is full and this is lecturers worst project
-			if (studentsFirstProject.currentlyAssignedStudents.size() == studentsFirstProject.capacity || (firstProjectsLecturer.numberOfAssignees == firstProjectsLecturer.capacity && lecturersWorstNonEmptyProject == studentsFirstProject)) {
-				currentStudent.preferenceList.set(currentIndex, emptyProject);
-				findNextFavouriteProject(currentStudent);
+			if (studentsFirstProject.unpromoted.size() == studentsFirstProject.capacity || (fPL.assigned == fPL.capacity && lecturersWorstNonEmptyProject == studentsFirstProject)) {
+				student.preferenceList.set(currentIndex, emptyProject);
+				findNextFavouriteProject(student);
 			} else {
 				// get lecturersWorstNonEmptyProject and remove random student from this
-				int indexOfWorstNonEmptyProject= firstProjectsLecturer.projectList.size() - 1;
-				lecturersWorstNonEmptyProject = lecturersWorstNonEmptyProject(firstProjectsLecturer, lecturersWorstNonEmptyProject);
+				int indexOfWorstNonEmptyProject= fPL.projects.size() - 1;
+				lecturersWorstNonEmptyProject = lecturersWorstNonEmptyProject(fPL, lecturersWorstNonEmptyProject);
 
 				// temporarily set project as students assigned project
-				currentStudent.currentlyAssignedProject = studentsFirstProject;
-				studentsFirstProject.currentlyAssignedStudents.add(currentStudent);
-				assignedStudents.add(currentStudent);
-				unassignedStudents.remove(currentStudent);
-				firstProjectsLecturer.numberOfAssignees++;
+				student.proj = studentsFirstProject;
+				studentsFirstProject.unpromoted.add(student);
+				assignedStudents.add(student);
+				unassigned.remove(student);
+				fPL.assigned++;
 
-				if (firstProjectsLecturer.numberOfAssignees > firstProjectsLecturer.capacity) {
+				if (fPL.assigned > fPL.capacity) {
 					Random random = new Random();
-					int removeInt = random.nextInt((lecturersWorstNonEmptyProject.currentlyAssignedStudents.size()));
+					int removeInt = random.nextInt((lecturersWorstNonEmptyProject.unpromoted.size()));
 					if (removeInt != 0) {
 						removeInt--; // allows access to each student
 					}
 					// remove a random student from the lecturersWorstNonEmptyProject
-					Student removeStudent = lecturersWorstNonEmptyProject.currentlyAssignedStudents.get(removeInt);
-					lecturersWorstNonEmptyProject.currentlyAssignedStudents.remove(removeStudent);
-					removeStudent.currentlyAssignedProject = null;
+					Student removeStudent = lecturersWorstNonEmptyProject.unpromoted.get(removeInt);
+					lecturersWorstNonEmptyProject.unpromoted.remove(removeStudent);
+					removeStudent.proj = null;
 
 					removeStudent.preferenceList.set(removeStudent.preferenceList.indexOf(lecturersWorstNonEmptyProject), emptyProject);
 
 					findNextFavouriteProject(removeStudent);
 
 					if (removeStudent.rankingListTracker != -1){	//if they dont only have rejected projects
-						unassignedStudents.add(removeStudent);
+						unassigned.add(removeStudent);
 					}
 
 					assignedStudents.remove(removeStudent);
-					firstProjectsLecturer.numberOfAssignees--;
+					fPL.assigned--;
 				}
 
-				if (firstProjectsLecturer.capacity == firstProjectsLecturer.numberOfAssignees) {
+				if (fPL.capacity == fPL.assigned) {
 					//every project that lecturer prefers worstnonemptyproject to
 					//delete project from all students list
 
-					for (int i = (firstProjectsLecturer.projectList.indexOf(lecturersWorstNonEmptyProject)+1); i < firstProjectsLecturer.projectList.size(); i++){
-						redundantProject = firstProjectsLecturer.projectList.get(i);
+					for (int i = (fPL.projects.indexOf(lecturersWorstNonEmptyProject)+1); i < fPL.projects.size(); i++){
+						redundantProject = fPL.projects.get(i);
 						// for each student remove from their preferenceList if they have it
-						for (Student s:unassignedStudents) {
+						for (Student s:unassigned) {
 								// remove this and use ranking lists
 								// causing concurrent modification access error
 								// so have to track location of redundant project and remove it after
@@ -87,7 +87,7 @@ public class Approx extends Algorithm{
 									findNextFavouriteProject(s);
 								}
 						}
-						for (Student s:unassignedStudents) {
+						for (Student s:unassigned) {
 								// causing concurrent modification access error
 								// so have to track location of redundant project and remove it after
 								int location = -1;

@@ -19,7 +19,7 @@ public class StabilityChecker {
       rLT = s.rankingList[s.rankingListTracker];
       for (int p = 0; p < s.rankingList.length; p++) {
           if (s.rankingList[p] < rLT && s.preferenceList.get(p) != emptyProject) { //if student prefers this project and the project is not empty and
-            for (Student x:s.preferenceList.get(p).currentlyAssignedStudents) {	 // make di edge from current student to all currently assigned
+            for (Student x:s.preferenceList.get(p).unpromoted) {	 // make di edge from current student to all currently assigned
               digraph.add(s, x);
             }
         }
@@ -47,11 +47,11 @@ public class StabilityChecker {
       for (int p = 0; p < s.rankingList.length; p++) {
         if (s.rankingList[p] < rLT && s.preferenceList.get(p) != emptyProject && s.rankingListTracker != p) { //finds all preferred projects by student
           currentProj = s.preferenceList.get(p);
-          if (currentProj.capacity != currentProj.currentlyAssignedStudents.size()){
-            if (currentProj.lecturer.capacity == currentProj.lecturer.numberOfAssignees) {
+          if (currentProj.capacity != currentProj.unpromoted.size()){
+            if (currentProj.lecturer.capacity == currentProj.lecturer.assigned) {
               //currently just use location in lecturers list of projects to determine which they prefers #TODO FIX
               lecturersWorstNonEmptyProject = Algorithm.lecturersWorstNonEmptyProject(currentProj.lecturer, currentProj);
-              if (currentProj.lecturer.projectList.indexOf(currentProj) < currentProj.lecturer.projectList.indexOf(lecturersWorstNonEmptyProject)) {
+              if (currentProj.lecturer.projects.indexOf(currentProj) < currentProj.lecturer.projects.indexOf(lecturersWorstNonEmptyProject)) {
                 System.out.println("ERROR: Assigned student with full teacher who prefers this project");
                 algorithm.printInstance();
               }
@@ -73,16 +73,15 @@ public class StabilityChecker {
       Project lecturersWorstNonEmptyProject=null;
 
       int rLT; // finds rating of current project
-      Project emptyProject= new Project("empty");
   		for (Student s:unassignedStudents) {
   			for (int p = 0; p<s.preferenceList.size(); p++)
-  				if (s.preferenceList.get(p) != emptyProject) {
+  				if (s.preferenceList.get(p) != algorithm.   emptyProject) {
   					currentProj = s.preferenceList.get(p);
-  					if (currentProj.lecturer.capacity == currentProj.lecturer.numberOfAssignees) {
+  					if (currentProj.lecturer.capacity == currentProj.lecturer.assigned) {
   						//currently just use location in lecturers list of projects to determine which they prefers #TODO FIX
               lecturersWorstNonEmptyProject = Algorithm.lecturersWorstNonEmptyProject(currentProj.lecturer, currentProj);
 
-  						if (currentProj.lecturer.projectList.indexOf(currentProj) < currentProj.lecturer.projectList.indexOf(lecturersWorstNonEmptyProject)) {
+  						if (currentProj.lecturer.projects.indexOf(currentProj) < currentProj.lecturer.projects.indexOf(lecturersWorstNonEmptyProject)) {
 
   							System.out.println("ERROR: unassigned student with full teacher who prefers this project");
                 algorithm.printInstance();

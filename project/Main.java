@@ -27,9 +27,9 @@ public class Main {
     if (!choice.equals("x")) {
       algorithm = instanceGenerator(choice);
       createRankingLists();
-      algorithm.s.stabilityChecker(algorithm.assignedStudents, algorithm.unassignedStudents, algorithm.emptyProject);
+      algorithm.s.stabilityChecker(algorithm.assignedStudents, algorithm.unassigned, algorithm.emptyProject);
       algorithm.s.checkAssignedStudentsForBlockingPairs(algorithm.assignedStudents);
-      algorithm.s.checkUnassignedStudentsForBlockingPairs(algorithm.unassignedStudents);
+      algorithm.s.checkUnassignedStudentsForBlockingPairs(algorithm.unassigned);
     } else {
       // Done so we know what the arguments actually do
       System.out.print("Enter how many instances you would like to generate ");
@@ -69,7 +69,7 @@ public class Main {
 
       int i = 0;
       while (i<numberOfInstances) {
-        go(arguments);
+        go(arguments, args[0]);
         i++;
       }
     }
@@ -98,7 +98,7 @@ public class Main {
       for(int i = 0; i < numStudents; i++) {
         splitted = br.readLine().split(" "); // get each student
         currentStudent = new Student(splitted[0].substring(0, splitted[0].length()-1));
-        algorithm.unassignedStudents.add(currentStudent); // creates student with new name
+        algorithm.unassigned.add(currentStudent); // creates student with new name
         untouchedStudent =  new Student(splitted[0].substring(0, splitted[0].length()-1));
         algorithm.untouchedStudents.add(untouchedStudent); // creates student with new name
 
@@ -120,7 +120,7 @@ public class Main {
         currentLecturer = new Lecturer(splitted[0].substring(0, splitted[0].length()-1), Integer.parseInt(splitted[1].substring(0, splitted[0].length()-1)));
         algorithm.testLecturers.add(currentLecturer);
         for (int j = 2; j < splitted.length; j++) {
-          currentLecturer.projectList.add(algorithm.testProjects.get(Integer.parseInt(splitted[j].replace(":", ""))-1));
+          currentLecturer.projects.add(algorithm.testProjects.get(Integer.parseInt(splitted[j].replace(":", ""))-1));
           algorithm.testProjects.get(Integer.parseInt(splitted[j])-1).lecturer = currentLecturer;
         }
       }
@@ -133,18 +133,18 @@ public class Main {
       // #TODO if there are matches edit currentstudents rankinglIst
       while ((line = br.readLine()) != null) {
         splitted = line.split(",");
-        currentStudent = algorithm.unassignedStudents.get(Integer.parseInt(splitted[0].substring(1, splitted[0].length())) - 1);
+        currentStudent = algorithm.unassigned.get(Integer.parseInt(splitted[0].substring(1, splitted[0].length())) - 1);
         toBeRemoved.add(currentStudent);
         projectNumber = Integer.parseInt(splitted[1].substring(0, splitted[0].length()-1))-1;
         projectNumber = currentStudent.preferenceList.indexOf(algorithm.testProjects.get(projectNumber)); // get index of project in students pref list
         matchingProject = algorithm.testProjects.get(projectNumber);
-        currentStudent.currentlyAssignedProject = matchingProject;
+        currentStudent.proj = matchingProject;
         currentStudent.rankingListTracker = projectNumber;    // for stability checking purposes
-        matchingProject.currentlyAssignedStudents.add(currentStudent);
-        matchingProject.lecturer.numberOfAssignees++;
+        matchingProject.unpromoted.add(currentStudent);
+        matchingProject.lecturer.assigned++;
       }
       algorithm.assignedStudents.addAll(toBeRemoved);
-      algorithm.unassignedStudents.removeAll(toBeRemoved);
+      algorithm.unassigned.removeAll(toBeRemoved);
 
     } catch (Exception e) {
       System.out.println("Type of error: " + e.getClass().getName() + " Error message: " + e.getMessage());
@@ -152,16 +152,21 @@ public class Main {
     return algorithm;
   }
 
-  static void go(int[] arguments) {
-      Approx algorithm = new Approx();
-
+  static void go(int[] arguments, String promotion) {
+      if (promotion.equals("promotion"))
+        algorithm = new ApproxPromotion();
+      else
+        algorithm = new Approx();
       populate(arguments); // args0 is number of students to generate
       assignCapacity(arguments[3], arguments[4]);	//assigns capacity to the projects, args are lecturer capacity and project capacity
       assignProjectsToLecturers(); // Associate project with a lecturer
+      if (promotion.equals("promotion")){
+        algorithm.spaPApproxPromotion();
+      }else {
+        algorithm.assignProjectsToStudents();
+      }
       algorithm.printInstance();
-      algorithm.assignProjectsToStudents();
-      algorithm.printInstance();
-      algorithm.s.stabilityChecker(algorithm.assignedStudents, algorithm.unassignedStudents, algorithm.emptyProject);
+      algorithm.s.stabilityChecker(algorithm.assignedStudents, algorithm.unassigned, algorithm.emptyProject);
   }
 
   static void assignCapacity(int lecturerCapacity, int projectCapacity) {
@@ -190,7 +195,7 @@ public class Main {
 
 	static void populateStudents(int numberOfStudents) {
 		for (int i = 0; i < numberOfStudents; i++){
-			algorithm.unassignedStudents.add(new Student(Integer.toString(i)));
+			algorithm.unassigned.add(new Student(Integer.toString(i)));
       algorithm.untouchedStudents.add(new Student(Integer.toString(i)));
 		}
   		// populates student preference lists
@@ -199,14 +204,14 @@ public class Main {
   		ArrayList<Project> duplicateList;
   		int rPI;
   		// need to re-add projects after a student has been assigned all his projects
-  		for (int j = 0; j <algorithm.unassignedStudents.size(); j++){ //for each projects
+  		for (int j = 0; j <algorithm.unassigned.size(); j++){ //for each projects
   			duplicateList = new ArrayList<Project>(algorithm.testProjects);
   			random = Math.random()*5;
 
   			// need to ensure we havent removed last item from duplicate list
   			for (int i = 0; i < (random + 5) && !duplicateList.isEmpty(); i++) {
   				rPI = randomProjectIndex.nextInt(duplicateList.size());
-  				algorithm.unassignedStudents.get(j).preferenceList.add(duplicateList.get(rPI));
+  				algorithm.unassigned.get(j).preferenceList.add(duplicateList.get(rPI));
   				algorithm.untouchedStudents.get(j).preferenceList.add(duplicateList.get(rPI));
   				duplicateList.remove(rPI);
   			}
@@ -231,7 +236,7 @@ public class Main {
   		Random randomProjectIndex = new Random();
   		for (int i = 0; i < algorithm.testLecturers.size() && proj.size()>0; i++) {
   			int randomInt = randomProjectIndex.nextInt(proj.size());
-  			algorithm.testLecturers.get(i).projectList.add(proj.get(randomInt));
+  			algorithm.testLecturers.get(i).projects.add(proj.get(randomInt));
   			proj.get(randomInt).lecturer = algorithm.testLecturers.get(i);
   			proj.remove(randomInt);
   		}
@@ -245,7 +250,7 @@ public class Main {
   			int randomLectInt = randomProjectIndex.nextInt(algorithm.testLecturers.size());
   			chosenProject = proj.get(randomProjInt);
   			chosenLecturer = algorithm.testLecturers.get(randomLectInt);
-  			chosenLecturer.projectList.add(chosenProject);
+  			chosenLecturer.projects.add(chosenProject);
   			chosenProject.lecturer = chosenLecturer;
   			proj.remove(randomProjInt);
   		}
@@ -253,7 +258,7 @@ public class Main {
 
     static void createRankingLists() {
 
-      for (Student s: algorithm.unassignedStudents) {
+      for (Student s: algorithm.unassigned) {
         s.rankingList = new int[s.preferenceList.size()];
         for (int i = 0; i < s.rankingList.length-1; i++) {
           s.rankingList[i] = i;  // Initially set rankings so index 0 is favourite, 1 is second favourite etc..

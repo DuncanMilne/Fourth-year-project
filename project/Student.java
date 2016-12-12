@@ -5,7 +5,7 @@ public class Student {
 
 	ArrayList<Project> preferenceList;
 	ArrayList<Project> untouchedPreferenceList;
-	Project currentlyAssignedProject;
+	Project proj;
 
 	// Used to find index of project in students preference list
 	// i.e. index 0 contains preference value for project 0 for student
