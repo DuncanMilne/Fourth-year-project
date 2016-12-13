@@ -260,7 +260,7 @@ public class Main {
 
       for (Student s: algorithm.unassigned) {
         s.rankingList = new int[s.preferenceList.size()];
-        for (int i = 0; i < s.rankingList.length-1; i++) {
+        for (int i = 0; i < s.rankingList.length; i++) {
           s.rankingList[i] = i;  // Initially set rankings so index 0 is favourite, 1 is second favourite etc..
         }
       }

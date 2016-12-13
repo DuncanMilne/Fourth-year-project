@@ -22,6 +22,7 @@ public class ApproxPromotion extends Algorithm{
       wNEP = emptyProject;
       stud = unassigned.get(randomStudent.nextInt(unassigned.size()));
       wasStudentPromoted = false;
+
       if (stud.rankingListTracker == -1) { // if stud has empty preference list and is not promoted
         if (!stud.promoted){
           stud.promote();
@@ -31,16 +32,16 @@ public class ApproxPromotion extends Algorithm{
           wasStudentPromoted = true;
         }
       }
+
       if (!wasStudentPromoted) { // used to ignore function runthrough if we promote the student
         currentIndex = stud.rankingListTracker;
         firstProj = stud.preferenceList.get(currentIndex);
         fPL = firstProj.lecturer;
-        if (fPL.assigned != 0) {
-          wNEP = fPL.projects.get(fPL.projects.size() - 1); //initially set it to worst project
-        } else {
+        int wNEPIndex;
+        if (fPL.assigned!= 0) {
           wNEP = lecturersWorstNonEmptyProject(fPL, wNEP);
         }
-        if (wNEP!= emptyProject && ((firstProj.unpromoted.size() +firstProj.promoted.size()) == firstProj.capacity || (fPL.assigned == fPL.capacity && wNEP == firstProj))){  //do check for if empty project, if empty project then lecturer has no worst non empty project
+        if (((firstProj.unpromoted.size() +firstProj.promoted.size()) == firstProj.capacity || (fPL.assigned == fPL.capacity && wNEP == firstProj))){  //do check for if empty project, if empty project then lecturer has no worst non empty project
           // if student is unpromoted or there is no unpromoted student assigned to firstProj
           if (!stud.promoted || firstProj.unpromoted.size()==0){
             // reject student
@@ -51,29 +52,45 @@ public class ApproxPromotion extends Algorithm{
             Student removeStudent = firstProj.unpromoted.get(randomStudent.nextInt(firstProj.unpromoted.size()));
             assignedStudents.remove(removeStudent);
             unassigned.add(removeStudent);
+            removeStudent.preferenceList.set(removeStudent.rankingListTracker,emptyProject); //#TODO this is probably not right, not meant to change ranking lists
+            findNextFavouriteProject(removeStudent);
             firstProj.promoted.add(stud);
           }
-        } else if (fPL.assigned == fPL.capacity && fPL.rankingList[fPL.projects.indexOf(wNEP)] < fPL.rankingList[fPL.projects.indexOf(firstProj)]){   // line 16 in pseudo code. Start from here tomorrow also try fix git.
-          // lecturer is full and prefers the worst non empty project to firstProj
-          stud.preferenceList.set(currentIndex, emptyProject);
-          findNextFavouriteProject(stud);
-          System.out.println("testestestest");
         } else {
-          stud.proj = firstProj;
-          firstProj.unpromoted.add(stud);
-          assignedStudents.add(stud);
-          unassigned.remove(stud);
-          fPL.assigned++;
-
-          // if lecturer is oversubscribed
-          if (fPL.assigned > fPL.capacity) {
-
-            removeStudentFromArrayList(fPL, wNEP);
-
-
+          if (fPL.assigned != 0) {//if wNEP is not emptyProject pseudocode line16 first condition
+            System.out.println(wNEP.name);
+            System.out.println(fPL.projects.indexOf(wNEP));
+           if (fPL.assigned == fPL.capacity && fPL.rankingList[fPL.projects.indexOf(wNEP)] < fPL.rankingList[fPL.projects.indexOf(firstProj)]){    // line 16 in pseudo code. Start from here tomorrow also try fix git.
+               // lecturer is full and prefers the worst non empty project to firstProj. reject sj line 17 pseudocode
+              stud.preferenceList.set(currentIndex, emptyProject);
+              findNextFavouriteProject(stud);
+            } else {
+              stud.proj = firstProj;
+              firstProj.unpromoted.add(stud);
+              assignedStudents.add(stud);
+              unassigned.remove(stud);
+              fPL.assigned++;
+              // if lecturer is oversubscribed
+              if (fPL.assigned > fPL.capacity) {
+                removeStudentFromArrayList(fPL, wNEP);
+              }
+            }
+          } else { // if wNEP is emptyProject
+            if (fPL.assigned==fPL.capacity) {
+              // reject sj line 17 pseudocode
+              stud.preferenceList.set(currentIndex, emptyProject);
+              findNextFavouriteProject(stud);
+            } else {
+                stud.proj = firstProj;    //#TODO abstract this out
+                firstProj.unpromoted.add(stud);
+                assignedStudents.add(stud);
+                unassigned.remove(stud);
+                fPL.assigned++;
+                if (fPL.assigned > fPL.capacity) {    // #TODO work out if this is needed
+                  removeStudentFromArrayList(fPL, wNEP);
+                }
+            }
           }
-        }
-      }
-    }
+    }}}
   }
 }

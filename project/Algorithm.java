@@ -55,7 +55,7 @@ public class Algorithm {
 	// Returns lecturersWorstNonEmptyProject
 	public static Project lecturersWorstNonEmptyProject(Lecturer firstProjectsLecturer, Project lecturersWorstNonEmptyProject) {
 		for (int i = firstProjectsLecturer.projects.size()-1;i>-1; i--){
-			if (firstProjectsLecturer.projects.get(i).unpromoted.size()>0){
+			if (firstProjectsLecturer.projects.get(i).unpromoted.size()+firstProjectsLecturer.projects.get(i).promoted.size()>0){
 					lecturersWorstNonEmptyProject = firstProjectsLecturer.projects.get(i);
 					i=-1;
 			}
