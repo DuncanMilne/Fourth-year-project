@@ -32,30 +32,48 @@ public class Algorithm {
 
 	protected void findNextFavouriteProject(Student currentStudent) {
 		int max = -1;
-		for (int k = 0; k < currentStudent.rankingList.length; k++) { 	//always iterates over students full ranking list
+
+		// =iterates over students full ranking list
+		for (int k = 0; k < currentStudent.rankingList.length; k++) {
+
+			// found potential next favourite project
 			if (currentStudent.preferenceList.get(k) != emptyProject){
+
+				// if previous contender has been found
 				if (max !=-1){
+
+					// compare current with max
  					if (currentStudent.rankingList[k] < currentStudent.rankingList[max]) {
 						max = k;
 					}
-				} else {
+				} else { // no contender found, this must be favourite
 					max = k;
 				}
 			}
 		}
+
+		// if we didn't find a contender
 		if (max == -1) {
+
+			// student is now projectless
 			unassigned.remove(currentStudent);
-			projectlessStudents.add(currentStudent);
+			projectlessStudents.add(currentStudent);	//#TODO could abstract this out
 			currentStudent.rankingListTracker = -1;
 		} else {
+
+			// set students favourite project tracker to max
 			currentStudent.rankingListTracker = max;
 		}
 	}
 
 	// Returns lecturersWorstNonEmptyProject
 	public static Project lecturersWorstNonEmptyProject(Lecturer firstProjectsLecturer, Project lecturersWorstNonEmptyProject) {
+
+		// iterate from the end as the last entry will contain the worst project
 		for (int i = firstProjectsLecturer.projects.size()-1;i>-1; i--){
-			if (firstProjectsLecturer.projects.get(i).unpromoted.size()+firstProjectsLecturer.projects.get(i).promoted.size()>0){
+
+			// if project is not empty
+			if (firstProjectsLecturer.projects.get(i).unpromoted.size() + firstProjectsLecturer.projects.get(i).promoted.size()>0){
 					lecturersWorstNonEmptyProject = firstProjectsLecturer.projects.get(i);
 					i=-1;
 			}
@@ -64,22 +82,21 @@ public class Algorithm {
 	}
 
 	public void printInstance() {
+
 		int numberOfStudents = unassigned.size() + assignedStudents.size() + projectlessStudents.size();
 		System.out.println(testProjects.size() + " " + numberOfStudents + " " + testLecturers.size());
+
 		this.printProjects();
+
 		this.printStudents();
+
 		this.printLecturers();
+
 		this.printMatching();
 	}
 
-	void printMatching() {
-		System.out.println("PRINTING MATCHING");
-		for (Student s:assignedStudents) {
-			System.out.println(s.name + " " + s.proj.name);
-		}
-	}
-
 	void printProjects(){
+		System.out.println("PRINTING PROJECTS");
 		System.out.println();
 		ArrayList<Project> toPrint = testProjects;
 		for (Project p: toPrint) {
@@ -88,7 +105,19 @@ public class Algorithm {
 		System.out.println();
 	}
 
+	void printStudents() {
+		System.out.println("PRINTING STUDENTS");
+		for (Student st: untouchedStudents) {
+			System.out.print(st.name + " : ");
+			for (Project p: st.preferenceList) {
+				System.out.print(p.name + " ");
+			}
+			System.out.println("");
+		}
+	}
+
 	void printLecturers() {
+		System.out.println("PRINTING LECTURERS");
 		ArrayList<Lecturer> toPrint = testLecturers;
 		for (Lecturer l: toPrint) {
 			System.out.print(l.name + " : " + l.capacity + " : ");
@@ -100,13 +129,10 @@ public class Algorithm {
 		System.out.println();
 	}
 
-	void printStudents() {
-		for (Student st: untouchedStudents) {
-			System.out.print(st.name + " : ");
-			for (Project p: st.preferenceList) {
-				System.out.print(p.name + " ");
-			}
-			System.out.println("");
+	void printMatching() {
+		System.out.println("PRINTING MATCHING");
+		for (Student s:assignedStudents) {
+			System.out.println(s.name + " " + s.proj.name);
 		}
 	}
 
@@ -122,7 +148,7 @@ public class Algorithm {
 			// remove a random student from the lecturersWorstNonEmptyProject
 			removeStudent = worstNonEmptyProject.unpromoted.get(removeInt);
 		} else {
-	 	 int removeInt = random.nextInt((worstNonEmptyProject.promoted.size()));
+	 	 int removeInt = random.nextInt((worstNonEmptyProject.promoted.size())-1);
 	 	 if (removeInt != 0) {
 	 		 removeInt--; // allows access to each student
 	 	 }

@@ -10,18 +10,31 @@ public class Approx extends Algorithm{
 
 		//could use random value to randomise which student in unassigned we use
 		Project studentsFirstProject;
-		Lecturer fPL;
-		Project lecturersWorstNonEmptyProject;
-		Student student;
-		Project redundantProject;
-		int currentIndex; // used to locate students favourite 	project
-		Random randomStudent = new Random();
+
+    Lecturer fPL;
+
+    Project lecturersWorstNonEmptyProject;
+
+    Student student;
+
+    Project redundantProject;
+
+    int currentIndex; // used to locate students favourite 	project
+
+    Random randomStudent = new Random();
+
 		while (!unassigned.isEmpty()) {
+
 			student = unassigned.get(randomStudent.nextInt(unassigned.size()));
-			currentIndex = student.rankingListTracker;
-			studentsFirstProject = student.preferenceList.get(currentIndex);
-			fPL = studentsFirstProject.lecturer;
+
+      currentIndex = student.rankingListTracker;
+
+      studentsFirstProject = student.preferenceList.get(currentIndex);
+
+      fPL = studentsFirstProject.lecturer;
+
 			lecturersWorstNonEmptyProject = fPL.projects.get(fPL.projects.size() - 1); //initially set it to worst project
+
 			if (fPL.assigned != 0) {
 				//iterate over all lecturers projects backwards to find worst nonEmptyProject
 				lecturersWorstNonEmptyProject = lecturersWorstNonEmptyProject(fPL, lecturersWorstNonEmptyProject);
@@ -74,31 +87,37 @@ public class Approx extends Algorithm{
 						redundantProject = fPL.projects.get(i);
 						// for each student remove from their preferenceList if they have it
 						for (Student s:unassigned) {
-								// remove this and use ranking lists
+
 								// causing concurrent modification access error
 								// so have to track location of redundant project and remove it after
 								int location = -1;
+
 								for (int j = 0; j < s.preferenceList.size()-1; j++) {
 									if(s.preferenceList.get(j)==redundantProject)
 										j=s.preferenceList.size();
 								}
+
 								if (location!= -1) {
 									s.preferenceList.set(location, emptyProject);
 									findNextFavouriteProject(s);
 								}
 						}
 						for (Student s:unassigned) {
+
 								// causing concurrent modification access error
 								// so have to track location of redundant project and remove it after
 								int location = -1;
+
 								for (int j = 0; j < s.preferenceList.size()-1; j++) {
 									if(s.preferenceList.get(j)==redundantProject)
 										j=s.preferenceList.size();
 								}
+
 								if (location!= -1) {
 									s.preferenceList.set(location, emptyProject);
 									findNextFavouriteProject(s);
 								}
+
 						}
 					}
 				}
