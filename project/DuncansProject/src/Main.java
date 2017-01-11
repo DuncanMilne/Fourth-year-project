@@ -1,6 +1,3 @@
-/*import java.util.ArrayList;
-import java.util.Scanner;
-import java.util.Random;*/
 import java.util.*;
 import java.io.BufferedReader;
 import java.io.FileReader;
@@ -8,7 +5,6 @@ import javax.swing.*;
 import java.awt.*;
 
 public class Main {
-
 
   static Algorithm algorithm;
 

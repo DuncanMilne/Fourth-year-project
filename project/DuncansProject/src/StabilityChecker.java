@@ -28,6 +28,9 @@ public class StabilityChecker {
     //	System.out.println("current graph " + digraph);
     if (digraph.isDag()){
       System.out.println("The graph is a dag");
+      if (algorithm.instances == 1){ // if there is only one instance requested, print the instance
+    	  algorithm.printInstance();
+      }
       //algorithm.printInstance();
     } else {
       System.out.println("The graph is not a dag");
