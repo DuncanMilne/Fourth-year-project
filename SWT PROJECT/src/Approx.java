@@ -46,7 +46,7 @@ public class Approx extends Algorithm{
 				findNextFavouriteProject(student);
 			} else {
 				// get lecturersWorstNonEmptyProject and remove random student from this
-				int indexOfWorstNonEmptyProject= fPL.projects.size() - 1;
+				//int indexOfWorstNonEmptyProject= fPL.projects.size() - 1; eclipse says this isnt being used, commented out will investigate later
 				lecturersWorstNonEmptyProject = lecturersWorstNonEmptyProject(fPL, lecturersWorstNonEmptyProject);
 
 				// temporarily set project as students assigned project

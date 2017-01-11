@@ -4,7 +4,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Stack;
 
-public class Digraph<Student> {
+public class Digraph {
 
  // keys are the student with the project, values are the student that prefer this project to their own
  private Map<Student,ArrayList<Student>> preferThisStudentsProject = new HashMap<Student,ArrayList<Student>>();

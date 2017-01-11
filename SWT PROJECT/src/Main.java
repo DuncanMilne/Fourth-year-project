@@ -1,6 +1,3 @@
-/*import java.util.ArrayList;
-import java.util.Scanner;
-import java.util.Random;*/
 import java.util.*;
 import java.io.BufferedReader;
 import java.io.FileReader;
@@ -9,61 +6,14 @@ import java.awt.*;
 
 public class Main {
 
-
   static Algorithm algorithm;
 
   public static void main(String[] args) {
 
-    //1. Create the frame.
-    JFrame frame = new JFrame("Test");
-
-    JPanel panel = new JPanel();
-    panel.setLayout(new GridBagLayout());
-
-    GridBagConstraints gbc = new GridBagConstraints();
-    gbc.gridx=0;
-    gbc.gridy=0;
-    gbc.insets = new Insets(15,12,12,12);
-
-    panel.add(new JLabel("label1"), gbc);
-    gbc.gridx++;
-    panel.add(new JLabel("Label 2"), gbc);
-
-    gbc.gridy++;
-
-    gbc.fill = GridBagConstraints.HORIZONTAL;
-
-    panel.add(new JTextField(10),gbc);
-
-    gbc.gridx++;
-    panel.add(new JTextField(10), gbc);
-
-    frame.add(panel);
-    //2. Optional: What happens when the frame closes?
-    frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-
-    //3. Create components and put them in the frame.
-    //...create emptyLabel...
-    //frame.getContentPane().add(emptyLabel, BorderLayout.CENTER);
-
-    //4. Size the frame.
-    frame.pack();
-
-    //5. Show it.
-    frame.setVisible(true);
-
-    frame.setExtendedState(java.awt.Frame.MAXIMIZED_BOTH);
-
-
-    Student student;
-    Project project;
-    Lecturer lecturer;
-    Lecturer lecturer2;
-    Project project2;
-
-		Scanner standardInput = new Scanner(System.in);
-		System.out.print("Enter a file name or x to generate random instances: ");
-		String choice = standardInput.nextLine();
+	/*
+	Scanner standardInput = new Scanner(System.in);
+	System.out.print("Enter a file name or x to generate random instances: ");
+	String choice = standardInput.nextLine();
 
     // #NOTE for all cases project students wants to be assigned is undersubscribed
     // pass in a 1 as an argument if u want to run this version
@@ -116,6 +66,8 @@ public class Main {
           lecturerCapacity = Integer.parseInt(standardInput.nextLine());
         }
       }
+      
+      standardInput.close();
 
       int i = 0;
 
@@ -123,8 +75,8 @@ public class Main {
         go(arguments, args[0]);
         i++;
       }
-
     }
+	*/
   }
 
   static Algorithm instanceGenerator(String fileName) {
@@ -212,6 +164,8 @@ public class Main {
         matchingProject.lecturer.assigned++;
       }
 
+      br.close();
+      
       algorithm.assignedStudents.addAll(toBeRemoved);
       algorithm.unassigned.removeAll(toBeRemoved);
 
@@ -221,17 +175,17 @@ public class Main {
     return algorithm;
   }
 
-  static void go(int[] arguments, String promotion) {
-      if (promotion.equals("promotion"))
+  public void go(int[] arguments, boolean promotion) {
+      if (promotion){
         algorithm = new ApproxPromotion();
-      else
-        algorithm = new Approx();
-
+      }else {
+      	algorithm = new Approx();
+      }
       populate(arguments); // args0 is number of students to generate
       assignCapacity(arguments[3], arguments[4]);	//assigns capacity to the projects, args are lecturer capacity and project capacity
       assignProjectsToLecturers(); // Associate project with a lecturer
 
-      if (promotion.equals("promotion")){
+      if (promotion){
         algorithm.spaPApproxPromotion();
       } else {
         algorithm.assignProjectsToStudents();

@@ -1,9 +1,7 @@
 import java.util.ArrayList;
-import java.security.SecureRandom;
-import java.math.BigInteger;
-import java.util.Collections;
-import java.util.Scanner;
 import java.util.Random;
+
+import gurobi.GRBModel;
 
 
 // Currently creating projects and students and adding projects to students preference lists.
@@ -11,13 +9,16 @@ import java.util.Random;
 public class Algorithm {
 
 	protected ArrayList<Project> testProjects;
-  protected ArrayList<Lecturer> testLecturers;
-  protected ArrayList<Student> assignedStudents;
-  protected ArrayList<Student> unassigned;
-  protected ArrayList<Student> projectlessStudents;
+	protected ArrayList<Lecturer> testLecturers;
+	protected ArrayList<Student> assignedStudents;
+	protected ArrayList<Student> unassigned;
+	protected ArrayList<Student> projectlessStudents;
 	protected StabilityChecker s = new StabilityChecker(this);
 	protected Project emptyProject;
 	protected ArrayList<Student> untouchedStudents;
+	protected int instances;
+	GRBModel grbmodel;
+	
 	// make copy of unasigned students at the start then create new pref list in new data structure
 
 	public Algorithm() {
@@ -162,7 +163,7 @@ public class Algorithm {
 
 		findNextFavouriteProject(removeStudent);
 
-		if (removeStudent.rankingListTracker != -1){	//if they dont only have rejected projects
+		if (removeStudent.rankingListTracker != -1){	//if they don't only have rejected projects
 			unassigned.add(removeStudent);
 		}
 
@@ -173,4 +174,10 @@ public class Algorithm {
 	protected void  spaPApproxPromotion(){} //#TODO work out how to make these abstract?
 
 	protected void assignProjectsToStudents() {}
+	
+	protected void printMatchingOutput(int avg, int max, int min) {
+		System.out.println("Average matching size was " + avg);
+		System.out.println("Maximum matching size was " + max);
+		System.out.println("Minimum matching size was " + min);
+	}
 }

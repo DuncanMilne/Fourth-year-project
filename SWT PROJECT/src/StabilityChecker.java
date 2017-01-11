@@ -1,4 +1,4 @@
-import java.util.ArrayList;
+		import java.util.ArrayList;
 
 public class StabilityChecker {
 
@@ -10,7 +10,7 @@ public class StabilityChecker {
 
   protected void stabilityChecker(ArrayList<Student> assignedStudents, ArrayList<Student> unassignedStudents, Project emptyProject) {
     /* BLOCKING COALITIONS */
-    Digraph<Student> digraph = new Digraph<Student>();
+    Digraph digraph = new Digraph();
     int rLT; // finds rating of current project
     for (Student s:assignedStudents) {
       digraph.add(s);			// add al students as nodes
@@ -28,6 +28,9 @@ public class StabilityChecker {
     //	System.out.println("current graph " + digraph);
     if (digraph.isDag()){
       System.out.println("The graph is a dag");
+      if (algorithm.instances == 1){ // if there is only one instance requested, print the instance
+    	  algorithm.printInstance();
+      }
       //algorithm.printInstance();
     } else {
       System.out.println("The graph is not a dag");
@@ -68,30 +71,29 @@ public class StabilityChecker {
   }
 
 
-    void checkUnassignedStudentsForBlockingPairs(ArrayList<Student> unassignedStudents){
-      Project currentProj;
-      Project lecturersWorstNonEmptyProject=null;
+	void checkUnassignedStudentsForBlockingPairs(ArrayList<Student> unassignedStudents){
+	  Project currentProj;
+	  Project lecturersWorstNonEmptyProject=null;
 
-      int rLT; // finds rating of current project
-  		for (Student s:unassignedStudents) {
-  			for (int p = 0; p<s.preferenceList.size(); p++)
-  				if (s.preferenceList.get(p) != algorithm.   emptyProject) {
-  					currentProj = s.preferenceList.get(p);
-  					if (currentProj.lecturer.capacity == currentProj.lecturer.assigned) {
-  						//currently just use location in lecturers list of projects to determine which they prefers #TODO FIX
-              lecturersWorstNonEmptyProject = Algorithm.lecturersWorstNonEmptyProject(currentProj.lecturer, currentProj);
-
-  						if (currentProj.lecturer.projects.indexOf(currentProj) < currentProj.lecturer.projects.indexOf(lecturersWorstNonEmptyProject)) {
-
-  							System.out.println("ERROR: unassigned student with full teacher who prefers this project");
-                algorithm.printInstance();
-  						}
-  					} else {
-  						System.out.println("ERROR: unassigned student with under capacity teacher");
-              algorithm.printInstance();
-  					}
-  					// check if lecturer prefers this project to any non empty proects or if lecturer is not full
-  				}
-  			}
-      }
+		for (Student s:unassignedStudents) {
+			for (int p = 0; p<s.preferenceList.size(); p++)
+				if (s.preferenceList.get(p) != algorithm.   emptyProject) {
+					currentProj = s.preferenceList.get(p);
+					if (currentProj.lecturer.capacity == currentProj.lecturer.assigned) {
+						//currently just use location in lecturers list of projects to determine which they prefers #TODO FIX
+	          lecturersWorstNonEmptyProject = Algorithm.lecturersWorstNonEmptyProject(currentProj.lecturer, currentProj);
+	
+						if (currentProj.lecturer.projects.indexOf(currentProj) < currentProj.lecturer.projects.indexOf(lecturersWorstNonEmptyProject)) {
+	
+							System.out.println("ERROR: unassigned student with full teacher who prefers this project");
+	            algorithm.printInstance();
+						}
+					} else {
+						System.out.println("ERROR: unassigned student with under capacity teacher");
+	          algorithm.printInstance();
+					}
+					// check if lecturer prefers this project to any non empty proects or if lecturer is not full
+				}
+			}
+  }
 }

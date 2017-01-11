@@ -59,7 +59,6 @@ public class ApproxPromotion extends Algorithm{
 
         fPL = firstProj.lecturer;
 
-        int wNEPIndex;
 
         // if the student's favourite project's lecturer has a worst non empty project, find it
         if (fPL.assigned!= 0) {
