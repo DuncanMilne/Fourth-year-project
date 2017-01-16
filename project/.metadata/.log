@@ -2030,3 +2030,316 @@ org.eclipse.recommenders.utils.Logs$LogTraceException
 	at org.eclipse.core.internal.resources.Workspace.run(Workspace.java:2267)
 	at org.eclipse.egit.ui.Activator$ResourceRefreshJob.run(Activator.java:506)
 	at org.eclipse.core.internal.jobs.Worker.run(Worker.java:55)
+
+!ENTRY org.eclipse.egit.ui 4 0 2017-01-11 21:29:14.913
+!MESSAGE Failed to refresh projects from index changes
+!STACK 1
+org.eclipse.core.internal.resources.ResourceException: Errors occurred while refreshing resources with the local file system.
+	at org.eclipse.core.internal.localstore.FileSystemResourceManager.refreshResource(FileSystemResourceManager.java:977)
+	at org.eclipse.core.internal.localstore.FileSystemResourceManager.refresh(FileSystemResourceManager.java:960)
+	at org.eclipse.core.internal.resources.Resource.refreshLocal(Resource.java:1594)
+	at org.eclipse.egit.ui.Activator$ResourceRefreshJob$1.run(Activator.java:521)
+	at org.eclipse.core.internal.resources.Workspace.run(Workspace.java:2240)
+	at org.eclipse.core.internal.resources.Workspace.run(Workspace.java:2267)
+	at org.eclipse.egit.ui.Activator$ResourceRefreshJob.run(Activator.java:506)
+	at org.eclipse.core.internal.jobs.Worker.run(Worker.java:55)
+Contains: The project description file (.project) for 'SWT PROJECT' is missing.  This file contains important information about the project.  The project will not function properly until this file is restored.
+!SUBENTRY 1 org.eclipse.core.resources 4 271 2017-01-11 21:29:14.914
+!MESSAGE Errors occurred while refreshing resources with the local file system.
+!SUBENTRY 2 org.eclipse.core.resources 4 567 2017-01-11 21:29:14.914
+!MESSAGE The project description file (.project) for 'SWT PROJECT' is missing.  This file contains important information about the project.  The project will not function properly until this file is restored.
+
+!ENTRY org.eclipse.equinox.p2.operations 4 0 2017-01-11 21:37:14.278
+!MESSAGE Operation details
+!SUBENTRY 1 org.eclipse.equinox.p2.operations 4 10050 2017-01-11 21:37:14.278
+!MESSAGE Cannot complete the request.  See the error log for details.
+!SUBENTRY 1 org.eclipse.equinox.p2.operations 2 10005 2017-01-11 21:37:14.278
+!MESSAGE "SWT Designer Documentation" will be ignored because it is already installed.
+!SUBENTRY 1 org.eclipse.equinox.p2.operations 2 10005 2017-01-11 21:37:14.278
+!MESSAGE "SWT Designer" will be ignored because it is already installed.
+!SUBENTRY 1 org.eclipse.equinox.p2.operations 2 10005 2017-01-11 21:37:14.278
+!MESSAGE "WindowBuilder Core" will be ignored because it is already installed.
+!SUBENTRY 1 org.eclipse.equinox.p2.operations 2 10005 2017-01-11 21:37:14.278
+!MESSAGE "WindowBuilder XML Core (requires Eclipse WTP/WST)" will be ignored because it is already installed.
+!SUBENTRY 1 org.eclipse.equinox.p2.operations 2 10005 2017-01-11 21:37:14.278
+!MESSAGE "SWT Designer XWT Support (requires Eclipse WTP/WST)" will be ignored because it is already installed.
+!SUBENTRY 1 org.eclipse.equinox.p2.operations 2 10005 2017-01-11 21:37:14.278
+!MESSAGE "SWT Designer SWT_AWT Support" will be ignored because it is already installed.
+!SUBENTRY 1 org.eclipse.equinox.p2.operations 2 10005 2017-01-11 21:37:14.278
+!MESSAGE "WindowBuilder Java Core" will be ignored because it is already installed.
+!SUBENTRY 1 org.eclipse.equinox.p2.operations 2 10005 2017-01-11 21:37:14.278
+!MESSAGE "WindowBuilder GroupLayout Support" will be ignored because it is already installed.
+!SUBENTRY 1 org.eclipse.equinox.p2.operations 2 10005 2017-01-11 21:37:14.278
+!MESSAGE "Swing Designer" will be ignored because it is already installed.
+!SUBENTRY 1 org.eclipse.equinox.p2.operations 2 10005 2017-01-11 21:37:14.278
+!MESSAGE "WindowBuilder CSS Support" will be ignored because it is already installed.
+!SUBENTRY 1 org.eclipse.equinox.p2.operations 2 10005 2017-01-11 21:37:14.278
+!MESSAGE "Swing Designer Documentation" will be ignored because it is already installed.
+!SUBENTRY 1 org.eclipse.equinox.p2.operations 2 10005 2017-01-11 21:37:14.278
+!MESSAGE "SWT Designer Core" will be ignored because it is already installed.
+!SUBENTRY 1 org.eclipse.equinox.p2.operations 2 10005 2017-01-11 21:37:14.278
+!MESSAGE "WindowBuilder Core Documentation" will be ignored because it is already installed.
+!SUBENTRY 1 org.eclipse.equinox.p2.operations 2 10005 2017-01-11 21:37:14.278
+!MESSAGE "WindowBuilder Core UI" will be ignored because it is already installed.
+
+!ENTRY org.eclipse.equinox.p2.operations 4 0 2017-01-11 21:37:14.288
+!MESSAGE Operation details
+!SUBENTRY 1 org.eclipse.equinox.p2.operations 4 10050 2017-01-11 21:37:14.288
+!MESSAGE Cannot complete the request.  See the error log for details.
+!SUBENTRY 1 org.eclipse.equinox.p2.operations 2 10005 2017-01-11 21:37:14.288
+!MESSAGE "SWT Designer Documentation" will be ignored because it is already installed.
+!SUBENTRY 1 org.eclipse.equinox.p2.operations 2 10005 2017-01-11 21:37:14.288
+!MESSAGE "SWT Designer" will be ignored because it is already installed.
+!SUBENTRY 1 org.eclipse.equinox.p2.operations 2 10005 2017-01-11 21:37:14.288
+!MESSAGE "WindowBuilder Core" will be ignored because it is already installed.
+!SUBENTRY 1 org.eclipse.equinox.p2.operations 2 10005 2017-01-11 21:37:14.288
+!MESSAGE "WindowBuilder XML Core (requires Eclipse WTP/WST)" will be ignored because it is already installed.
+!SUBENTRY 1 org.eclipse.equinox.p2.operations 2 10005 2017-01-11 21:37:14.288
+!MESSAGE "SWT Designer XWT Support (requires Eclipse WTP/WST)" will be ignored because it is already installed.
+!SUBENTRY 1 org.eclipse.equinox.p2.operations 2 10005 2017-01-11 21:37:14.288
+!MESSAGE "SWT Designer SWT_AWT Support" will be ignored because it is already installed.
+!SUBENTRY 1 org.eclipse.equinox.p2.operations 2 10005 2017-01-11 21:37:14.288
+!MESSAGE "WindowBuilder Java Core" will be ignored because it is already installed.
+!SUBENTRY 1 org.eclipse.equinox.p2.operations 2 10005 2017-01-11 21:37:14.288
+!MESSAGE "WindowBuilder GroupLayout Support" will be ignored because it is already installed.
+!SUBENTRY 1 org.eclipse.equinox.p2.operations 2 10005 2017-01-11 21:37:14.288
+!MESSAGE "Swing Designer" will be ignored because it is already installed.
+!SUBENTRY 1 org.eclipse.equinox.p2.operations 2 10005 2017-01-11 21:37:14.288
+!MESSAGE "WindowBuilder CSS Support" will be ignored because it is already installed.
+!SUBENTRY 1 org.eclipse.equinox.p2.operations 2 10005 2017-01-11 21:37:14.288
+!MESSAGE "Swing Designer Documentation" will be ignored because it is already installed.
+!SUBENTRY 1 org.eclipse.equinox.p2.operations 2 10005 2017-01-11 21:37:14.288
+!MESSAGE "SWT Designer Core" will be ignored because it is already installed.
+!SUBENTRY 1 org.eclipse.equinox.p2.operations 2 10005 2017-01-11 21:37:14.288
+!MESSAGE "WindowBuilder Core Documentation" will be ignored because it is already installed.
+!SUBENTRY 1 org.eclipse.equinox.p2.operations 2 10005 2017-01-11 21:37:14.288
+!MESSAGE "WindowBuilder Core UI" will be ignored because it is already installed.
+
+!ENTRY org.eclipse.equinox.p2.operations 4 0 2017-01-11 21:38:22.236
+!MESSAGE Operation details
+!SUBENTRY 1 org.eclipse.equinox.p2.operations 4 10050 2017-01-11 21:38:22.236
+!MESSAGE Cannot complete the request.  See the error log for details.
+!SUBENTRY 1 org.eclipse.equinox.p2.operations 2 10005 2017-01-11 21:38:22.236
+!MESSAGE "SWT Designer Documentation" will be ignored because it is already installed.
+!SUBENTRY 1 org.eclipse.equinox.p2.operations 2 10005 2017-01-11 21:38:22.236
+!MESSAGE "SWT Designer" will be ignored because it is already installed.
+!SUBENTRY 1 org.eclipse.equinox.p2.operations 2 10005 2017-01-11 21:38:22.236
+!MESSAGE "WindowBuilder Core" will be ignored because it is already installed.
+!SUBENTRY 1 org.eclipse.equinox.p2.operations 2 10005 2017-01-11 21:38:22.236
+!MESSAGE "WindowBuilder XML Core (requires Eclipse WTP/WST)" will be ignored because it is already installed.
+!SUBENTRY 1 org.eclipse.equinox.p2.operations 2 10005 2017-01-11 21:38:22.236
+!MESSAGE "SWT Designer XWT Support (requires Eclipse WTP/WST)" will be ignored because it is already installed.
+!SUBENTRY 1 org.eclipse.equinox.p2.operations 2 10005 2017-01-11 21:38:22.236
+!MESSAGE "SWT Designer SWT_AWT Support" will be ignored because it is already installed.
+!SUBENTRY 1 org.eclipse.equinox.p2.operations 2 10005 2017-01-11 21:38:22.236
+!MESSAGE "WindowBuilder Java Core" will be ignored because it is already installed.
+!SUBENTRY 1 org.eclipse.equinox.p2.operations 2 10005 2017-01-11 21:38:22.236
+!MESSAGE "WindowBuilder GroupLayout Support" will be ignored because it is already installed.
+!SUBENTRY 1 org.eclipse.equinox.p2.operations 2 10005 2017-01-11 21:38:22.236
+!MESSAGE "Swing Designer" will be ignored because it is already installed.
+!SUBENTRY 1 org.eclipse.equinox.p2.operations 2 10005 2017-01-11 21:38:22.236
+!MESSAGE "WindowBuilder CSS Support" will be ignored because it is already installed.
+!SUBENTRY 1 org.eclipse.equinox.p2.operations 2 10005 2017-01-11 21:38:22.236
+!MESSAGE "Swing Designer Documentation" will be ignored because it is already installed.
+!SUBENTRY 1 org.eclipse.equinox.p2.operations 2 10005 2017-01-11 21:38:22.236
+!MESSAGE "SWT Designer Core" will be ignored because it is already installed.
+!SUBENTRY 1 org.eclipse.equinox.p2.operations 2 10005 2017-01-11 21:38:22.236
+!MESSAGE "WindowBuilder Core Documentation" will be ignored because it is already installed.
+!SUBENTRY 1 org.eclipse.equinox.p2.operations 2 10005 2017-01-11 21:38:22.236
+!MESSAGE "WindowBuilder Core UI" will be ignored because it is already installed.
+
+!ENTRY org.eclipse.equinox.p2.operations 4 0 2017-01-11 21:38:22.241
+!MESSAGE Operation details
+!SUBENTRY 1 org.eclipse.equinox.p2.operations 4 10050 2017-01-11 21:38:22.242
+!MESSAGE Cannot complete the request.  See the error log for details.
+!SUBENTRY 1 org.eclipse.equinox.p2.operations 2 10005 2017-01-11 21:38:22.242
+!MESSAGE "SWT Designer Documentation" will be ignored because it is already installed.
+!SUBENTRY 1 org.eclipse.equinox.p2.operations 2 10005 2017-01-11 21:38:22.242
+!MESSAGE "SWT Designer" will be ignored because it is already installed.
+!SUBENTRY 1 org.eclipse.equinox.p2.operations 2 10005 2017-01-11 21:38:22.242
+!MESSAGE "WindowBuilder Core" will be ignored because it is already installed.
+!SUBENTRY 1 org.eclipse.equinox.p2.operations 2 10005 2017-01-11 21:38:22.242
+!MESSAGE "WindowBuilder XML Core (requires Eclipse WTP/WST)" will be ignored because it is already installed.
+!SUBENTRY 1 org.eclipse.equinox.p2.operations 2 10005 2017-01-11 21:38:22.242
+!MESSAGE "SWT Designer XWT Support (requires Eclipse WTP/WST)" will be ignored because it is already installed.
+!SUBENTRY 1 org.eclipse.equinox.p2.operations 2 10005 2017-01-11 21:38:22.242
+!MESSAGE "SWT Designer SWT_AWT Support" will be ignored because it is already installed.
+!SUBENTRY 1 org.eclipse.equinox.p2.operations 2 10005 2017-01-11 21:38:22.242
+!MESSAGE "WindowBuilder Java Core" will be ignored because it is already installed.
+!SUBENTRY 1 org.eclipse.equinox.p2.operations 2 10005 2017-01-11 21:38:22.242
+!MESSAGE "WindowBuilder GroupLayout Support" will be ignored because it is already installed.
+!SUBENTRY 1 org.eclipse.equinox.p2.operations 2 10005 2017-01-11 21:38:22.242
+!MESSAGE "Swing Designer" will be ignored because it is already installed.
+!SUBENTRY 1 org.eclipse.equinox.p2.operations 2 10005 2017-01-11 21:38:22.242
+!MESSAGE "WindowBuilder CSS Support" will be ignored because it is already installed.
+!SUBENTRY 1 org.eclipse.equinox.p2.operations 2 10005 2017-01-11 21:38:22.242
+!MESSAGE "Swing Designer Documentation" will be ignored because it is already installed.
+!SUBENTRY 1 org.eclipse.equinox.p2.operations 2 10005 2017-01-11 21:38:22.242
+!MESSAGE "SWT Designer Core" will be ignored because it is already installed.
+!SUBENTRY 1 org.eclipse.equinox.p2.operations 2 10005 2017-01-11 21:38:22.242
+!MESSAGE "WindowBuilder Core Documentation" will be ignored because it is already installed.
+!SUBENTRY 1 org.eclipse.equinox.p2.operations 2 10005 2017-01-11 21:38:22.242
+!MESSAGE "WindowBuilder Core UI" will be ignored because it is already installed.
+
+!ENTRY org.eclipse.equinox.p2.operations 4 0 2017-01-11 21:38:22.271
+!MESSAGE Operation details
+!SUBENTRY 1 org.eclipse.equinox.p2.operations 4 10050 2017-01-11 21:38:22.271
+!MESSAGE Cannot complete the request.  See the error log for details.
+!SUBENTRY 1 org.eclipse.equinox.p2.operations 2 10005 2017-01-11 21:38:22.271
+!MESSAGE "SWT Designer Documentation" will be ignored because it is already installed.
+!SUBENTRY 1 org.eclipse.equinox.p2.operations 2 10005 2017-01-11 21:38:22.271
+!MESSAGE "SWT Designer" will be ignored because it is already installed.
+!SUBENTRY 1 org.eclipse.equinox.p2.operations 2 10005 2017-01-11 21:38:22.271
+!MESSAGE "WindowBuilder Core" will be ignored because it is already installed.
+!SUBENTRY 1 org.eclipse.equinox.p2.operations 2 10005 2017-01-11 21:38:22.271
+!MESSAGE "WindowBuilder XML Core (requires Eclipse WTP/WST)" will be ignored because it is already installed.
+!SUBENTRY 1 org.eclipse.equinox.p2.operations 2 10005 2017-01-11 21:38:22.271
+!MESSAGE "SWT Designer XWT Support (requires Eclipse WTP/WST)" will be ignored because it is already installed.
+!SUBENTRY 1 org.eclipse.equinox.p2.operations 2 10005 2017-01-11 21:38:22.271
+!MESSAGE "SWT Designer SWT_AWT Support" will be ignored because it is already installed.
+!SUBENTRY 1 org.eclipse.equinox.p2.operations 2 10005 2017-01-11 21:38:22.271
+!MESSAGE "WindowBuilder Java Core" will be ignored because it is already installed.
+!SUBENTRY 1 org.eclipse.equinox.p2.operations 2 10005 2017-01-11 21:38:22.271
+!MESSAGE "WindowBuilder GroupLayout Support" will be ignored because it is already installed.
+!SUBENTRY 1 org.eclipse.equinox.p2.operations 2 10005 2017-01-11 21:38:22.271
+!MESSAGE "Swing Designer" will be ignored because it is already installed.
+!SUBENTRY 1 org.eclipse.equinox.p2.operations 2 10005 2017-01-11 21:38:22.271
+!MESSAGE "WindowBuilder CSS Support" will be ignored because it is already installed.
+!SUBENTRY 1 org.eclipse.equinox.p2.operations 2 10005 2017-01-11 21:38:22.271
+!MESSAGE "Swing Designer Documentation" will be ignored because it is already installed.
+!SUBENTRY 1 org.eclipse.equinox.p2.operations 2 10005 2017-01-11 21:38:22.271
+!MESSAGE "SWT Designer Core" will be ignored because it is already installed.
+!SUBENTRY 1 org.eclipse.equinox.p2.operations 2 10005 2017-01-11 21:38:22.271
+!MESSAGE "WindowBuilder Core Documentation" will be ignored because it is already installed.
+!SUBENTRY 1 org.eclipse.equinox.p2.operations 2 10005 2017-01-11 21:38:22.271
+!MESSAGE "WindowBuilder Core UI" will be ignored because it is already installed.
+
+!ENTRY org.eclipse.equinox.p2.operations 4 0 2017-01-11 21:38:22.275
+!MESSAGE Operation details
+!SUBENTRY 1 org.eclipse.equinox.p2.operations 4 10050 2017-01-11 21:38:22.275
+!MESSAGE Cannot complete the request.  See the error log for details.
+!SUBENTRY 1 org.eclipse.equinox.p2.operations 2 10005 2017-01-11 21:38:22.275
+!MESSAGE "SWT Designer Documentation" will be ignored because it is already installed.
+!SUBENTRY 1 org.eclipse.equinox.p2.operations 2 10005 2017-01-11 21:38:22.275
+!MESSAGE "SWT Designer" will be ignored because it is already installed.
+!SUBENTRY 1 org.eclipse.equinox.p2.operations 2 10005 2017-01-11 21:38:22.275
+!MESSAGE "WindowBuilder Core" will be ignored because it is already installed.
+!SUBENTRY 1 org.eclipse.equinox.p2.operations 2 10005 2017-01-11 21:38:22.275
+!MESSAGE "WindowBuilder XML Core (requires Eclipse WTP/WST)" will be ignored because it is already installed.
+!SUBENTRY 1 org.eclipse.equinox.p2.operations 2 10005 2017-01-11 21:38:22.275
+!MESSAGE "SWT Designer XWT Support (requires Eclipse WTP/WST)" will be ignored because it is already installed.
+!SUBENTRY 1 org.eclipse.equinox.p2.operations 2 10005 2017-01-11 21:38:22.275
+!MESSAGE "SWT Designer SWT_AWT Support" will be ignored because it is already installed.
+!SUBENTRY 1 org.eclipse.equinox.p2.operations 2 10005 2017-01-11 21:38:22.275
+!MESSAGE "WindowBuilder Java Core" will be ignored because it is already installed.
+!SUBENTRY 1 org.eclipse.equinox.p2.operations 2 10005 2017-01-11 21:38:22.275
+!MESSAGE "WindowBuilder GroupLayout Support" will be ignored because it is already installed.
+!SUBENTRY 1 org.eclipse.equinox.p2.operations 2 10005 2017-01-11 21:38:22.275
+!MESSAGE "Swing Designer" will be ignored because it is already installed.
+!SUBENTRY 1 org.eclipse.equinox.p2.operations 2 10005 2017-01-11 21:38:22.275
+!MESSAGE "WindowBuilder CSS Support" will be ignored because it is already installed.
+!SUBENTRY 1 org.eclipse.equinox.p2.operations 2 10005 2017-01-11 21:38:22.275
+!MESSAGE "Swing Designer Documentation" will be ignored because it is already installed.
+!SUBENTRY 1 org.eclipse.equinox.p2.operations 2 10005 2017-01-11 21:38:22.275
+!MESSAGE "SWT Designer Core" will be ignored because it is already installed.
+!SUBENTRY 1 org.eclipse.equinox.p2.operations 2 10005 2017-01-11 21:38:22.275
+!MESSAGE "WindowBuilder Core Documentation" will be ignored because it is already installed.
+!SUBENTRY 1 org.eclipse.equinox.p2.operations 2 10005 2017-01-11 21:38:22.275
+!MESSAGE "WindowBuilder Core UI" will be ignored because it is already installed.
+
+!ENTRY org.eclipse.equinox.p2.touchpoint.natives 2 0 2017-01-11 21:41:26.094
+!MESSAGE Could not remove temporary backup directory (it is safe to manually delete it and its contents): C:\Users\Duncan\AppData\Local\Temp\epp.package.jee_2b31ef4d97e0_ac1eadf4df13
+!SESSION 2017-01-11 21:43:08.897 -----------------------------------------------
+eclipse.buildId=4.6.2.M20161124-1400
+java.version=1.8.0_111
+java.vendor=Oracle Corporation
+BootLoader constants: OS=win32, ARCH=x86_64, WS=win32, NL=en_GB
+Framework arguments:  -product org.eclipse.epp.package.jee.product -product org.eclipse.epp.package.jee.product
+Command-line arguments:  -os win32 -ws win32 -arch x86_64 -product org.eclipse.epp.package.jee.product -data file:/D:/University/Fourth-year-project/project/ -product org.eclipse.epp.package.jee.product
+
+!ENTRY org.eclipse.ui 4 0 2017-01-11 21:43:39.271
+!MESSAGE C:\Users\Duncan\Downloads\eclipse\plugins\org.eclipse.platform_4.6.1.v20160907-1200\splash.bmp (The system cannot find the path specified)
+!STACK 0
+java.io.FileNotFoundException: C:\Users\Duncan\Downloads\eclipse\plugins\org.eclipse.platform_4.6.1.v20160907-1200\splash.bmp (The system cannot find the path specified)
+	at java.io.FileInputStream.open0(Native Method)
+	at java.io.FileInputStream.open(Unknown Source)
+	at java.io.FileInputStream.<init>(Unknown Source)
+	at java.io.FileInputStream.<init>(Unknown Source)
+	at org.eclipse.ui.internal.Workbench.loadImage(Workbench.java:910)
+	at org.eclipse.ui.internal.Workbench.createSplashWrapper(Workbench.java:819)
+	at org.eclipse.ui.internal.Workbench.access$6(Workbench.java:816)
+	at org.eclipse.ui.internal.Workbench$5.run(Workbench.java:662)
+	at org.eclipse.core.databinding.observable.Realm.runWithDefault(Realm.java:336)
+	at org.eclipse.ui.internal.Workbench.createAndRunWorkbench(Workbench.java:610)
+	at org.eclipse.ui.PlatformUI.createAndRunWorkbench(PlatformUI.java:148)
+	at org.eclipse.ui.internal.ide.application.IDEApplication.start(IDEApplication.java:138)
+	at org.eclipse.equinox.internal.app.EclipseAppHandle.run(EclipseAppHandle.java:196)
+	at org.eclipse.core.runtime.internal.adaptor.EclipseAppLauncher.runApplication(EclipseAppLauncher.java:134)
+	at org.eclipse.core.runtime.internal.adaptor.EclipseAppLauncher.start(EclipseAppLauncher.java:104)
+	at org.eclipse.core.runtime.adaptor.EclipseStarter.run(EclipseStarter.java:388)
+	at org.eclipse.core.runtime.adaptor.EclipseStarter.run(EclipseStarter.java:243)
+	at sun.reflect.NativeMethodAccessorImpl.invoke0(Native Method)
+	at sun.reflect.NativeMethodAccessorImpl.invoke(Unknown Source)
+	at sun.reflect.DelegatingMethodAccessorImpl.invoke(Unknown Source)
+	at java.lang.reflect.Method.invoke(Unknown Source)
+	at org.eclipse.equinox.launcher.Main.invokeFramework(Main.java:673)
+	at org.eclipse.equinox.launcher.Main.basicRun(Main.java:610)
+	at org.eclipse.equinox.launcher.Main.run(Main.java:1519)
+
+!ENTRY org.eclipse.ui 4 0 2017-01-11 21:43:39.281
+!MESSAGE Error occurred during status handling
+!STACK 0
+java.lang.NullPointerException
+	at org.eclipse.ui.internal.statushandlers.StatusHandlerRegistry.<init>(StatusHandlerRegistry.java:72)
+	at org.eclipse.ui.internal.statushandlers.StatusHandlerRegistry.getDefault(StatusHandlerRegistry.java:91)
+	at org.eclipse.ui.statushandlers.StatusManager.getStatusHandler(StatusManager.java:145)
+	at org.eclipse.ui.statushandlers.StatusManager.handle(StatusManager.java:204)
+	at org.eclipse.ui.statushandlers.StatusManager.handle(StatusManager.java:246)
+	at org.eclipse.ui.statushandlers.StatusManager.handle(StatusManager.java:257)
+	at org.eclipse.ui.internal.Workbench.loadImage(Workbench.java:916)
+	at org.eclipse.ui.internal.Workbench.createSplashWrapper(Workbench.java:819)
+	at org.eclipse.ui.internal.Workbench.access$6(Workbench.java:816)
+	at org.eclipse.ui.internal.Workbench$5.run(Workbench.java:662)
+	at org.eclipse.core.databinding.observable.Realm.runWithDefault(Realm.java:336)
+	at org.eclipse.ui.internal.Workbench.createAndRunWorkbench(Workbench.java:610)
+	at org.eclipse.ui.PlatformUI.createAndRunWorkbench(PlatformUI.java:148)
+	at org.eclipse.ui.internal.ide.application.IDEApplication.start(IDEApplication.java:138)
+	at org.eclipse.equinox.internal.app.EclipseAppHandle.run(EclipseAppHandle.java:196)
+	at org.eclipse.core.runtime.internal.adaptor.EclipseAppLauncher.runApplication(EclipseAppLauncher.java:134)
+	at org.eclipse.core.runtime.internal.adaptor.EclipseAppLauncher.start(EclipseAppLauncher.java:104)
+	at org.eclipse.core.runtime.adaptor.EclipseStarter.run(EclipseStarter.java:388)
+	at org.eclipse.core.runtime.adaptor.EclipseStarter.run(EclipseStarter.java:243)
+	at sun.reflect.NativeMethodAccessorImpl.invoke0(Native Method)
+	at sun.reflect.NativeMethodAccessorImpl.invoke(Unknown Source)
+	at sun.reflect.DelegatingMethodAccessorImpl.invoke(Unknown Source)
+	at java.lang.reflect.Method.invoke(Unknown Source)
+	at org.eclipse.equinox.launcher.Main.invokeFramework(Main.java:673)
+	at org.eclipse.equinox.launcher.Main.basicRun(Main.java:610)
+	at org.eclipse.equinox.launcher.Main.run(Main.java:1519)
+
+!ENTRY org.eclipse.egit.ui 2 0 2017-01-11 21:43:45.909
+!MESSAGE Warning: The environment variable HOME is not set. The following directory will be used to store the Git
+user global configuration and to define the default location to store repositories: 'C:\Users\Duncan'. If this is
+not correct please set the HOME environment variable and restart Eclipse. Otherwise Git for Windows and
+EGit might behave differently since they see different configuration options.
+This warning can be switched off on the Team > Git > Confirmations and Warnings preference page.
+!SESSION 2017-01-16 14:35:36.838 -----------------------------------------------
+eclipse.buildId=4.6.2.M20161124-1400
+java.version=1.8.0_111
+java.vendor=Oracle Corporation
+BootLoader constants: OS=win32, ARCH=x86_64, WS=win32, NL=en_GB
+Framework arguments:  -product org.eclipse.epp.package.jee.product
+Command-line arguments:  -os win32 -ws win32 -arch x86_64 -product org.eclipse.epp.package.jee.product
+
+!ENTRY org.eclipse.equinox.ds 2 0 2017-01-16 14:36:10.050
+!MESSAGE [SCR - WorkThread] Timeout occurred! Thread was blocked on processing [QueuedJob] WorkPerformer: org.eclipse.equinox.internal.ds.SCRManager@4af739fb; actionType 1
+
+!ENTRY org.eclipse.equinox.ds 2 0 2017-01-16 14:36:10.055
+!MESSAGE [SCR] Enabling components of bundle org.eclipse.update.configurator did not complete in 30000 ms 
+
+!ENTRY org.eclipse.egit.ui 2 0 2017-01-16 14:36:53.535
+!MESSAGE Warning: The environment variable HOME is not set. The following directory will be used to store the Git
+user global configuration and to define the default location to store repositories: 'C:\Users\Duncan'. If this is
+not correct please set the HOME environment variable and restart Eclipse. Otherwise Git for Windows and
+EGit might behave differently since they see different configuration options.
+This warning can be switched off on the Team > Git > Confirmations and Warnings preference page.
