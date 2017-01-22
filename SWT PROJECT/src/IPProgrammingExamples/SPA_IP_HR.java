@@ -27,6 +27,8 @@ public class SPA_IP_HR {
 
     /** <p>This array takes the form of the students preference list but has several attributes for
     each student project pair.</p> */
+    //first list is student, second is their pref list. By pref list i mean an ip_model_unit which says whether or not the student has
+    // this proj in their pref list, and the grbmodel var associated with it
     IP_model_unit[][] unitArray;
     /** <p>projectLists stores list of vars that correspond to a given project.</p> */
     ArrayList<ArrayList<GRBVar>> projectLists;
@@ -272,6 +274,7 @@ public class SPA_IP_HR {
     public void setStudentAssignments() throws GRBException {
         // ready to save the assigned students to the studentAssignments array in the model
         int[] studentAssignments = m.studentAssignments;
+        System.out.println(studentAssignments);
         for (int x = 0; x < numStudents; x++) {
             studentAssignments[x] = -1;
         }

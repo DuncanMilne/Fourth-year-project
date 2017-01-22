@@ -1,4 +1,4 @@
-		import java.util.ArrayList;
+import java.util.ArrayList;
 
 public class StabilityChecker {
 
@@ -29,12 +29,12 @@ public class StabilityChecker {
     if (digraph.isDag()){
       System.out.println("The graph is a dag");
       if (algorithm.instances == 1){ // if there is only one instance requested, print the instance
-    	  algorithm.printInstance();
+    	  algorithm.printInstance(0);
       }
       //algorithm.printInstance();
     } else {
       System.out.println("The graph is not a dag");
-      algorithm.printInstance();
+      algorithm.printInstance(0);
     }
     // unassignedStudents prefer all of their projects
   }
@@ -56,11 +56,11 @@ public class StabilityChecker {
               lecturersWorstNonEmptyProject = Algorithm.lecturersWorstNonEmptyProject(currentProj.lecturer, currentProj);
               if (currentProj.lecturer.projects.indexOf(currentProj) < currentProj.lecturer.projects.indexOf(lecturersWorstNonEmptyProject)) {
                 System.out.println("ERROR: Assigned student with full teacher who prefers this project");
-                algorithm.printInstance();
+                algorithm.printInstance(0);
               }
             } else {
               System.out.println("ERROR: Assigned student with under capacity teacher");
-              algorithm.printInstance();
+              algorithm.printInstance(0);
 
             }
           }
@@ -86,11 +86,11 @@ public class StabilityChecker {
 						if (currentProj.lecturer.projects.indexOf(currentProj) < currentProj.lecturer.projects.indexOf(lecturersWorstNonEmptyProject)) {
 	
 							System.out.println("ERROR: unassigned student with full teacher who prefers this project");
-	            algorithm.printInstance();
+	            algorithm.printInstance(0);
 						}
 					} else {
 						System.out.println("ERROR: unassigned student with under capacity teacher");
-	          algorithm.printInstance();
+	          algorithm.printInstance(0);
 					}
 					// check if lecturer prefers this project to any non empty proects or if lecturer is not full
 				}

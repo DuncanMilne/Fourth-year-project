@@ -1,14 +1,15 @@
 import java.util.ArrayList;
 import java.util.Random;
 
-import gurobi.GRBModel;
+import gurobi.GRBException;
+
 
 
 // Currently creating projects and students and adding projects to students preference lists.
 // Lecturers are also created
 public class Algorithm {
 
-	protected ArrayList<Project> testProjects;
+	protected ArrayList<Project> projects;
 	protected ArrayList<Lecturer> testLecturers;
 	protected ArrayList<Student> assignedStudents;
 	protected ArrayList<Student> unassigned;
@@ -17,12 +18,11 @@ public class Algorithm {
 	protected Project emptyProject;
 	protected ArrayList<Student> untouchedStudents;
 	protected int instances;
-	GRBModel grbmodel;
 	
 	// make copy of unasigned students at the start then create new pref list in new data structure
 
 	public Algorithm() {
-		testProjects = new ArrayList<Project>();
+		projects = new ArrayList<Project>();
 		testLecturers = new ArrayList<Lecturer>();
 		assignedStudents = new ArrayList<Student>();
 		unassigned = new ArrayList<Student>();
@@ -82,24 +82,26 @@ public class Algorithm {
 		return lecturersWorstNonEmptyProject;
 	}
 
-	public void printInstance() {
+	public void printInstance(int constraint) {
 
 		int numberOfStudents = unassigned.size() + assignedStudents.size() + projectlessStudents.size();
-		System.out.println(testProjects.size() + " " + numberOfStudents + " " + testLecturers.size());
+		System.out.println(projects.size() + " " + numberOfStudents + " " + testLecturers.size());
 
 		this.printProjects();
 
 		this.printStudents();
 
 		this.printLecturers();
-
-		this.printMatching();
+		if (constraint == 0) 
+			this.printMatching();
+		else 
+			this.printConstraintMatching();
 	}
 
 	void printProjects(){
 		System.out.println("PRINTING PROJECTS");
 		System.out.println();
-		ArrayList<Project> toPrint = testProjects;
+		ArrayList<Project> toPrint = projects;
 		for (Project p: toPrint) {
 			System.out.println(p.name + " " + p.capacity);
 		}
@@ -134,6 +136,14 @@ public class Algorithm {
 		System.out.println("PRINTING MATCHING");
 		for (Student s:assignedStudents) {
 			System.out.println(s.name + " " + s.proj.name);
+		}
+	}
+	
+	void printConstraintMatching() {
+		System.out.println("PRINTING MATCHING");
+		for (Student s:untouchedStudents) {
+			if (s.proj!=null)
+				System.out.println(s.name + " " + s.proj.name);
 		}
 	}
 
@@ -179,5 +189,9 @@ public class Algorithm {
 		System.out.println("Average matching size was " + avg);
 		System.out.println("Maximum matching size was " + max);
 		System.out.println("Minimum matching size was " + min);
+	}
+
+	public void assignConstraints(Algorithm a) throws GRBException {
+		
 	}
 }

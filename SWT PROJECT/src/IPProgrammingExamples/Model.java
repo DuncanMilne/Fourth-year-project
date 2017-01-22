@@ -70,6 +70,7 @@ public class Model {
      int[] projectLowerQuotas, int[] projUpperQuotas, int[] projLecturers, int[] lecturerLowerQuotas, int[] lecturerUpperQuotas) {
 		feasible = true;  // assume this model is feasible until proven otherwise
 
+        System.out.println("test");
         // set the instance variables
         this.studentPrefArray = studentPrefArray;
 		this.studentPrefRankArray = studentPrefRankArray;

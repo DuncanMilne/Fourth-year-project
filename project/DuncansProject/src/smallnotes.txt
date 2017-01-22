@@ -1,3 +1,20 @@
+IP model notes
+Frances' model is equivalent to my algorithm.
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 Done in cheesy way
 shuffle list of unassigned students before the while loop (randomises prog)
 when adding students to a list add them in random pos

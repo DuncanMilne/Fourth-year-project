@@ -1,5 +1,4 @@
 import java.util.ArrayList;
-
 public class Project {
 
 	Lecturer lecturer;
@@ -10,7 +9,6 @@ public class Project {
 	ArrayList<Student> promoted;
 
 	int capacity;
-
 
 	public Project(String name) {
 		this.name = name;

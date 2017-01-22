@@ -1,0 +1,8 @@
+
+public class GurobiModel extends Algorithm {
+
+	public GurobiModel() {
+		
+	}
+
+}

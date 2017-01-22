@@ -1,4 +1,5 @@
 import java.util.ArrayList;
+import gurobi.*;
 
 public class Student {
 
@@ -6,6 +7,7 @@ public class Student {
 	ArrayList<Project> preferenceList;
 	ArrayList<Project> untouchedPreferenceList;
 	Project proj;
+	ArrayList<GRBVar> grbvars;
 
 	// Used to find index of project in students preference list
 	// i.e. index 0 contains preference value for project 0 for student
@@ -25,6 +27,7 @@ public class Student {
 		this.name = name;
 		promoted = false;
 		preferenceList = new ArrayList<Project>();
+		grbvars = new ArrayList<GRBVar>();
 	}
 
 	public void promote() {
