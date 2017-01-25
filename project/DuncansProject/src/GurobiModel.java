@@ -22,26 +22,28 @@ public class GurobiModel extends Algorithm {
 			env = new GRBEnv();
 	        grbmodel = new GRBModel(env);
 		} catch (GRBException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
 	}
 	
 	public void assignConstraints(Algorithm a) throws GRBException {
 
-		System.out.println("ettrste");
+	    //grbmodel.getEnv().set(GRB.IntParam.OutputFlag, 0);
+	        
 		upperLowerConstraints(a);
-		
+			
 		addMaxSizeConstraint(a);
 		
-		System.out.println("1 is my favourite number");
-        
-		minSumStudentRanks(a);    
+		blockingCoalitionConstraints(a);
 		
-		System.out.println("2"); 
-
         grbmodel.optimize();
-        
+
+	   	 for (Student s:a.untouchedStudents) {
+	   		 for (GRBVar var: s.envyList) {
+	   			 System.out.println(var.get(GRB.DoubleAttr.X));
+	   		 }
+	   	 }
+	   	 
         int status = grbmodel.get(GRB.IntAttr.Status);
         
         if (status != GRB.Status.OPTIMAL) {
@@ -78,90 +80,102 @@ public class GurobiModel extends Algorithm {
             // each student is matched to 1 or less projects
             grbmodel.addConstr(sumVarsForStudent, GRB.LESS_EQUAL, 1.0, "ConstraintStudent " + s.name); //can change this to be less than or equal to the capacity of each project
         }
-
+     
+        // ----------------------------------------------------------------------------------------
+        // for each project 
+        for (Project p: a.projects) {
+            GRBLinExpr numStudentsForProj = new GRBLinExpr();
+            // for every student, if this project is in their pref list, add term
+            for (Student s: a.untouchedStudents) {
+            	if (s.preferenceList.contains(p)){
+            		numStudentsForProj.addTerm(1,s.grbvars.get(s.preferenceList.indexOf(p)));
+            	}
+            }
+            // The number of students a project has must be less than or equal to the max capacity
+            grbmodel.addConstr(numStudentsForProj, GRB.LESS_EQUAL, (double) p.capacity, "ConstraintProjectUQ" + p.name); //need to set this to be the capacity of each project   
+        }
+        
+        
         // ----------------------------------------------------------------------------------------
         // for each lecturer
-
+        int x = 0;
         for (Lecturer l: a.testLecturers) {
-            GRBLinExpr numStudentsForLect = new GRBLinExpr();
-	        // ----------------------------------------------------------------------------------------
-	        // for each project 
-	        for (Project p: a.projects) {
-	            GRBLinExpr numStudentsForProj = new GRBLinExpr();
-	            // for every student, if this project is in their pref list, add term
-	            for (Student s: a.untouchedStudents) {
-	            	if (s.preferenceList.contains(p)){
-	            		numStudentsForProj.addTerm(1, grbmodel.addVar(0.0, 1.0, 0.0, GRB.BINARY, "pref" + s.name));
-	            		if (l.projects.contains(p)){
-		            		numStudentsForLect.addTerm(1, grbmodel.addVar(0.0, 1.0, 0.0, GRB.BINARY, "pref" + s.name));
-	            		}
-	            	}
-	            }
-	            // The number of students a project has must be less than or equal to the max capacity
-	            grbmodel.addConstr(numStudentsForProj, GRB.LESS_EQUAL, (double) p.capacity, "ConstraintProjectUQ" + p.name); //need to set this to be the capacity of each project   
-	        }
+            GRBLinExpr numStudentsForLect = new GRBLinExpr();    
+            for (Student s:a.untouchedStudents) {
+            	for (Project p: s.preferenceList) {
+            		if (l.projects.contains(p)){
+                		numStudentsForLect.addTerm(1, s.grbvars.get(x));
+            		}
+            		x++;
+            	}
+           	 	x=0;
+            }
             grbmodel.addConstr(numStudentsForLect, GRB.LESS_EQUAL, (double) l.capacity, "ConstraintLecturerUQ" + l.name);
         }
 
     }
 
     /**
-    * <p>Optimises on the maximum size and adds relevant constraint.</p>
-    */
-    public void addMaxSizeConstraint(Algorithm a) throws GRBException {
-    	 GRBLinExpr sumAllVariables = new GRBLinExpr();
-         for (Student s: a.untouchedStudents) {
-        	 for (Project p: a.projects)
-                 sumAllVariables.addTerm(1, grbmodel.addVar(0.0, 1.0, 0.0, GRB.BINARY, "pref" + s.name));
-         }
+     * <p>Optimises on the maximum size and adds relevant constraint.</p>
+     */
+     public void addMaxSizeConstraint(Algorithm a) throws GRBException {
+     	 GRBLinExpr sumAllVariables = new GRBLinExpr();
+          for (Student s: a.untouchedStudents) {
+         	 for (GRBVar var: s.grbvars)
+                sumAllVariables.addTerm(1, var);
+          }
 
-         grbmodel.setObjective(sumAllVariables, GRB.MAXIMIZE);
+          grbmodel.setObjective(sumAllVariables, GRB.MAXIMIZE);
+          
+          /*
+          grbmodel.optimize();
          
-         grbmodel.optimize();
-         
-         int status = grbmodel.get(GRB.IntAttr.Status); 
-         
-         // if there is a feasible solution
-         if (status == GRB.Status.OPTIMAL) {
-             double maxSize = grbmodel.get(GRB.DoubleAttr.ObjVal);
-             System.out.println("max size is " + maxSize);
-             // add a new constraint into the model to say that the size of matching must be at least the bound found above
-             grbmodel.addConstr(sumAllVariables, GRB.GREATER_EQUAL, (double) maxSize, "ConstraintSize");
+          int status = grbmodel.get(GRB.IntAttr.Status); 
+          
+          // if there is a feasible solution
+          if (status == GRB.Status.OPTIMAL) {
+              double maxSize = grbmodel.get(GRB.DoubleAttr.ObjVal);
+              // add a new constraint into the model to say that the size of matching must be at least the bound found above
+              grbmodel.addConstr(sumAllVariables, GRB.GREATER_EQUAL, (double) maxSize, "ConstraintSize");
+          }*/
+     }
 
-         }
-    }
-
-
-    /**
-    * <p>Optimises on the minimum student cost and adds relevant constraint.</p>
-    */
-    public void minSumStudentRanks(Algorithm a) throws GRBException {
-    	GRBLinExpr sumAllRanks = new GRBLinExpr();
-        for (Student s:a.untouchedStudents) {
-        	for (Project p: s.preferenceList)
-        		sumAllRanks.addTerm(s.preferenceList.indexOf(p)+1, grbmodel.addVar(0.0, 1.0, 0.0, GRB.BINARY, "pref" + s.name)); //the one should be replaced by the students rank of this project
-        }
-
-        grbmodel.setObjective(sumAllRanks, GRB.MINIMIZE);
-        grbmodel.optimize();
-        int status = grbmodel.get(GRB.IntAttr.Status); 
-
-        // if there is a feasible solution
-        if (status == GRB.Status.OPTIMAL) {
-            double minSumRank = grbmodel.get(GRB.DoubleAttr.ObjVal);
-
-            grbmodel.addConstr(sumAllRanks, GRB.LESS_EQUAL, (double) minSumRank, "ConstraintSumRanks");
-        }
-    }
-    
-
-    /**
-    * <p>Set the current student assignments in the model.</p>
-    */
+     private void blockingCoalitionConstraints(Algorithm a) throws GRBException {
+    	 // First we create an envy graph
+    	 
+    	 // all of the v variables are being set to 1 which shouldn't happen because everyone shouldnt envy everyone
+    	 
+    	 for (Student i1:a.untouchedStudents){
+    		 for (Student i2: a.untouchedStudents) {
+    			 if (i1!=i2){
+    				 GRBVar v = grbmodel.addVar(0.0, 1.0, 0.0, GRB.BINARY, "envy " + i2.name);  
+    				 v.set(GRB.DoubleAttr.Start, 0.0);
+    				 i1.envyList.add(v);
+    				 for (Project j1:i1.preferenceList) {
+    					 // for every project i1 prefers to j1
+    					 for (int x = 0; x < i1.preferenceList.indexOf(j1); x++) {
+        					 Project j2 = i1.preferenceList.get(x);
+    						 if (i2.preferenceList.contains(j2)) { //if i2 likes project j2
+    					     	 GRBLinExpr lhs = new GRBLinExpr();
+    							 GRBLinExpr rhs = new GRBLinExpr();
+    					     	 lhs.addConstant(1.0);
+    					     	 lhs.addTerm(1, v);
+    					     	 rhs.addTerm(1, i1.grbvars.get(i1.preferenceList.indexOf(j1)));
+    					     	 rhs.addTerm(1, i2.grbvars.get(i2.preferenceList.indexOf(j2)));	
+    					     	 grbmodel.addConstr(lhs, GRB.GREATER_EQUAL, rhs, "myconstraint"); // this will set v to be 1 for any student that envies any other
+    						 }
+    					 }
+    				 }
+    			 }
+    		 }	
+    	 }
+     }
+     
     // duncans comment - the assignments have already been chosen by the constraints, this is just setting them
     public void setStudentAssignments(Algorithm a) throws GRBException {
     	// ready to save the assigned students to the studentAssignments array in the model
-          
+
+
         // set the student assignments
         for (int x = 0; x < a.untouchedStudents.size(); x++) {
         	Student s = a.untouchedStudents.get(x);
@@ -170,11 +184,13 @@ public class GurobiModel extends Algorithm {
             // for every preference of current student
             for (int projInd = 0; projInd < prefLength; projInd++) {
                 double resultPref = s.grbvars.get(projInd).get(GRB.DoubleAttr.X);
-                System.out.println(resultPref);
                 if (resultPref > 0.5) {
-                    s.proj = s.preferenceList.get(projInd);   
-                    matched = true;   
+                    s.proj = s.preferenceList.get(projInd); 
+                    matched = true;
                 }
+            }
+            if (!matched){
+                s.proj = emptyProject;
             }
         }
     }

@@ -6,6 +6,48 @@ Frances' model is equivalent to my algorithm.
 
 
 
+prints out all grb vars
+
+for (Student s:a.untouchedStudents){
+	for (GRBVar v:s.grbvars){
+		System.out.println(v.get(GRB.DoubleAttr.X));
+	}
+}
+
+
+
+
+
+
+
+DONT NEED
+
+    /**
+    * <p>Optimises on the minimum student cost and adds relevant constraint.</p>
+    
+    public void minSumStudentRanks(Algorithm a) throws GRBException {
+    	GRBLinExpr sumAllRanks = new GRBLinExpr();
+        for (Student s:a.untouchedStudents) {
+        	for (Project p: s.preferenceList)
+        		sumAllRanks.addTerm(s.preferenceList.indexOf(p)+1, grbmodel.addVar(0.0, 1.0, 0.0, GRB.BINARY, "pref" + s.name)); //the one should be replaced by the students rank of this project
+        }
+
+        grbmodel.setObjective(sumAllRanks, GRB.MINIMIZE);
+        grbmodel.optimize();
+        int status = grbmodel.get(GRB.IntAttr.Status); 
+
+        // if there is a feasible solution
+        if (status == GRB.Status.OPTIMAL) {
+            double minSumRank = grbmodel.get(GRB.DoubleAttr.ObjVal);
+
+            grbmodel.addConstr(sumAllRanks, GRB.LESS_EQUAL, (double) minSumRank, "ConstraintSumRanks");
+        }
+    }
+    */
+
+
+
+
 
 
 

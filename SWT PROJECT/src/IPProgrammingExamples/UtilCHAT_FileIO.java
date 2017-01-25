@@ -69,15 +69,18 @@ public abstract class UtilCHAT_FileIO {
 					studentPrefs[i] = studentPrefsAndRanks[0];
 					studentPrefRanks[i] = studentPrefsAndRanks[1];
 				}
-				
+
 				// input project lower and upper quotas, and project lecturer
 				for (int i = 0; i < numProjects; i++) {
 					String s = scan.nextLine();
 					String[] ssplit = s.split("[ :]+");
 
-					projectLowerQuotas[i] = Integer.parseInt(ssplit[1]);
-					projectCapacities[i] = Integer.parseInt(ssplit[2]);
-					projectLecturers[i] = Integer.parseInt(ssplit[3]);
+					projectLowerQuotas[i] = Integer.parseInt(ssplit[0]);
+					projectCapacities[i] = Integer.parseInt(ssplit[1]);
+
+					System.out.println("duncanstest1");
+					projectLecturers[i] = Integer.parseInt(ssplit[2]);
+					System.out.println("duncanstest");
 
 				}	
 
@@ -100,6 +103,7 @@ public abstract class UtilCHAT_FileIO {
 
 				Model model = new Model(studentPrefs, studentPrefRanks, lecturerPrefs, lecturerPrefRanks, 
 					projectLowerQuotas, projectCapacities, projectLecturers, lecturerLowerQuotas, lecturerUpperQuotas);
+
 				return model;
 			}
 			// closes file if it was successfully opened

@@ -8,6 +8,8 @@ public class Student {
 	ArrayList<Project> untouchedPreferenceList;
 	Project proj;
 	ArrayList<GRBVar> grbvars;
+	 // create envy list. This is a list pertaining to other students and whether or not this student envies them.
+	ArrayList<GRBVar> envyList;
 
 	// Used to find index of project in students preference list
 	// i.e. index 0 contains preference value for project 0 for student
@@ -28,6 +30,7 @@ public class Student {
 		promoted = false;
 		preferenceList = new ArrayList<Project>();
 		grbvars = new ArrayList<GRBVar>();
+		envyList = new ArrayList<GRBVar>();
 	}
 
 	public void promote() {

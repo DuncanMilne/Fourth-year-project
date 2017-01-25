@@ -1,8 +1,0 @@
-
-public class GurobiModel {
-
-	public GurobiModel(int[] arguments) {
-		
-	}
-
-}
