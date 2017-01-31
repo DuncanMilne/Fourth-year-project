@@ -26,9 +26,22 @@ public class GurobiModel extends Algorithm {
 		}
 	}
 	
+	public GurobiModel(Algorithm algorithm) {
+  		this.projects = new ArrayList<Project>(algorithm.projects);
+  		this.testLecturers = new ArrayList<Lecturer>(algorithm.testLecturers);
+  		this.emptyProject = new Project("empty");
+  		this.untouchedStudents = new ArrayList<Student>(algorithm.untouchedStudents);
+        try {
+			env = new GRBEnv();
+	        grbmodel = new GRBModel(env);
+		} catch (GRBException e) {
+			e.printStackTrace();
+		}
+	}
+
 	public void assignConstraints(Algorithm a) throws GRBException {
 
-	    //grbmodel.getEnv().set(GRB.IntParam.OutputFlag, 0);
+	    grbmodel.getEnv().set(GRB.IntParam.OutputFlag, 0);
 	        
 		upperLowerConstraints(a);
 			
@@ -38,11 +51,11 @@ public class GurobiModel extends Algorithm {
 		
         grbmodel.optimize();
 
-	   	 for (Student s:a.untouchedStudents) {
+	   	 /*for (Student s:a.untouchedStudents) {
 	   		 for (GRBVar var: s.envyList) {
 	   			 System.out.println(var.get(GRB.DoubleAttr.X));
 	   		 }
-	   	 }
+	   	 }*/
 	   	 
         int status = grbmodel.get(GRB.IntAttr.Status);
         
@@ -144,7 +157,7 @@ public class GurobiModel extends Algorithm {
     	 // First we create an envy graph
     	 
     	 // all of the v variables are being set to 1 which shouldn't happen because everyone shouldnt envy everyone
-    	 
+     	 
     	 for (Student i1:a.untouchedStudents){
     		 for (Student i2: a.untouchedStudents) {
     			 if (i1!=i2){
@@ -168,6 +181,38 @@ public class GurobiModel extends Algorithm {
     				 }
     			 }
     		 }	
+    	 }
+    	 
+    	 ArrayList<GRBVar> vertexLabels = new ArrayList<GRBVar>();
+    	 
+    	 for (Student i1:a.untouchedStudents) {
+    		 GRBVar v = grbmodel.addVar(0, untouchedStudents.size(), 0, GRB.INTEGER, "label " + i1.name);
+    		 vertexLabels.add(v);
+    	 }
+    	 
+    	 int i1Index = 0;
+    	 int i2Index = 0;
+    	 
+    	 // checks for topological ordering
+    	 
+    	 for (Student i1:a.untouchedStudents) {
+    		 for (Student i2:a.untouchedStudents) { // can find vi' by getting grbvar at certain indexes
+    			 if (i1 != i2){
+	    			 GRBLinExpr lhs = new GRBLinExpr();
+	    			 GRBLinExpr rhs = new GRBLinExpr();
+	    			 
+	    			 GRBLinExpr bracketedExpression = new GRBLinExpr();
+	    			 bracketedExpression.addConstant(1.0);
+	    			 bracketedExpression.addTerm(-1, i1.envyList.get(i2Index)); 
+	    			 lhs.addTerm(1, vertexLabels.get(i1Index));
+	    			 rhs.addTerm(1, vertexLabels.get(i2Index));
+	    			 rhs.multAdd(a.untouchedStudents.size(), bracketedExpression);
+	    			 grbmodel.addConstr(lhs, GRB.LESS_EQUAL, rhs, "myconstraint2"); //need to remove the equal part
+	    			 
+    			 }
+        		 i2Index = 0;
+    		 }
+    		 i1Index++;
     	 }
      }
      

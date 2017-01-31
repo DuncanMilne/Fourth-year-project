@@ -1,3 +1,4 @@
+import java.util.ArrayList;
 import java.util.Random;
 
 public class ApproxPromotion extends Algorithm{
@@ -6,7 +7,18 @@ public class ApproxPromotion extends Algorithm{
     super();
   }
 
-  protected void spaPApproxPromotion() {
+  public ApproxPromotion(Algorithm algorithm) {
+	this.assignedStudents = new ArrayList<Student>(algorithm.assignedStudents);
+	this.projects = new ArrayList<Project>(algorithm.projects);
+	this.testLecturers = new ArrayList<Lecturer>(algorithm.testLecturers);
+	this.unassigned = new ArrayList<Student>(algorithm.unassigned);
+	this.emptyProject = new Project("empty");
+	this.projectlessStudents = new ArrayList<Student>(algorithm.projectlessStudents);
+	this.untouchedStudents = new ArrayList<Student>(algorithm.untouchedStudents);
+	this.s = new StabilityChecker(this);
+  }
+
+protected void spaPApproxPromotion() {
     // while there exists an unassigned student that has a non empty list of is unpromoted.
     // Simply check when adding back to unassigned if their list is non empty or if they are unpromoted. If unpromoted, promote them and re-add all items to their list
     // otherwise add them to projectless

@@ -105,11 +105,11 @@ public class mygooey {
 		text_5.setBounds(172, 209, 76, 21);
 
 		Button btnSpapapprox = new Button(shell, SWT.RADIO);
-		btnSpapapprox.setBounds(68, 112, 102, 16);
+		btnSpapapprox.setBounds(10, 112, 102, 16);
 		btnSpapapprox.setText("SPA-P-APPROX");
 
 		Button btnSpapapproxpromotion = new Button(shell, SWT.RADIO);
-		btnSpapapproxpromotion.setBounds(68, 134, 185, 16);
+		btnSpapapproxpromotion.setBounds(10, 134, 185, 16);
 		btnSpapapproxpromotion.setText("SPA-P-APPROX-PROMOTION");
 
 		Button btnBoth = new Button(shell, SWT.RADIO);
@@ -118,12 +118,16 @@ public class mygooey {
 			public void widgetSelected(SelectionEvent e) {
 			}
 		});
-		btnBoth.setBounds(254, 112, 90, 16);
-		btnBoth.setText("Both");
+		btnBoth.setBounds(10, 156, 224, 16);
+		btnBoth.setText("Compare approximation algorithms");
 		
 		Button btnIpProgrammingModel = new Button(shell, SWT.RADIO);
-		btnIpProgrammingModel.setBounds(250, 134, 146, 16);
+		btnIpProgrammingModel.setBounds(228, 112, 146, 16);
 		btnIpProgrammingModel.setText("IP programming model");
+		
+		Button btnCompareThreeImplementations = new Button(shell, SWT.RADIO);
+		btnCompareThreeImplementations.setBounds(228, 134, 196, 16);
+		btnCompareThreeImplementations.setText("Compare Three Implementations");
 
 		btnRunAlgorithm.addMouseListener(new MouseAdapter() {
 			@Override
@@ -147,14 +151,15 @@ public class mygooey {
 
 	          try {
 			      if (btnBoth.getSelection()){
-			          main.go(arguments, 0);
-					  main.go(arguments, 1);
+			          main.go(arguments, 3);
 				  } else if (btnSpapapproxpromotion.getSelection()) {
-			          main.	go(arguments, 0);
+			          main.go(arguments, 0);
 				  } else if (btnSpapapprox.getSelection()) {
 			          main.go(arguments, 1);
 				  } else if (btnIpProgrammingModel.getSelection()){
 					  main.go(arguments, 2);
+				  } else if (btnCompareThreeImplementations.getSelection()) {
+					  main.go(arguments, 4);
 				  } else {
 					  System.out.println("Please select which algorithm you would like to run");
 				  }

@@ -85,14 +85,15 @@ public class Algorithm {
 	public void printInstance(int constraint) {
 
 		int numberOfStudents = unassigned.size() + assignedStudents.size() + projectlessStudents.size();
-		System.out.println(projects.size() + " " + numberOfStudents + " " + testLecturers.size());
+		//System.out.println(projects.size() + " " + numberOfStudents + " " + testLecturers.size());
 
-		this.printProjects();
+		//this.printProjects();
 
-		this.printStudents();
+		//this.printStudents();
 
-		this.printLecturers();
-		if (constraint == 0) 
+		//this.printLecturers();
+		
+		if (constraint == 0 ) 
 			this.printMatching();
 		else 
 			this.printConstraintMatching();
@@ -135,16 +136,22 @@ public class Algorithm {
 	void printMatching() {
 		System.out.println("PRINTING MATCHING");
 		for (Student s:assignedStudents) {
-			System.out.println(s.name + " " + s.proj.name);
+			//System.out.println(s.name + " " + s.proj.name);
 		}
+		System.out.println(assignedStudents.size() + " students were assigned a project");
 	}
 	
 	void printConstraintMatching() {
 		System.out.println("PRINTING MATCHING");
+		int countOfMatched = 0;
 		for (Student s:untouchedStudents) {
 			if (s.proj!=null)
-				System.out.println(s.name + " " + s.proj.name);
+				//System.out.println(s.name + " " + s.proj.name);
+			if (s.proj != emptyProject) {
+				countOfMatched++;
+			}
 		}
+		System.out.println(countOfMatched + " students were matched");
 	}
 
 	void removeStudentFromArrayList(Lecturer firstProjectsLecturer,Project worstNonEmptyProject) {
