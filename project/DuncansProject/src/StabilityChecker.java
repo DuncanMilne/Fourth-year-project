@@ -8,26 +8,26 @@ public class StabilityChecker {
     this.algorithm = algorithm;
   }
 
-  protected void stabilityChecker(ArrayList<Student> assignedStudents, ArrayList<Student> unassignedStudents, Project emptyProject) {
+  protected void stabilityChecker(ArrayList<Student> assignedStudents, Project emptyProject) {
     /* BLOCKING COALITIONS */
     Digraph digraph = new Digraph();
-    int rLT; // finds rating of current project
     for (Student s:assignedStudents) {
       digraph.add(s);			// add al students as nodes
     }
     for (Student s:assignedStudents) {			// for every student add edges to other students who have a preferable project
-      rLT = s.rankingList[s.rankingListTracker];
-      for (int p = 0; p < s.rankingList.length; p++) {
-          if (s.rankingList[p] < rLT && s.preferenceList.get(p) != emptyProject) { //if student prefers this project and the project is not empty and
-            for (Student x:s.preferenceList.get(p).unpromoted) {	 // make di edge from current student to all currently assigned
-              digraph.add(s, x);
+      for (int p = 0; p < s.rankingList.length; p++) {	// for every project they have
+          if (s.rankingList[p] < s.preferenceList.indexOf(s.proj)) { //if student prefers this project and the project is not empty and
+            for (Student x:assignedStudents) {	 // make di edge from current student to all currently assigned
+              if (x.proj == s.untouchedPreferenceList.get(p)) {
+            	  digraph.add(s, x);
+              }
             }
         }
       }
     }
     //	System.out.println("current graph " + digraph);
     if (digraph.isDag()){
-      System.out.println("The graph is a dag");
+      //System.out.println("The graph is a dag");
       if (algorithm.instances == 1){ // if there is only one instance requested, print the instance
     	  algorithm.printInstance(0);
       }
@@ -35,8 +35,8 @@ public class StabilityChecker {
     } else {
       System.out.println("The graph is not a dag");
       algorithm.printInstance(0);
+      System.exit(0);
     }
-    // unassignedStudents prefer all of their projects
   }
 
   void checkAssignedStudentsForBlockingPairs(ArrayList<Student> assignedStudents){

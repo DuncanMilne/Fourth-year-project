@@ -10,7 +10,7 @@ public class Main {
   static Algorithm algorithm;
 
   public static void main(String[] args) {
-
+	  mygooey.main(args);
 	/*
 	Scanner standardInput = new Scanner(System.in);
 	System.out.print("Enter a file name or x to generate random instances: ");
@@ -189,36 +189,37 @@ public class Main {
 	      if (promotion == 0) {
 	          algorithm = new ApproxPromotion(algorithm);
 	          algorithm.spaPApproxPromotion();
-	          algorithm.printInstance(0);
-	          algorithm.s.stabilityChecker(algorithm.assignedStudents, algorithm.unassigned, algorithm.emptyProject);
+	          //algorithm.printInstance(0);
+	          algorithm.s.stabilityChecker(algorithm.assignedStudents, algorithm.emptyProject);
 	      } else if (promotion == 1){
 	          algorithm = new Approx(algorithm);
 	          algorithm.assignProjectsToStudents();
-	          algorithm.printInstance(0);
-	          algorithm.s.stabilityChecker(algorithm.assignedStudents, algorithm.unassigned, algorithm.emptyProject);
+	          //algorithm.printInstance(0);
+	          algorithm.s.stabilityChecker(algorithm.assignedStudents, algorithm.emptyProject);
 	      } else if (promotion == 2){
 	    	  algorithm = new GurobiModel(algorithm);
 	    	  algorithm.assignConstraints(algorithm);
 	          algorithm.printInstance(1);
+	          algorithm.s.stabilityChecker(algorithm.untouchedStudents, algorithm.emptyProject);
 	      } else if (promotion == 3) {
-	    	  ApproxPromotion algorithm1 = new ApproxPromotion(algorithm);
-	          algorithm1.spaPApproxPromotion();
-	          algorithm1.printInstance(0);
-	          algorithm1.s.stabilityChecker(algorithm1.assignedStudents, algorithm1.unassigned, algorithm1.emptyProject);
 	    	  Approx algorithm2 = new Approx(algorithm);
+	    	  ApproxPromotion algorithm1 = new ApproxPromotion(algorithm);
 	          algorithm2.assignProjectsToStudents();
 	          algorithm2.printInstance(0);
-	          algorithm2.s.stabilityChecker(algorithm2.assignedStudents, algorithm2.unassigned, algorithm2.emptyProject);
+	          algorithm2.s.stabilityChecker(algorithm2.assignedStudents, algorithm2.emptyProject);
+	          algorithm1.spaPApproxPromotion();
+	          algorithm1.printInstance(0);
+	          algorithm1.s.stabilityChecker(algorithm1.assignedStudents, algorithm1.emptyProject);
 	      } else {
 	    	  ApproxPromotion algorithm1 = new ApproxPromotion(algorithm);
-	          algorithm1.spaPApproxPromotion();
-	          algorithm1.printInstance(0);
-	          algorithm1.s.stabilityChecker(algorithm1.assignedStudents, algorithm1.unassigned, algorithm1.emptyProject);
 	    	  Approx algorithm2 = new Approx(algorithm);
-	          algorithm2.assignProjectsToStudents();
-	          algorithm2.printInstance(0);
-	          algorithm2.s.stabilityChecker(algorithm2.assignedStudents, algorithm2.unassigned, algorithm2.emptyProject);
 	          GurobiModel algorithm3 = new GurobiModel(algorithm);
+	    	  algorithm2.assignProjectsToStudents();
+	          algorithm2.printInstance(0);
+	          algorithm2.s.stabilityChecker(algorithm2.assignedStudents, algorithm2.emptyProject);
+	    	  algorithm1.spaPApproxPromotion();
+	          algorithm1.printInstance(0);
+	          algorithm1.s.stabilityChecker(algorithm1.assignedStudents, algorithm1.emptyProject);
 	    	  algorithm3.assignConstraints(algorithm3);
 	          algorithm3.printInstance(1);
 	      }
@@ -228,7 +229,6 @@ public class Main {
 
   static void assignCapacity(int lecturerCapacity, int projectCapacity) {
 
-		//currently hardcode capacity as 20 but can change to parameter
 		Random random = new Random();
 
 		for (int i = 0; i< projectCapacity; i++) {
@@ -266,7 +266,7 @@ public class Main {
 		ArrayList<Project> duplicateList;
 		int rPI;
 		// need to re-add projects after a student has been assigned all his projects
-		for (int j = 0; j <algorithm.unassigned.size(); j++){ //for each projects
+		for (int j = 0; j <algorithm.unassigned.size(); j++){ //for each student
 			duplicateList = new ArrayList<Project>(algorithm.projects);
 			random = Math.random()*5;
 
@@ -277,6 +277,7 @@ public class Main {
 				algorithm.untouchedStudents.get(j).preferenceList.add(duplicateList.get(rPI));
 				duplicateList.remove(rPI);
 			}
+			algorithm.unassigned.get(j).untouchedPreferenceList = new ArrayList<Project>(algorithm.unassigned.get(j).preferenceList);
 
   		}
   	}
@@ -328,11 +329,17 @@ public class Main {
         }
       }
       for (Student s: algorithm.assignedStudents) {
-        s.rankingList = new int[s.preferenceList.size()];
-        for (int i = 0; i < s.rankingList.length; i++) {
-          s.rankingList[i] = i;  // Initially set rankings so index 0 is favourite, 1 is second favourite etc..
+          s.rankingList = new int[s.preferenceList.size()];
+          for (int i = 0; i < s.rankingList.length; i++) {
+            s.rankingList[i] = i;  // Initially set rankings so index 0 is favourite, 1 is second favourite etc..
+          }
         }
-      }
+      for (Student s: algorithm.untouchedStudents) {
+          s.rankingList = new int[s.preferenceList.size()];
+          for (int i = 0; i < s.rankingList.length; i++) {
+            s.rankingList[i] = i;  // Initially set rankings so index 0 is favourite, 1 is second favourite etc..
+          }
+        }
       for (Lecturer l: algorithm.testLecturers) {
         l.rankingList = new int[l.projects.size()];
         for (int i = 0; i < l.rankingList.length; i++) {

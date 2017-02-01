@@ -29,6 +29,7 @@ public class Student {
 		this.name = name;
 		promoted = false;
 		preferenceList = new ArrayList<Project>();
+		untouchedPreferenceList = new ArrayList<Project>();
 		grbvars = new ArrayList<GRBVar>();
 		envyList = new ArrayList<GRBVar>();
 	}

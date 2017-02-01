@@ -84,7 +84,7 @@ public class Algorithm {
 
 	public void printInstance(int constraint) {
 
-		int numberOfStudents = unassigned.size() + assignedStudents.size() + projectlessStudents.size();
+		//int numberOfStudents = unassigned.size() + assignedStudents.size() + projectlessStudents.size();
 		//System.out.println(projects.size() + " " + numberOfStudents + " " + testLecturers.size());
 
 		//this.printProjects();
@@ -201,4 +201,5 @@ public class Algorithm {
 	public void assignConstraints(Algorithm a) throws GRBException {
 		
 	}
+	
 }
