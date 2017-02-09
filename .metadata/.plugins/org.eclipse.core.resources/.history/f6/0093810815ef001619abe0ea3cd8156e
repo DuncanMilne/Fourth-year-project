@@ -212,7 +212,7 @@ public class Main {
 	    	  algorithm.assignConstraints(algorithm);
 	          algorithm.s.stabilityChecker(algorithm.untouchedStudents, algorithm.emptyProject);
 	          algorithm.s.IProgrammingBlockingPairs(algorithm.assignedStudents);      
-	          //algorithm.printInstance(1);
+	          algorithm.printInstance(1);
 	          //algorithm.printInstance(1);
 	      } else if (promotion == 3) {
 	    	  Approx algorithm2 = new Approx(algorithm);

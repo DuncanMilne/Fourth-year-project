@@ -106,9 +106,6 @@ public class StabilityChecker {
 						if (s.proj.lecturer.projects.indexOf(s.proj) < currentProj.lecturer.projects.indexOf(currentProj)){
 							algorithm.printInstance(1);
 							System.out.println("DOES NOT COMPUTE"); // 3a fails
-							System.out.println("DOES NOT COMPUTE"); // 3a fails
-							System.out.println("DOES NOT COMPUTE"); // 3a fails
-							System.out.println("DOES NOT COMPUTE"); // 3a fails
 							System.exit(1);
 						}
 					}

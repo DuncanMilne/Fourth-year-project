@@ -104,11 +104,8 @@ public class StabilityChecker {
 					currentProj = s.untouchedPreferenceList.get(p);
 					if (currentProj.capacity > currentProj.unpromoted.size()){
 						if (s.proj.lecturer.projects.indexOf(s.proj) < currentProj.lecturer.projects.indexOf(currentProj)){
+							System.out.println("DOES NOT COMPUTE"); // 3a fails
 							algorithm.printInstance(1);
-							System.out.println("DOES NOT COMPUTE"); // 3a fails
-							System.out.println("DOES NOT COMPUTE"); // 3a fails
-							System.out.println("DOES NOT COMPUTE"); // 3a fails
-							System.out.println("DOES NOT COMPUTE"); // 3a fails
 							System.exit(1);
 						}
 					}

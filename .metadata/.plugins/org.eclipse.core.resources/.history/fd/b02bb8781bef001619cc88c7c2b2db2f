@@ -180,8 +180,8 @@ public class GurobiModel extends Algorithm {
 				threeA.multAdd(1.0, Dijk);
 
 				rhsvars.add(Aijk);
-				rhsvars.add(Cijk);
 				rhsvars.add(Dijk);
+				rhsvars.add(Cijk);
 				UCPTracker.add(underCapacityProjects.get(a.projects.indexOf(p)));
 				grbmodel.addConstr(threeA, GRB.LESS_EQUAL, 3, "constraint 3a");
 				i++;

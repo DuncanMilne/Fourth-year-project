@@ -180,8 +180,8 @@ public class GurobiModel extends Algorithm {
 				threeA.multAdd(1.0, Dijk);
 
 				rhsvars.add(Aijk);
-				rhsvars.add(Cijk);
 				rhsvars.add(Dijk);
+				rhsvars.add(Cijk);
 				UCPTracker.add(underCapacityProjects.get(a.projects.indexOf(p)));
 				grbmodel.addConstr(threeA, GRB.LESS_EQUAL, 3, "constraint 3a");
 				i++;
@@ -321,9 +321,11 @@ public class GurobiModel extends Algorithm {
 	    			 rhs.addConstant(vertexLabels.get(a.assignedStudents.indexOf(i2)));
 	    			 rhs.multAdd(a.assignedStudents.size(), bracketedExpression);
 
+	    			 //System.out.println(rhs.getConstant());
+	    			 //System.out.println(rhs.getCoeff(0));  don't understand how this works. need to work out how this works and if its doing the right thing.
 	    			 lhs.addConstant(vertexLabels.get(i1Index));
 	    			 lhs.addConstant(1.0);
-	    			 grbmodel.addConstr(lhs, GRB.LESS_EQUAL, rhs, "myconstraint2");
+	    			 grbmodel.addConstr(lhs, GRB.LESS_EQUAL, rhs, "myconstraint2"); //need to remove the equal part
 	    			 i2Index++;
     			 }
     		 }

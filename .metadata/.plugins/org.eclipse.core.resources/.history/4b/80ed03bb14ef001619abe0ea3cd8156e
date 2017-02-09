@@ -14,8 +14,8 @@ public class GurobiModel extends Algorithm {
     /** <p>The gurobi model.</p> */
     GRBModel grbmodel;
 
-	ArrayList<GRBLinExpr> rhsvars = new ArrayList<GRBLinExpr>();
-	ArrayList<GRBVar> UCPTracker = new ArrayList<GRBVar>();
+	ArrayList<GRBVar> rhsvars = new ArrayList<GRBVar>();
+	ArrayList<GRBLinExpr> lhsvars = new ArrayList<GRBLinExpr>();
 	ArrayList<Integer> vtracker = new ArrayList<Integer>();
     boolean feasible = true;
 	
@@ -68,13 +68,13 @@ public class GurobiModel extends Algorithm {
             setStudentAssignments(a);
         }
         
-        for (GRBVar var : UCPTracker) {
-        	System.out.println("ucp " +var.get(GRB.DoubleAttr.X));
-        }
+        for (GRBVar v: rhsvars) {
+    		System.out.println("rhs " + v.get(GRB.DoubleAttr.X));
+    	}
         
-        for(GRBLinExpr e: rhsvars) {
-        	System.out.println(e.getValue());
-        }
+        for (GRBLinExpr v: lhsvars) {
+    		System.out.println(v.getValue());
+    	}
         
         // write model then dispose of model and environment
         //m.setInfoString(infoString);
@@ -112,6 +112,8 @@ public class GurobiModel extends Algorithm {
 					sumOf.addTerm(1.0, s.grbvars.get(j));
 				}
 				
+				// have to make sum of equal to 0 or 1?
+				
 				Aijk.multAdd(-1.0, sumOf);
 				
 				GRBLinExpr BijkRHS = new GRBLinExpr();
@@ -135,31 +137,31 @@ public class GurobiModel extends Algorithm {
 				
 				BijkRHS.multAdd(-1.0, Eijk);
 					
+				// should Bijk simply be whether or not this is true?????
 				grbmodel.addConstr(BijkLHS, GRB.GREATER_EQUAL, BijkRHS, "constraintname");
 				
 				
 				GRBLinExpr Cijk = new GRBLinExpr();
 				
-				// this was causing errors at some point, it shouldnt. seems to be causing errors when # lects < # projs < # studs. 6,4,2 fails
+				//this was causing errors at some point, it shouldnt. seems to be causing errors when # lects < # projs < # studs. 6,4,2 fails
 				for (Project q:p.lecturer.projects) {
-					if (s.preferenceList.contains(q) && p!=q) {
-						Cijk.addTerm(1.0, s.grbvars.get(s.preferenceList.indexOf(q)));
-					}
+					int test = s.preferenceList.indexOf(q);
+					System.out.println("index " +test);
+					System.out.println("size "+ s.grbvars.size());
+					Cijk.addTerm(1.0, s.grbvars.get(test));
 				}
 
 				GRBLinExpr Dijk = new GRBLinExpr();
 				
 				for (int j = p.lecturer.projects.indexOf(p)+1; j < p.lecturer.projects.size(); j ++) {
-					Project curr = p.lecturer.projects.get(j);
-					if (s.preferenceList.contains(curr)) {
-						Dijk.addTerm(1.0, s.grbvars.get(s.preferenceList.indexOf(curr)));
-					}
+					Dijk.addTerm(1.0, s.grbvars.get(j));
 				}
 
 				// ensure all are 1 or 0. There is probably a better way to do this.
 				grbmodel.addConstr(Aijk, GRB.GREATER_EQUAL, 0.0, "name");
 				grbmodel.addConstr(Aijk, GRB.LESS_EQUAL, 1.0, "name");
 				
+				//problems with BijkLHS as we're stating it has to be bina		ry but also is equal to the capacity of the project
 				grbmodel.addConstr(Cijk, GRB.GREATER_EQUAL, 0.0, "name");
 				grbmodel.addConstr(Cijk, GRB.LESS_EQUAL, 1.0, "name");
 				grbmodel.addConstr(Dijk, GRB.GREATER_EQUAL, 0.0, "name");
@@ -178,11 +180,8 @@ public class GurobiModel extends Algorithm {
 				threeA.multAdd(1.0, Cijk);
 				
 				threeA.multAdd(1.0, Dijk);
-
-				rhsvars.add(Aijk);
-				rhsvars.add(Cijk);
-				rhsvars.add(Dijk);
-				UCPTracker.add(underCapacityProjects.get(a.projects.indexOf(p)));
+				
+				rhsvars.add(underCapacityProjects.get(a.projects.indexOf(p)));
 				grbmodel.addConstr(threeA, GRB.LESS_EQUAL, 3, "constraint 3a");
 				i++;
 			}
@@ -321,9 +320,11 @@ public class GurobiModel extends Algorithm {
 	    			 rhs.addConstant(vertexLabels.get(a.assignedStudents.indexOf(i2)));
 	    			 rhs.multAdd(a.assignedStudents.size(), bracketedExpression);
 
+	    			 //System.out.println(rhs.getConstant());
+	    			 //System.out.println(rhs.getCoeff(0));  don't understand how this works. need to work out how this works and if its doing the right thing.
 	    			 lhs.addConstant(vertexLabels.get(i1Index));
 	    			 lhs.addConstant(1.0);
-	    			 grbmodel.addConstr(lhs, GRB.LESS_EQUAL, rhs, "myconstraint2");
+	    			 grbmodel.addConstr(lhs, GRB.LESS_EQUAL, rhs, "myconstraint2"); //need to remove the equal part
 	    			 i2Index++;
     			 }
     		 }
