@@ -1,0 +1,4 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<session version="1.0">
+<refactoring comment="Rename local variable &apos;firstProjectsLecturer&apos; in &apos;Algorithm.lecturersWorstNonEmptyProject(...)&apos; to &apos;fPL&apos;&#x0D;&#x0A;- Original project: &apos;DuncansProject&apos;&#x0D;&#x0A;- Original element: &apos;Algorithm.lecturersWorstNonEmptyProject(Lecturer, Project).firstProjectsLecturer&apos;&#x0D;&#x0A;- Renamed element: &apos;firstProjectsLecturer&apos;&#x0D;&#x0A;- Update references to refactored element" description="Rename local variable &apos;firstProjectsLecturer&apos;" id="org.eclipse.jdt.ui.rename.local.variable" input="/src&lt;{Algorithm.java[Algorithm~lecturersWorstNonEmptyProject~QLecturer;~QProject;@firstProjectsLecturer!2148!2177!2157!2177!QLecturer;!0!true" name="fPL" references="true" stamp="1486230836940" version="1.0"/>
+</session>

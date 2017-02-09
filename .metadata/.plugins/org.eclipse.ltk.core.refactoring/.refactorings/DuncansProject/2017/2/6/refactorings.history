@@ -1,0 +1,4 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<session version="1.0">
+<refactoring comment="Rename local variable &apos;firstCondition&apos; in &apos;GurobiModel.assign3aConstraints(...)&apos; to &apos;conditionA&apos;&#x0D;&#x0A;- Original project: &apos;DuncansProject&apos;&#x0D;&#x0A;- Original element: &apos;GurobiModel.assign3aConstraints(Algorithm).firstCondition&apos;&#x0D;&#x0A;- Renamed element: &apos;firstCondition&apos;&#x0D;&#x0A;- Update references to refactored element" description="Rename local variable &apos;firstCondition&apos;" id="org.eclipse.jdt.ui.rename.local.variable" input="/src&lt;{GurobiModel.java[GurobiModel~assign3aConstraints~QAlgorithm;@firstCondition!2616!2660!2627!2640!QGRBLinExpr;!0!false" name="conditionA" references="true" stamp="1486407276001" version="1.0"/>
+</session>

@@ -1,4 +1,4 @@
-import java.util.*;
+	import java.util.*;
 
 import gurobi.GRBException;
 
@@ -80,10 +80,10 @@ public class Main {
 	*/
   }
 
-  static Algorithm instanceGenerator(String fileName) {
-    Algorithm algorithm = new Algorithm();
+  Algorithm instanceGenerator(String fileName) {
+    Algorithm algorithm1 = new Algorithm();
     try {
-
+    	
       BufferedReader br = new BufferedReader(new FileReader(fileName));
 
       String[] splitted = br.readLine().split(" ");
@@ -105,7 +105,7 @@ public class Main {
 
         splitted = br.readLine().split(" ");
         currentProject = new Project(splitted[0], Integer.parseInt(splitted[1]));
-        algorithm.projects.add(currentProject);
+        algorithm1.projects.add(currentProject);
       }
 
       // now create students
@@ -113,13 +113,13 @@ public class Main {
 
         splitted = br.readLine().split(" "); // get each student
         currentStudent = new Student(splitted[0].substring(0, splitted[0].length()-1));
-        algorithm.unassigned.add(currentStudent); // creates student with new name
+        algorithm1.unassigned.add(currentStudent); // creates student with new name
         untouchedStudent =  new Student(splitted[0].substring(0, splitted[0].length()-1));
-        algorithm.untouchedStudents.add(untouchedStudent); // creates student with new name
+        algorithm1.untouchedStudents.add(untouchedStudent); // creates student with new name
 
         for (int j = 1; j < splitted.length; j++) {
-          currentStudent.preferenceList.add(algorithm.projects.get(Integer.parseInt(splitted[j])-1));
-          untouchedStudent.preferenceList.add(algorithm.projects.get(Integer.parseInt(splitted[j])-1));
+          currentStudent.preferenceList.add(algorithm1.projects.get(Integer.parseInt(splitted[j])-1));
+          untouchedStudent.preferenceList.add(algorithm1.projects.get(Integer.parseInt(splitted[j])-1));
         }
 
         currentStudent.rankingList = new int[currentStudent.preferenceList.size()];
@@ -127,6 +127,10 @@ public class Main {
 		    for (int k = 0; k < currentStudent.preferenceList.size(); k++) {
 				  currentStudent.rankingList[k] = k;  // Initially set rankings so index 0 is favourite, 1 is second favourite etc..
 			  }
+
+		currentStudent.untouchedPreferenceList = new ArrayList<Project>(currentStudent.preferenceList);
+		untouchedStudent.untouchedPreferenceList = new ArrayList<Project>(untouchedStudent.preferenceList);
+		   
       }
 
       Lecturer currentLecturer;
@@ -136,13 +140,13 @@ public class Main {
 
         splitted = br.readLine().split(" ");
         currentLecturer = new Lecturer(splitted[0].substring(0, splitted[0].length()-1), Integer.parseInt(splitted[1].substring(0, splitted[0].length()-1)));
-        algorithm.testLecturers.add(currentLecturer);
+        algorithm1.testLecturers.add(currentLecturer);
         for (int j = 2; j < splitted.length; j++) {
-          currentLecturer.projects.add(algorithm.projects.get(Integer.parseInt(splitted[j].replace(":", ""))-1));
-          algorithm.projects.get(Integer.parseInt(splitted[j])-1).lecturer = currentLecturer;
+          currentLecturer.projects.add(algorithm1.projects.get(Integer.parseInt(splitted[j].replace(":", ""))-1));
+          algorithm1.projects.get(Integer.parseInt(splitted[j])-1).lecturer = currentLecturer;
         }
       }
-
+      
       String line;
 
       // add matchings
@@ -154,11 +158,11 @@ public class Main {
       while ((line = br.readLine()) != null) {
 
         splitted = line.split(",");
-        currentStudent = algorithm.unassigned.get(Integer.parseInt(splitted[0].substring(1, splitted[0].length())) - 1);
+        currentStudent = algorithm1.unassigned.get(Integer.parseInt(splitted[0].substring(1, splitted[0].length())) - 1);
         toBeRemoved.add(currentStudent);
         projectNumber = Integer.parseInt(splitted[1].substring(0, splitted[0].length()-1))-1;
-        projectNumber = currentStudent.preferenceList.indexOf(algorithm.projects.get(projectNumber)); // get index of project in students pref list
-        matchingProject = algorithm.projects.get(projectNumber);
+        projectNumber = currentStudent.preferenceList.indexOf(algorithm1.projects.get(projectNumber)); // get index of project in students pref list
+        matchingProject = algorithm1.projects.get(projectNumber);
         currentStudent.proj = matchingProject;
         currentStudent.rankingListTracker = projectNumber;    // for stability checking purposes
         matchingProject.unpromoted.add(currentStudent);
@@ -166,13 +170,16 @@ public class Main {
       }
 
       br.close();
-      
-      algorithm.assignedStudents.addAll(toBeRemoved);
-      algorithm.unassigned.removeAll(toBeRemoved);
+
+
+      algorithm1.assignedStudents.addAll(toBeRemoved);
+      algorithm1.unassigned.removeAll(toBeRemoved);
 
     } catch (Exception e) {
       System.out.println("Type of error: " + e.getClass().getName() + " Error message: " + e.getMessage());
     }
+    algorithm = algorithm1;
+    createRankingLists();
     return algorithm;
   }
 
@@ -199,7 +206,7 @@ public class Main {
 	      } else if (promotion == 2){
 	    	  algorithm = new GurobiModel(algorithm);
 	    	  algorithm.assignConstraints(algorithm);
-	          algorithm.printInstance(1);
+	          //algorithm.printInstance(1);
 	          algorithm.s.stabilityChecker(algorithm.untouchedStudents, algorithm.emptyProject);
 	      } else if (promotion == 3) {
 	    	  Approx algorithm2 = new Approx(algorithm);

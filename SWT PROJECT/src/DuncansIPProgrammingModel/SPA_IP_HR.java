@@ -2,7 +2,6 @@ package DuncansIPProgrammingModel;
 
 
 import gurobi.*;
-import java.io.*;
 import java.util.*;
 
 /**

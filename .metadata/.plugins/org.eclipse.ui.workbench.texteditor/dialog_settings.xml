@@ -2,22 +2,23 @@
 <section name="Workbench">
 	<section name="org.eclipse.ui.texteditor.FindReplaceDialog">
 		<item value="false" key="isRegEx"/>
-		<item value="System.out" key="selection"/>
+		<item value="algorithm" key="selection"/>
 		<item value="false" key="casesensitive"/>
 		<item value="false" key="incremental"/>
 		<item value="true" key="wrap"/>
 		<item value="false" key="wholeword"/>
 		<list key="findhistory">
+			<item value="algorithm"/>
+			<item value="emptypro"/>
+			<item value="untouchedstudents"/>
+			<item value="lecturerswors"/>
+			<item value="set"/>
+			<item value="set()"/>
+			<item value="findnext"/>
 			<item value="system.out"/>
-			<item value="rankinglist"/>
-			<item value="unassignedstudents"/>
-			<item value="rankinglisttracker"/>
-			<item value="currentindex"/>
-			<item value="preference"/>
-			<item value="object"/>
-			<item value="objective"/>
 		</list>
 		<list key="replacehistory">
+			<item value="assignedStudents"/>
 		</list>
 	</section>
 	<section name="org.eclipse.ui.texteditor.FindReplaceDialog_dialogBounds">
