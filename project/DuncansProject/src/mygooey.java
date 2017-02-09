@@ -153,7 +153,9 @@ public class mygooey {
 					e1.printStackTrace();
 				  }
 		          algorithm.printInstance(1); 
-		         algorithm.s.stabilityChecker(algorithm.assignedStudents, algorithm.emptyProject);
+		          algorithm.s.stabilityChecker(algorithm.assignedStudents, algorithm.emptyProject);
+		          algorithm.s.IProgrammingBlockingPairs((algorithm.assignedStudents));
+		          algorithm.printInstance(1);
 			  } else {
 		      int numberOfStudents = Integer.parseInt(text.getText());
 		      

@@ -197,17 +197,23 @@ public class Main {
 	          algorithm = new ApproxPromotion(algorithm);
 	          algorithm.spaPApproxPromotion();
 	          //algorithm.printInstance(0);
-	          algorithm.s.stabilityChecker(algorithm.assignedStudents, algorithm.emptyProject);
+	          algorithm.s.stabilityChecker(algorithm.assignedStudents, algorithm.emptyProject);      
+	          algorithm.s.checkAssignedStudentsForBlockingPairs(algorithm.assignedStudents);      
+	          algorithm.s.checkUnassignedStudentsForBlockingPairs(algorithm.unassigned);
 	      } else if (promotion == 1){
 	          algorithm = new Approx(algorithm);
 	          algorithm.assignProjectsToStudents();
 	          //algorithm.printInstance(0);
 	          algorithm.s.stabilityChecker(algorithm.assignedStudents, algorithm.emptyProject);
+	          algorithm.s.checkAssignedStudentsForBlockingPairs(algorithm.assignedStudents);      
+	          algorithm.s.checkUnassignedStudentsForBlockingPairs(algorithm.unassigned);
 	      } else if (promotion == 2){
 	    	  algorithm = new GurobiModel(algorithm);
 	    	  algorithm.assignConstraints(algorithm);
-	          //algorithm.printInstance(1);
 	          algorithm.s.stabilityChecker(algorithm.untouchedStudents, algorithm.emptyProject);
+	          algorithm.s.IProgrammingBlockingPairs(algorithm.assignedStudents);      
+	          algorithm.printInstance(1);
+	          //algorithm.printInstance(1);
 	      } else if (promotion == 3) {
 	    	  Approx algorithm2 = new Approx(algorithm);
 	    	  ApproxPromotion algorithm1 = new ApproxPromotion(algorithm);
@@ -282,9 +288,11 @@ public class Main {
 				rPI = randomProjectIndex.nextInt(duplicateList.size());
 				algorithm.unassigned.get(j).preferenceList.add(duplicateList.get(rPI));
 				algorithm.untouchedStudents.get(j).preferenceList.add(duplicateList.get(rPI));
+				algorithm.unassigned.get(j).untouchedPreferenceList.add(duplicateList.get(rPI));
+				algorithm.untouchedStudents.get(j).untouchedPreferenceList.add(duplicateList.get(rPI));
 				duplicateList.remove(rPI);
 			}
-			algorithm.unassigned.get(j).untouchedPreferenceList = new ArrayList<Project>(algorithm.unassigned.get(j).preferenceList);
+			//algorithm.unassigned.get(j).untouchedPreferenceList = new ArrayList<Project>(algorithm.unassigned.get(j).preferenceList);
 
   		}
   	}

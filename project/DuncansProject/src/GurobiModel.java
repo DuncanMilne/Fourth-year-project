@@ -14,7 +14,7 @@ public class GurobiModel extends Algorithm {
     /** <p>The gurobi model.</p> */
     GRBModel grbmodel;
 
-	ArrayList<GRBLinExpr> toprint3a = new ArrayList<GRBLinExpr>();
+	ArrayList<GRBLinExpr> rhsvars = new ArrayList<GRBLinExpr>();
 	ArrayList<GRBLinExpr> lhsvars = new ArrayList<GRBLinExpr>();
 	ArrayList<Integer> vtracker = new ArrayList<Integer>();
     boolean feasible = true;
@@ -53,7 +53,7 @@ public class GurobiModel extends Algorithm {
 		
 		blockingCoalitionConstraints(a);
 		
-		//assign3aConstraints(a);
+		assign3aConstraints(a);
 		
         grbmodel.optimize();
 	   	 
@@ -62,27 +62,19 @@ public class GurobiModel extends Algorithm {
         if (status != GRB.Status.OPTIMAL) {
             feasible = false;
             System.out.println("no solution found in the following instance:");
+            a.printInstance(1);
         }
         else {
             setStudentAssignments(a);
         }
         
-        /*for (Student s:assignedStudents){	
-        	for (GRBVar v: s.envyList) {
-        		System.out.println(v.get(GRB.DoubleAttr.X));
-        	}
-        }*/
-
-        for (GRBLinExpr b: toprint3a){
-        	System.out.println("rhs " + b.getValue());
-        }
-        for (GRBLinExpr b: lhsvars){
-        	System.out.println("lhs " + b.getValue());
-        }
-
-        for (int b: vtracker){
-        	System.out.println("v label for i2 is " + b);
-        }
+        for (GRBLinExpr v: rhsvars) {
+    		System.out.println("rhs " + v.getCoeff(0));
+    	}
+        
+        for (GRBLinExpr v: lhsvars) {
+    		System.out.println(v.getValue());
+    	}
         
         // write model then dispose of model and environment
         //m.setInfoString(infoString);
@@ -136,12 +128,12 @@ public class GurobiModel extends Algorithm {
 				// 1- (students assigned to projects/capacity of project
 				GRBLinExpr Eijk = new GRBLinExpr();
 				
+				// Eijk is used to count how many students are subscribed to p
 				for (Student t:assignedStudents) {
 					if (t.preferenceList.contains(p)) {
 						Eijk.addTerm(1.0, t.grbvars.get(t.preferenceList.indexOf(p)));
 					}
 				}
-				
 				
 				BijkRHS.multAdd(-1.0, Eijk);
 				
@@ -150,8 +142,10 @@ public class GurobiModel extends Algorithm {
 				
 				GRBLinExpr Cijk = new GRBLinExpr();
 				
+				//this was causing errors at some point, it shouldnt.
 				for (Project q:p.lecturer.projects) {
-					Cijk.addTerm(1.0, s.grbvars.get(s.preferenceList.indexOf(q)));
+					int test = s.preferenceList.indexOf(q);
+					Cijk.addTerm(1.0, s.grbvars.get(test));
 				}
 
 				GRBLinExpr Dijk = new GRBLinExpr();
@@ -163,6 +157,8 @@ public class GurobiModel extends Algorithm {
 				// ensure all are 1 or 0. There is probably a better way to do this.
 				grbmodel.addConstr(Aijk, GRB.GREATER_EQUAL, 0.0, "name");
 				grbmodel.addConstr(Aijk, GRB.LESS_EQUAL, 1.0, "name");
+				
+				//problems with BijkLHS as we're stating it has to be binary but also is equal to the capacity of the project
 				grbmodel.addConstr(BijkLHS, GRB.GREATER_EQUAL, 0.0, "name");
 				grbmodel.addConstr(BijkLHS, GRB.LESS_EQUAL, 1.0, "name");
 				grbmodel.addConstr(Cijk, GRB.GREATER_EQUAL, 0.0, "name");
@@ -171,6 +167,8 @@ public class GurobiModel extends Algorithm {
 				grbmodel.addConstr(Dijk, GRB.LESS_EQUAL, 1.0, "name");
 				grbmodel.addConstr(Eijk, GRB.GREATER_EQUAL, 0.0, "name");
 				grbmodel.addConstr(Eijk, GRB.LESS_EQUAL, 1.0, "name");
+				grbmodel.addConstr(sumOf, GRB.GREATER_EQUAL, 0.0, "name");
+				grbmodel.addConstr(sumOf, GRB.LESS_EQUAL, 1.0, "name");
 				
 				GRBLinExpr threeA = new GRBLinExpr();
 				
@@ -181,7 +179,8 @@ public class GurobiModel extends Algorithm {
 				threeA.multAdd(1.0, Cijk);
 				
 				threeA.multAdd(1.0, Dijk);
-			
+				
+				rhsvars.add(BijkRHS);
 				grbmodel.addConstr(threeA, GRB.LESS_EQUAL, 3, "constraint 3a");
 				i++;
 			}
@@ -326,9 +325,6 @@ public class GurobiModel extends Algorithm {
 	    			 lhs.addConstant(1.0);
 	    			 grbmodel.addConstr(lhs, GRB.LESS_EQUAL, rhs, "myconstraint2"); //need to remove the equal part
 	    			 i2Index++;
-					 toprint3a.add(rhs);
-					 lhsvars.add(lhs);
-					 vtracker.add(vertexLabels.get(a.assignedStudents.indexOf(i2)));
     			 }
     		 }
     		 i2Index = 0;
@@ -351,6 +347,7 @@ public class GurobiModel extends Algorithm {
                 if (resultPref > 0.5) {
                     s.proj = s.preferenceList.get(projInd); 
                     matched = true;
+                    s.proj.unpromoted.add(s);
                 }
             }
             if (!matched){
