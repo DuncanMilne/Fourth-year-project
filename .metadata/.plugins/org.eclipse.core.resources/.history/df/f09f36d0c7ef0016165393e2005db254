@@ -103,7 +103,7 @@ public class StabilityChecker {
 				for (int p = 0; p < s.untouchedPreferenceList.indexOf(s.proj); p++){
 					currentProj = s.untouchedPreferenceList.get(p);
 					if (currentProj.capacity > currentProj.unpromoted.size()){
-						if (s.proj.lecturer.projects.indexOf(s.proj) > currentProj.lecturer.projects.indexOf(currentProj) && s.proj.lecturer == currentProj.lecturer){
+						if (s.proj.lecturer.projects.indexOf(s.proj) < currentProj.lecturer.projects.indexOf(currentProj)){
 							algorithm.printInstance(1);
 							System.out.println("DOES NOT COMPUTE"); // 3a fails
 							System.out.println("DOES NOT COMPUTE"); // 3a fails
@@ -112,6 +112,7 @@ public class StabilityChecker {
 							System.exit(1);
 						}
 					}
+					System.out.println("test");
 					
 				}
 			} else {

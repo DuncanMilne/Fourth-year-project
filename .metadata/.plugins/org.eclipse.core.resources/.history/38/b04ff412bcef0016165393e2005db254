@@ -15,7 +15,6 @@ public class GurobiModel extends Algorithm {
     GRBModel grbmodel;
 
 	ArrayList<GRBLinExpr> rhsvars = new ArrayList<GRBLinExpr>();
-	ArrayList<GRBLinExpr> lhsvars = new ArrayList<GRBLinExpr>();
 	ArrayList<GRBVar> UCPTracker = new ArrayList<GRBVar>();
 	ArrayList<Integer> vtracker = new ArrayList<Integer>();
     boolean feasible = true;
@@ -69,6 +68,14 @@ public class GurobiModel extends Algorithm {
             setStudentAssignments(a);
         }
         
+        for (GRBVar var : UCPTracker) {
+        	System.out.println("ucp " +var.get(GRB.DoubleAttr.X));
+        }
+        
+        for(GRBLinExpr e: rhsvars) {
+        	System.out.println(e.getValue());
+        }
+        
         // write model then dispose of model and environment
         //m.setInfoString(infoString);
         //grbmodel.write("SPA_IP_HR.lp");
@@ -83,9 +90,7 @@ public class GurobiModel extends Algorithm {
 		ArrayList<GRBVar> underCapacityProjects = new ArrayList<GRBVar>();
 		
 		for (Project p: a.projects) {
-			GRBVar v = grbmodel.addVar(0.0, 1.0, 0.0, GRB.BINARY, p.name + " under capacity");
-			v.set(GRB.DoubleAttr.Start, 0.0);
-			underCapacityProjects.add(v); // Ei,i'
+			underCapacityProjects.add(grbmodel.addVar(0.0, 1.0, 0.0, GRB.BINARY, p.name + " under capacity"));
 		}
 		
 		//need to make variables a b c and d for each student/project/lecturer combo. projects + lecturers will obv be matched
@@ -103,8 +108,6 @@ public class GurobiModel extends Algorithm {
 				
 				GRBLinExpr sumOf = new GRBLinExpr();
 				
-				// sumOf is 1 if a student has a worse project than p or student is unassigned
-				// #NOTE i believe this to be working as intended... further testing needed??
 				for (int j = 0; j < i; j ++) {
 					sumOf.addTerm(1.0, s.grbvars.get(j));
 				}
@@ -119,6 +122,7 @@ public class GurobiModel extends Algorithm {
 				
 				BijkRHS.addConstant(p.capacity); // instead of dividing Eijk by capacity of project, times everything else by capacity of project
 				
+				
 				// 1- (students assigned to projects/capacity of project
 				GRBLinExpr Eijk = new GRBLinExpr();
 				
@@ -128,16 +132,15 @@ public class GurobiModel extends Algorithm {
 						Eijk.addTerm(1.0, t.grbvars.get(t.preferenceList.indexOf(p)));
 					}
 				}
-					
+				
 				BijkRHS.multAdd(-1.0, Eijk);
 					
 				grbmodel.addConstr(BijkLHS, GRB.GREATER_EQUAL, BijkRHS, "constraintname");
 				
-				 
+				
 				GRBLinExpr Cijk = new GRBLinExpr();
 				
 				// this was causing errors at some point, it shouldnt. seems to be causing errors when # lects < # projs < # studs. 6,4,2 fails
-				//believe this works, not put too much thought in but seems to make sense
 				for (Project q:p.lecturer.projects) {
 					if (s.preferenceList.contains(q) && p!=q) {
 						Cijk.addTerm(1.0, s.grbvars.get(s.preferenceList.indexOf(q)));
@@ -153,6 +156,16 @@ public class GurobiModel extends Algorithm {
 					}
 				}
 
+				// ensure all are 1 or 0. There is probably a better way to do this.
+				grbmodel.addConstr(Aijk, GRB.GREATER_EQUAL, 0.0, "name");
+				grbmodel.addConstr(Aijk, GRB.LESS_EQUAL, 1.0, "name");
+				
+				grbmodel.addConstr(Cijk, GRB.GREATER_EQUAL, 0.0, "name");
+				grbmodel.addConstr(Cijk, GRB.LESS_EQUAL, 1.0, "name");
+				grbmodel.addConstr(Dijk, GRB.GREATER_EQUAL, 0.0, "name");
+				grbmodel.addConstr(Dijk, GRB.LESS_EQUAL, 1.0, "name");
+				grbmodel.addConstr(sumOf, GRB.GREATER_EQUAL, 0.0, "name");
+				grbmodel.addConstr(sumOf, GRB.LESS_EQUAL, 1.0, "name");
 				
 				GRBLinExpr threeA = new GRBLinExpr();
 				
@@ -164,10 +177,9 @@ public class GurobiModel extends Algorithm {
 				
 				threeA.multAdd(1.0, Dijk);
 
-				lhsvars.add(Aijk);
-				//rhsvars.add(BijkRHS);
-				
-				//rhsvars.add(Dijk);
+				rhsvars.add(Aijk);
+				rhsvars.add(Cijk);
+				rhsvars.add(Dijk);
 				UCPTracker.add(underCapacityProjects.get(a.projects.indexOf(p)));
 				grbmodel.addConstr(threeA, GRB.LESS_EQUAL, 3, "constraint 3a");
 				i++;

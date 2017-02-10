@@ -130,6 +130,7 @@ public class GurobiModel extends Algorithm {
 				}
 					
 				BijkRHS.multAdd(-1.0, Eijk);
+				System.out.println(Eijk.size());
 					
 				grbmodel.addConstr(BijkLHS, GRB.GREATER_EQUAL, BijkRHS, "constraintname");
 				

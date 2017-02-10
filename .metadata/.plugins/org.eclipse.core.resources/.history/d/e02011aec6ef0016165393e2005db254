@@ -69,6 +69,18 @@ public class GurobiModel extends Algorithm {
             setStudentAssignments(a);
         }
         
+        for (GRBVar var : UCPTracker) {
+        	System.out.println("ucp " +var.get(GRB.DoubleAttr.X));
+        }
+        
+        for(GRBLinExpr e: rhsvars) {
+        	System.out.println("rhs " + e.getValue());
+        }
+        
+        for(GRBLinExpr e: lhsvars) {
+        	System.out.println("lhs " + e.getValue());
+        }
+        
         // write model then dispose of model and environment
         //m.setInfoString(infoString);
         //grbmodel.write("SPA_IP_HR.lp");
@@ -130,6 +142,7 @@ public class GurobiModel extends Algorithm {
 				}
 					
 				BijkRHS.multAdd(-1.0, Eijk);
+				System.out.println(Eijk.size());
 					
 				grbmodel.addConstr(BijkLHS, GRB.GREATER_EQUAL, BijkRHS, "constraintname");
 				
@@ -153,6 +166,9 @@ public class GurobiModel extends Algorithm {
 					}
 				}
 
+				// ensure all are 1 or 0. There is probably a better way to do this.
+				grbmodel.addConstr(Aijk, GRB.GREATER_EQUAL, 0.0, "name");
+				grbmodel.addConstr(Aijk, GRB.LESS_EQUAL, 1.0, "name");
 				
 				GRBLinExpr threeA = new GRBLinExpr();
 				
