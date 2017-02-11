@@ -140,7 +140,7 @@ public class Main {
 
         splitted = br.readLine().split(" ");
         currentLecturer = new Lecturer(splitted[0].substring(0, splitted[0].length()-1), Integer.parseInt(splitted[1].substring(0, splitted[0].length()-1)));
-        algorithm1.testLecturers.add(currentLecturer);
+        algorithm1.lecturers.add(currentLecturer);
         for (int j = 2; j < splitted.length; j++) {
           currentLecturer.projects.add(algorithm1.projects.get(Integer.parseInt(splitted[j].replace(":", ""))-1));
           algorithm1.projects.get(Integer.parseInt(splitted[j])-1).lecturer = currentLecturer;
@@ -183,7 +183,7 @@ public class Main {
     return algorithm;
   }
 
-  public void go(int[] arguments, int promotion) throws GRBException {
+  public void go(int[] arguments, int promotion) throws GRBException, CloneNotSupportedException {
 	  
 	  for (int i=0; i< arguments[5]; i++) {
 		  algorithm = new Algorithm();
@@ -215,29 +215,29 @@ public class Main {
 	          //algorithm.printInstance(1);
 	          //algorithm.printInstance(1);
 	      } else if (promotion == 3) {
-	    	  Approx algorithm2 = new Approx(algorithm);
-	    	  ApproxPromotion algorithm1 = new ApproxPromotion(algorithm);
-	          algorithm2.assignProjectsToStudents();
+	    	  Approx algorithm2 = new Approx((Algorithm) algorithm.clone(), true);
 	          algorithm2.printInstance(0);
+	    	  ApproxPromotion algorithm1 = new ApproxPromotion((Algorithm) algorithm.clone(), true);
+	          algorithm2.assignProjectsToStudents();
 	          algorithm2.s.stabilityChecker(algorithm2.assignedStudents, algorithm2.emptyProject);
-	          algorithm1.spaPApproxPromotion();
 	          algorithm1.printInstance(0);
+	          algorithm1.spaPApproxPromotion();
 	          algorithm1.s.stabilityChecker(algorithm1.assignedStudents, algorithm1.emptyProject);
+	          
 	      } else {
-	    	  ApproxPromotion algorithm1 = new ApproxPromotion(algorithm);
-	    	  Approx algorithm2 = new Approx(algorithm);
-	          GurobiModel algorithm3 = new GurobiModel(algorithm);
+	    	  ApproxPromotion algorithm1 = new ApproxPromotion((Algorithm) algorithm.clone());
+	    	  Approx algorithm2 = new Approx((Algorithm) algorithm.clone());
+	          GurobiModel algorithm3 = new GurobiModel((Algorithm) algorithm.clone());
 	    	  algorithm2.assignProjectsToStudents();
 	          algorithm2.printInstance(0);
 	          algorithm2.s.stabilityChecker(algorithm2.assignedStudents, algorithm2.emptyProject);
-	    	  algorithm1.spaPApproxPromotion();
 	          algorithm1.printInstance(0);
+	    	  algorithm1.spaPApproxPromotion();
 	          algorithm1.s.stabilityChecker(algorithm1.assignedStudents, algorithm1.emptyProject);
 	    	  algorithm3.assignConstraints(algorithm3);
 	          algorithm3.printInstance(1);
 	      }
 	  }
-
   }
 
   static void assignCapacity(int lecturerCapacity, int projectCapacity) {
@@ -249,7 +249,7 @@ public class Main {
 		}
 
 		for (int i = 0; i< lecturerCapacity; i++) {
-		    algorithm.testLecturers.get(random.nextInt(algorithm.testLecturers.size())).capacity++;
+		    algorithm.lecturers.get(random.nextInt(algorithm.lecturers.size())).capacity++;
 		}
 	}
 
@@ -299,7 +299,7 @@ public class Main {
 
     static void populateLecturers(int numberOfLecturers) {
       for (int i = 0; i < numberOfLecturers; i++){
-        algorithm.testLecturers.add(new Lecturer(Integer.toString(i)));
+        algorithm.lecturers.add(new Lecturer(Integer.toString(i)));
       }
     }
 
@@ -310,10 +310,10 @@ public class Main {
 
   		// first assign each lecturer one project
   		Random randomProjectIndex = new Random();
-  		for (int i = 0; i < algorithm.testLecturers.size() && proj.size()>0; i++) {
+  		for (int i = 0; i < algorithm.lecturers.size() && proj.size()>0; i++) {
   			int randomInt = randomProjectIndex.nextInt(proj.size());
-  			algorithm.testLecturers.get(i).projects.add(proj.get(randomInt));
-  			proj.get(randomInt).lecturer = algorithm.testLecturers.get(i);
+  			algorithm.lecturers.get(i).projects.add(proj.get(randomInt));
+  			proj.get(randomInt).lecturer = algorithm.lecturers.get(i);
   			proj.remove(randomInt);
   		}
 
@@ -324,9 +324,9 @@ public class Main {
   		Lecturer chosenLecturer;
   		while (proj.size()>0) {
   			int randomProjInt = randomProjectIndex.nextInt(proj.size());
-  			int randomLectInt = randomProjectIndex.nextInt(algorithm.testLecturers.size());
+  			int randomLectInt = randomProjectIndex.nextInt(algorithm.lecturers.size());
   			chosenProject = proj.get(randomProjInt);
-  			chosenLecturer = algorithm.testLecturers.get(randomLectInt);
+  			chosenLecturer = algorithm.lecturers.get(randomLectInt);
   			chosenLecturer.projects.add(chosenProject);
   			chosenProject.lecturer = chosenLecturer;
   			proj.remove(randomProjInt);
@@ -355,7 +355,7 @@ public class Main {
             s.rankingList[i] = i;  // Initially set rankings so index 0 is favourite, 1 is second favourite etc..
           }
         }
-      for (Lecturer l: algorithm.testLecturers) {
+      for (Lecturer l: algorithm.lecturers) {
         l.rankingList = new int[l.projects.size()];
         for (int i = 0; i < l.rankingList.length; i++) {
           l.rankingList[i] = i;

@@ -10,12 +10,103 @@ public class ApproxPromotion extends Algorithm{
   public ApproxPromotion(Algorithm algorithm) {
 	this.assignedStudents = new ArrayList<Student>(algorithm.assignedStudents);
 	this.projects = new ArrayList<Project>(algorithm.projects);
-	this.testLecturers = new ArrayList<Lecturer>(algorithm.testLecturers);
+	this.lecturers = new ArrayList<Lecturer>(algorithm.lecturers);
 	this.unassigned = new ArrayList<Student>(algorithm.unassigned);
 	this.emptyProject = new Project("empty");
 	this.projectlessStudents = new ArrayList<Student>(algorithm.projectlessStudents);
 	this.untouchedStudents = new ArrayList<Student>(algorithm.untouchedStudents);
 	this.s = new StabilityChecker(this);
+  }
+  
+  // used for cloning purposes
+  
+  public ApproxPromotion(Algorithm algorithm, boolean cloning) throws CloneNotSupportedException {
+	  this.assignedStudents = new ArrayList<Student>();
+	  for (Student s : algorithm.assignedStudents) {
+		  Student new1 = (Student) s.clone();
+		  new1.rankingList = new int[s.rankingList.length];
+		  this.assignedStudents.add(new1);
+		  new1.preferenceList = new ArrayList<Project>();
+		  new1.untouchedPreferenceList = new ArrayList<Project>();
+		  for (Project p : s.preferenceList)
+			  new1.preferenceList.add((Project) p.clone());
+		  for (Project p : s.untouchedPreferenceList)
+			  new1.untouchedPreferenceList.add((Project) p.clone());
+		  for (int i = 0; i<s.rankingList.length; i++) 
+			  new1.rankingList[i] = s.rankingList[i];
+	  }
+	  
+	  this.unassigned = new ArrayList<Student>();
+	  for (Student s : algorithm.unassigned) {
+		  Student new1 = (Student) s.clone();
+		  this.unassigned.add(new1);
+		  new1.preferenceList = new ArrayList<Project>();
+		  new1.untouchedPreferenceList = new ArrayList<Project>();
+		  for (Project p : s.preferenceList)
+			  new1.preferenceList.add((Project) p.clone());
+		  for (Project p : s.untouchedPreferenceList)
+			  new1.untouchedPreferenceList.add((Project) p.clone());
+		  for (int i = 0; i<s.rankingList.length; i++) 
+			  new1.rankingList[i] = s.rankingList[i];
+	  }
+	  
+	  this.projectlessStudents = new ArrayList<Student>();
+	  for (Student s : algorithm.projectlessStudents) {
+		  Student new1 = (Student) s.clone();
+		  this.projectlessStudents.add(new1);
+		  new1.preferenceList = new ArrayList<Project>();
+		  new1.untouchedPreferenceList = new ArrayList<Project>();
+		  for (Project p : s.preferenceList)
+			  new1.preferenceList.add((Project) p.clone());
+		  for (Project p : s.untouchedPreferenceList)
+			  new1.untouchedPreferenceList.add((Project) p.clone());
+		  for (int i = 0; i<s.rankingList.length; i++) 
+			  new1.rankingList[i] = s.rankingList[i];
+	  }
+	  
+	  this.untouchedStudents = new ArrayList<Student>();
+	  for (Student s : algorithm.untouchedStudents) {
+		  Student new1 = (Student) s.clone();
+		  this.untouchedStudents.add(new1);
+		  new1.preferenceList = new ArrayList<Project>();
+		  new1.untouchedPreferenceList = new ArrayList<Project>();
+		  for (Project p : s.preferenceList)
+			  new1.preferenceList.add((Project) p.clone());
+		  for (Project p : s.untouchedPreferenceList)
+			  new1.untouchedPreferenceList.add((Project) p.clone());
+		  for (int i = 0; i<s.rankingList.length; i++) 
+			  new1.rankingList[i] = s.rankingList[i];
+	  }
+	  
+	  this.projects = new ArrayList<Project>();
+	  for (Project s : algorithm.projects){
+		  Project new1 = (Project) s.clone();
+		  this.projects.add(new1);
+		  new1.unpromoted = new ArrayList<Student>();
+		  new1.promoted = new ArrayList<Student>();
+		  for (Student p: s.unpromoted) 
+			  new1.unpromoted.add((Student) p.clone());
+		  
+		  for (Student p: s.unpromoted) 
+			  new1.promoted.add((Student) p.clone());
+		  
+	  }
+	  
+	  this.lecturers = new ArrayList<Lecturer>();
+	  for (Lecturer s : algorithm.lecturers) {
+		  Lecturer new1 = (Lecturer) s.clone();
+		  new1.rankingList = new int[s.rankingList.length];
+		  this.lecturers.add(new1);
+		  new1.projects = new ArrayList<Project>();
+		  for (Project p : s.projects)
+			  new1.projects.add((Project) p.clone());
+		  for (int i = 0; i < s.rankingList.length; i++) 
+			  new1.rankingList[i] = s.rankingList[i];
+	  }
+
+	  this.emptyProject = new Project("empty");
+	  this.s = new StabilityChecker(this);
+	  
   }
 
 protected void spaPApproxPromotion() {
@@ -71,9 +162,8 @@ protected void spaPApproxPromotion() {
 
         fPL = firstProj.lecturer;
 
-
         // if the student's favourite project's lecturer has a worst non empty project, find it
-        if (fPL.assigned!= 0) {
+        if (fPL.assigned != 0) {
           wNEP = lecturersWorstNonEmptyProject(fPL, wNEP);
         }
 
@@ -104,6 +194,8 @@ protected void spaPApproxPromotion() {
           // if the first projects lecturer has a worst non empty project
           if (fPL.assigned != 0) {
 
+			System.out.println("fpl name " +fPL.name);
+			
            // if the first projects lecturer is full and they prefer the worst non empty project the students favourite
            if (fPL.assigned == fPL.capacity && fPL.rankingList[fPL.projects.indexOf(wNEP)] < fPL.rankingList[fPL.projects.indexOf(firstProj)]){
 

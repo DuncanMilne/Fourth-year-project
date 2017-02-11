@@ -32,7 +32,7 @@ public class GurobiModel extends Algorithm {
 	
 	public GurobiModel(Algorithm algorithm) {
   		this.projects = new ArrayList<Project>(algorithm.projects);
-  		this.testLecturers = new ArrayList<Lecturer>(algorithm.testLecturers);
+  		this.lecturers = new ArrayList<Lecturer>(algorithm.lecturers);
   		this.emptyProject = new Project("empty");
   		this.assignedStudents = new ArrayList<Student>(algorithm.unassigned);
   		this.untouchedStudents = new ArrayList<Student>(algorithm.untouchedStudents);
@@ -212,7 +212,7 @@ public class GurobiModel extends Algorithm {
         // ----------------------------------------------------------------------------------------
         // for each lecturer
         int x = 0;
-        for (Lecturer l: a.testLecturers) {
+        for (Lecturer l: a.lecturers) {
             GRBLinExpr numStudentsForLect = new GRBLinExpr();    
             for (Student s:a.assignedStudents) {
             	for (Project p: s.preferenceList) {

@@ -1,5 +1,5 @@
 import java.util.ArrayList;
-public class Project {
+public class Project implements Cloneable {
 
 	Lecturer lecturer;
 	String name;
@@ -24,4 +24,11 @@ public class Project {
 		unpromoted = new ArrayList<Student>();
 		promoted = new ArrayList<Student>();
 	}
+	
+	@Override
+	public Object clone() throws CloneNotSupportedException {
+
+	    return super.clone();
+	}
+
 }

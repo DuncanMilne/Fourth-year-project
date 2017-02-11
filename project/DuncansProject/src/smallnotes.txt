@@ -1,3 +1,5 @@
+if all this cloning nonsense fails, output algorithm instance to file then read it in for all that want to be run
+
 4 6 2 0 0 fails IP programming
 
 

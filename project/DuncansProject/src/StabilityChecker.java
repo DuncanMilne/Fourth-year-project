@@ -103,12 +103,9 @@ public class StabilityChecker {
 				for (int p = 0; p < s.untouchedPreferenceList.indexOf(s.proj); p++){
 					currentProj = s.untouchedPreferenceList.get(p);
 					if (currentProj.capacity > currentProj.unpromoted.size()){
-						if (s.proj.lecturer.projects.indexOf(s.proj) > currentProj.lecturer.projects.indexOf(currentProj) && s.proj.lecturer == currentProj.lecturer){
+						if (s.proj.lecturer.projects.indexOf(s.proj) > currentProj.lecturer.projects.indexOf(currentProj) && s.proj.lecturer == currentProj.lecturer){		// if the lecturer supervises both projects, and prefers one that the student also prefers
 							algorithm.printInstance(1);
-							System.out.println("DOES NOT COMPUTE"); // 3a fails
-							System.out.println("DOES NOT COMPUTE"); // 3a fails
-							System.out.println("DOES NOT COMPUTE"); // 3a fails
-							System.out.println("DOES NOT COMPUTE"); // 3a fails
+							System.out.println("DOES NOT COMPUTE, blocking pair condition 3a has been TRIGGERED"); // 3a fails
 							System.exit(1);
 						}
 					}

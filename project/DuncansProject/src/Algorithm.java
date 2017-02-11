@@ -5,10 +5,10 @@ import gurobi.GRB;
 import gurobi.GRBException;
 import gurobi.GRBVar;
 
-public class Algorithm {
+public class Algorithm implements Cloneable {
 
 	protected ArrayList<Project> projects;
-	protected ArrayList<Lecturer> testLecturers;
+	protected ArrayList<Lecturer> lecturers;
 	protected ArrayList<Student> assignedStudents;
 	protected ArrayList<Student> unassigned;
 	protected ArrayList<Student> projectlessStudents;
@@ -22,14 +22,18 @@ public class Algorithm {
 
 	public Algorithm() {
 		projects = new ArrayList<Project>();
-		testLecturers = new ArrayList<Lecturer>();
+		lecturers = new ArrayList<Lecturer>();
 		assignedStudents = new ArrayList<Student>();
 		unassigned = new ArrayList<Student>();
 		emptyProject = new Project("empty");
 		projectlessStudents = new ArrayList<Student>();
 		untouchedStudents = new ArrayList<Student>();
-  		this.applyingStudent = new ArrayList<Student>();
-  		this.applyingProject = new ArrayList<Project>();
+	}
+	
+	@Override
+	public Object clone() throws CloneNotSupportedException {
+
+	    return super.clone();
 	}
 
 	protected void findNextFavouriteProject(Student currentStudent) {
@@ -92,7 +96,7 @@ public class Algorithm {
 
 		//int numberOfStudents = unassigned.size() + assignedStudents.size() + projectlessStudents.size();
 		//System.out.println(projects.size() + " " + numberOfStudents + " " + testLecturers.size());
-
+		
 		this.printProjects();
 
 		this.printStudents();
@@ -132,7 +136,7 @@ public class Algorithm {
 
 	void printLecturers() {
 		System.out.println("PRINTING LECTURERS");
-		ArrayList<Lecturer> toPrint = testLecturers;
+		ArrayList<Lecturer> toPrint = lecturers;
 		for (Lecturer l: toPrint) {
 			System.out.print(l.name + " : " + l.capacity + " : ");
 			for (Project p: l.projects) {
