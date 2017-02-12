@@ -1,6 +1,6 @@
 import java.util.ArrayList;
 
-public class Lecturer implements Cloneable {
+public class Lecturer {
 
 	String name;
 
@@ -30,13 +30,6 @@ public class Lecturer implements Cloneable {
 		this.assigned = 0;
 	}
 	
-	
-	@Override
-	public Object clone() throws CloneNotSupportedException {
-
-	    return super.clone();
-	}
-
 }
 
 // should create full method in lecturer that returns true if lecturer.capacity = lecturer.assigned

@@ -1,7 +1,7 @@
 import java.util.ArrayList;
 import gurobi.*;
 
-public class Student implements Cloneable {
+public class Student {
 
 
 	ArrayList<Project> preferenceList;
@@ -38,12 +38,6 @@ public class Student implements Cloneable {
 		promoted = true;
 		preferenceList = new ArrayList<Project>(untouchedPreferenceList);
 		rankingListTracker = 0;
-	}
-	
-	@Override
-	public Object clone() throws CloneNotSupportedException {
-
-	    return super.clone();
 	}
 
 }

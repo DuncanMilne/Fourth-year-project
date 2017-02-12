@@ -1,4 +1,4 @@
-	import java.util.*;
+import java.util.*;
 
 import gurobi.GRBException;
 
@@ -102,7 +102,6 @@ public class Main {
       Project currentProject;
 
       for (int i = 0; i < numProjects; i++) {
-
         splitted = br.readLine().split(" ");
         currentProject = new Project(splitted[0], Integer.parseInt(splitted[1]));
         algorithm1.projects.add(currentProject);
@@ -118,15 +117,15 @@ public class Main {
         algorithm1.untouchedStudents.add(untouchedStudent); // creates student with new name
 
         for (int j = 1; j < splitted.length; j++) {
-          currentStudent.preferenceList.add(algorithm1.projects.get(Integer.parseInt(splitted[j])-1));
-          untouchedStudent.preferenceList.add(algorithm1.projects.get(Integer.parseInt(splitted[j])-1));
+          currentStudent.preferenceList.add(algorithm1.projects.get(Integer.parseInt(splitted[j])));
+          untouchedStudent.preferenceList.add(algorithm1.projects.get(Integer.parseInt(splitted[j])));
         }
 
         currentStudent.rankingList = new int[currentStudent.preferenceList.size()];
 
-		    for (int k = 0; k < currentStudent.preferenceList.size(); k++) {
-				  currentStudent.rankingList[k] = k;  // Initially set rankings so index 0 is favourite, 1 is second favourite etc..
-			  }
+	    for (int k = 0; k < currentStudent.preferenceList.size(); k++) {
+			  currentStudent.rankingList[k] = k;  // Initially set rankings so index 0 is favourite, 1 is second favourite etc..
+		 }
 
 		currentStudent.untouchedPreferenceList = new ArrayList<Project>(currentStudent.preferenceList);
 		untouchedStudent.untouchedPreferenceList = new ArrayList<Project>(untouchedStudent.preferenceList);
@@ -139,11 +138,11 @@ public class Main {
       for (int i = 0; i < numLecturers; i++) {
 
         splitted = br.readLine().split(" ");
-        currentLecturer = new Lecturer(splitted[0].substring(0, splitted[0].length()-1), Integer.parseInt(splitted[1].substring(0, splitted[0].length()-1)));
+        currentLecturer = new Lecturer(splitted[0].substring(0, splitted[0].length()-1), Integer.parseInt(splitted[1].substring(0, splitted[1].length()-1)));
         algorithm1.lecturers.add(currentLecturer);
         for (int j = 2; j < splitted.length; j++) {
-          currentLecturer.projects.add(algorithm1.projects.get(Integer.parseInt(splitted[j].replace(":", ""))-1));
-          algorithm1.projects.get(Integer.parseInt(splitted[j])-1).lecturer = currentLecturer;
+          currentLecturer.projects.add(algorithm1.projects.get(Integer.parseInt(splitted[j])));
+          algorithm1.projects.get(Integer.parseInt(splitted[j])).lecturer = currentLecturer;
         }
       }
       
@@ -158,9 +157,9 @@ public class Main {
       while ((line = br.readLine()) != null) {
 
         splitted = line.split(",");
-        currentStudent = algorithm1.unassigned.get(Integer.parseInt(splitted[0].substring(1, splitted[0].length())) - 1);
+        currentStudent = algorithm1.unassigned.get(Integer.parseInt(splitted[0].substring(1, splitted[0].length()-1)));
         toBeRemoved.add(currentStudent);
-        projectNumber = Integer.parseInt(splitted[1].substring(0, splitted[0].length()-1))-1;
+        projectNumber = Integer.parseInt(splitted[1].substring(0, splitted[0].length()-1));
         projectNumber = currentStudent.preferenceList.indexOf(algorithm1.projects.get(projectNumber)); // get index of project in students pref list
         matchingProject = algorithm1.projects.get(projectNumber);
         currentStudent.proj = matchingProject;
@@ -196,14 +195,12 @@ public class Main {
 	      if (promotion == 0) {
 	          algorithm = new ApproxPromotion(algorithm);
 	          algorithm.spaPApproxPromotion();
-	          //algorithm.printInstance(0);
 	          algorithm.s.stabilityChecker(algorithm.assignedStudents, algorithm.emptyProject);      
 	          algorithm.s.checkAssignedStudentsForBlockingPairs(algorithm.assignedStudents);      
 	          algorithm.s.checkUnassignedStudentsForBlockingPairs(algorithm.unassigned);
 	      } else if (promotion == 1){
 	          algorithm = new Approx(algorithm);
 	          algorithm.assignProjectsToStudents();
-	          //algorithm.printInstance(0);
 	          algorithm.s.stabilityChecker(algorithm.assignedStudents, algorithm.emptyProject);
 	          algorithm.s.checkAssignedStudentsForBlockingPairs(algorithm.assignedStudents);      
 	          algorithm.s.checkUnassignedStudentsForBlockingPairs(algorithm.unassigned);
@@ -211,35 +208,48 @@ public class Main {
 	    	  algorithm = new GurobiModel(algorithm);
 	    	  algorithm.assignConstraints(algorithm);
 	          algorithm.s.stabilityChecker(algorithm.untouchedStudents, algorithm.emptyProject);
-	          algorithm.s.IProgrammingBlockingPairs(algorithm.assignedStudents);      
-	          //algorithm.printInstance(1);
-	          //algorithm.printInstance(1);
+	          algorithm.s.IProgrammingBlockingPairs(algorithm.assignedStudents);
 	      } else if (promotion == 3) {
-	    	  Approx algorithm2 = new Approx((Algorithm) algorithm.clone(), true);
-	          algorithm2.printInstance(0);
-	    	  ApproxPromotion algorithm1 = new ApproxPromotion((Algorithm) algorithm.clone(), true);
-	          algorithm2.assignProjectsToStudents();
-	          algorithm2.s.stabilityChecker(algorithm2.assignedStudents, algorithm2.emptyProject);
-	          algorithm1.printInstance(0);
-	          algorithm1.spaPApproxPromotion();
-	          algorithm1.s.stabilityChecker(algorithm1.assignedStudents, algorithm1.emptyProject);
-	          
+	    	  algorithm.writeToFile();
+	    	  Algorithm algorithm1 = instanceGenerator("the-instance.txt");
+	    	  ApproxPromotion approxPromotion = new ApproxPromotion(algorithm1);
+	    	  Algorithm algorithm2 = instanceGenerator("the-instance.txt");
+	    	  Approx approx = new Approx(algorithm2);
+	          approx.assignProjectsToStudents();
+	          approx.s.stabilityChecker(algorithm2.assignedStudents, algorithm2.emptyProject);
+	          approxPromotion.spaPApproxPromotion();
+	          approxPromotion.s.stabilityChecker(approxPromotion.assignedStudents, approxPromotion.emptyProject);
 	      } else {
-	    	  ApproxPromotion algorithm1 = new ApproxPromotion((Algorithm) algorithm.clone());
-	    	  Approx algorithm2 = new Approx((Algorithm) algorithm.clone());
-	          GurobiModel algorithm3 = new GurobiModel((Algorithm) algorithm.clone());
-	    	  algorithm2.assignProjectsToStudents();
-	          algorithm2.printInstance(0);
-	          algorithm2.s.stabilityChecker(algorithm2.assignedStudents, algorithm2.emptyProject);
-	          algorithm1.printInstance(0);
-	    	  algorithm1.spaPApproxPromotion();
-	          algorithm1.s.stabilityChecker(algorithm1.assignedStudents, algorithm1.emptyProject);
-	    	  algorithm3.assignConstraints(algorithm3);
-	          algorithm3.printInstance(1);
+	    	  algorithm.writeToFile();
+	    	  try {
+	    	  Algorithm algorithm1 = instanceGenerator("the-instance.txt");
+	    	  Algorithm algorithm2 = instanceGenerator("the-instance.txt");
+	    	  Algorithm algorithm3 = instanceGenerator("the-instance.txt");
+	    	  Approx approx = new Approx(algorithm1);
+	    	  ApproxPromotion approxPromotion = new ApproxPromotion(algorithm2);
+	    	  GurobiModel gurobiModel = new GurobiModel(algorithm3);
+	    	  approx.assignProjectsToStudents();
+	          approx.s.stabilityChecker(approx.assignedStudents, approx.emptyProject);
+	    	  approxPromotion.spaPApproxPromotion();
+	          approxPromotion.s.stabilityChecker(approxPromotion.assignedStudents, approxPromotion.emptyProject);
+	    	  gurobiModel.assignConstraints(gurobiModel);
+	    	  System.out.println("approx size " + approx.assignedStudents.size() + " approxpromotion size " + approxPromotion.assignedStudents.size() + " ip programming size: " + gurobiModel.sizeOfMatching());
+	    	  if (gurobiModel.sizeOfMatching() < approxPromotion.assignedStudents.size() || gurobiModel.sizeOfMatching() < approx.assignedStudents.size()) {
+	    		  System.out.println("ERROR ERROR APPROX/APPROXPROMOTION IS FINDING A MATCHING LARGER THAN OPTIMAL!!!!!");
+	    		  approx.printInstance(0);
+	    		  approxPromotion.printInstance(0);
+	    		  gurobiModel.printInstance(1);
+	    		  System.exit(1);
+	    	  }
+	    	  } catch (NumberFormatException e) {
+	    		  e.printStackTrace();
+	    	  }
+	    	  
 	      }
 	  }
   }
-
+  
+ 
   static void assignCapacity(int lecturerCapacity, int projectCapacity) {
 
 		Random random = new Random();

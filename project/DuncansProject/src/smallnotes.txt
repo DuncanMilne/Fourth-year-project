@@ -1,3 +1,6 @@
+things to do next time - work on ip programming as blocking coalition is clearly not working, running ipfails.txt shows this.
+
+// is the stab checker working or using pref lists with empty projects?@!?!@?!@?!@!?@!?@!?@!? #NOTE #TODO
 if all this cloning nonsense fails, output algorithm instance to file then read it in for all that want to be run
 
 4 6 2 0 0 fails IP programming

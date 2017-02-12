@@ -13,7 +13,7 @@ public class StabilityChecker {
     Digraph digraph = new Digraph();
     for (Student s:assignedStudents) {
       digraph.add(s);			// add al students as nodes
-    }
+    }	// if this stab checker working or using pref lists with empty projects?@!?!@?!@?!@!?@!?@!?@!? #NOTE #TODO
     for (Student s:assignedStudents) {			// for every student add edges to other students who have a preferable project
       for (int p = 0; p < s.rankingList.length; p++) {	// for every project they have
           if (s.rankingList[p] < s.untouchedPreferenceList.indexOf(s.proj)) { //if student prefers this project and the project is not empty and

@@ -144,10 +144,20 @@ public class mygooey {
 			  Main main = new Main();
 			      
 			  if (txtAlternatively.getText()!="") {
+				  Algorithm Algorithm = main.instanceGenerator(txtAlternatively.getText());
+				  GurobiModel algorithm = new GurobiModel(Algorithm);
+				  algorithm.untouchedStudents = algorithm.unassigned; //??
+				  try {
+					algorithm.assignConstraints(algorithm);
+				  } catch (GRBException e1) {
+					e1.printStackTrace();
+				  }
+		          algorithm.s.stabilityChecker(algorithm.assignedStudents, algorithm.emptyProject);
+		          algorithm.s.IProgrammingBlockingPairs((algorithm.assignedStudents));
+		          algorithm.printInstance(1);
 			      if (btnBoth.getSelection()){
-					  Algorithm Algorithm = main.instanceGenerator(txtAlternatively.getText());
-			    	  Approx algorithm2;
-					try {
+					 
+					/*try {
 						algorithm2 = new Approx((Algorithm) Algorithm.clone());
 			            algorithm2.assignProjectsToStudents();
 			            algorithm2.printInstance(0);
@@ -224,9 +234,9 @@ public class mygooey {
 					} catch (CloneNotSupportedException e1) {
 						// TODO Auto-generated catch block
 						e1.printStackTrace();
-					}
+					}*/
 				  } else {
-					  System.out.println("Please select which algorithm you would like to run");
+					  //System.out.println("Please select which algorithm you would like to run");
 				  }
 			  } else {
 		      int numberOfStudents = Integer.parseInt(text.getText());

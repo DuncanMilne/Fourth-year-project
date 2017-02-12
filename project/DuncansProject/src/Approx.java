@@ -19,83 +19,6 @@ public class Approx extends Algorithm{
   		//testing variables
   		
 	}
-  	public Approx(Algorithm algorithm, boolean cloning) throws CloneNotSupportedException {
-  		this.assignedStudents = new ArrayList<Student>();
-  	  for (Student s : algorithm.assignedStudents) {
-  		  Student new1 = (Student) s.clone();
-  		  this.assignedStudents.add(new1);
-  		  new1.preferenceList = new ArrayList<Project>();
-  		  new1.untouchedPreferenceList = new ArrayList<Project>();
-  		  for (Project p : s.preferenceList)
-  			  new1.preferenceList.add((Project) p.clone());
-  		  for (Project p : s.untouchedPreferenceList)
-  			  new1.untouchedPreferenceList.add((Project) p.clone());
-  	  }
-  	  
-  	  this.unassigned = new ArrayList<Student>();
-  	  for (Student s : algorithm.unassigned) {
-  		  Student new1 = (Student) s.clone();
-  		  this.unassigned.add(new1);
-  		  new1.preferenceList = new ArrayList<Project>();
-  		  new1.untouchedPreferenceList = new ArrayList<Project>();
-  		  for (Project p : s.preferenceList)
-  			  new1.preferenceList.add((Project) p.clone());
-  		  for (Project p : s.untouchedPreferenceList)
-  			  new1.untouchedPreferenceList.add((Project) p.clone());
-  	  }
-  	  
-  	  this.projectlessStudents = new ArrayList<Student>();
-  	  for (Student s : algorithm.projectlessStudents) {
-  		  Student new1 = (Student) s.clone();
-  		  this.projectlessStudents.add(new1);
-  		  new1.preferenceList = new ArrayList<Project>();
-  		  new1.untouchedPreferenceList = new ArrayList<Project>();
-  		  for (Project p : s.preferenceList)
-  			  new1.preferenceList.add((Project) p.clone());
-  		  for (Project p : s.untouchedPreferenceList)
-  			  new1.untouchedPreferenceList.add((Project) p.clone());
-  	  }
-  	  
-  	  this.untouchedStudents = new ArrayList<Student>();
-  	  for (Student s : algorithm.untouchedStudents) {
-  		  Student new1 = (Student) s.clone();
-  		  this.untouchedStudents.add(new1);
-  		  new1.preferenceList = new ArrayList<Project>();
-  		  new1.untouchedPreferenceList = new ArrayList<Project>();
-  		  for (Project p : s.preferenceList)
-  			  new1.preferenceList.add((Project) p.clone());
-  		  for (Project p : s.untouchedPreferenceList)
-  			  new1.untouchedPreferenceList.add((Project) p.clone());
-  	  }
-  	  
-  	  this.projects = new ArrayList<Project>();
-  	  for (Project s : algorithm.projects){
-  		  Project new1 = (Project) s.clone();
-  		  this.projects.add(new1);
-  		  new1.unpromoted = new ArrayList<Student>();
-  		  new1.promoted = new ArrayList<Student>();
-  		  for (Student p: s.unpromoted) 
-  			  new1.unpromoted.add((Student) p.clone());
-  		  
-  		  for (Student p: s.unpromoted) 
-  			  new1.promoted.add((Student) p.clone());
-  		  
-  	  }
-  	  
-  	  this.lecturers = new ArrayList<Lecturer>();
-  	  for (Lecturer s : algorithm.lecturers) {
-  		  Lecturer new1 = (Lecturer) s.clone();
-  		  this.lecturers.add(new1);
-  		  new1.projects = new ArrayList<Project>();
-  		  for (Project p : s.projects)
-  			  new1.projects.add((Project) p.clone());
-		  for (int i = 0; i < s.rankingList.length; i++) 
-			  new1.rankingList[i] = s.rankingList[i];
-  	  }
-
-  	  this.emptyProject = new Project("empty");
-  	  this.s = new StabilityChecker(this);
-  	}
   	
 	protected void assignProjectsToStudents() {
 
@@ -116,13 +39,13 @@ public class Approx extends Algorithm{
 	
 		while (!unassigned.isEmpty()) {
 			student = unassigned.get(randomStudent.nextInt(unassigned.size()));
-			//System.out.println(student.rankingListTracker);
+			
 			currentIndex = student.rankingListTracker;
 
 			studentsFirstProject = student.preferenceList.get(currentIndex);
 
 			fPL = studentsFirstProject.lecturer;
-
+			
 			lecturersWorstNonEmptyProject = fPL.projects.get(fPL.projects.size() - 1); //initially set it to worst project
 
 			if (fPL.assigned != 0) {

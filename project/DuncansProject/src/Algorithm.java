@@ -1,3 +1,5 @@
+import java.io.IOException;
+import java.io.PrintWriter;
 import java.util.ArrayList;
 import java.util.Random;
 
@@ -29,13 +31,34 @@ public class Algorithm implements Cloneable {
 		projectlessStudents = new ArrayList<Student>();
 		untouchedStudents = new ArrayList<Student>();
 	}
-	
-	@Override
-	public Object clone() throws CloneNotSupportedException {
-
-	    return super.clone();
+	 
+	public void writeToFile() {
+		  try{
+			    PrintWriter writer = new PrintWriter("the-instance.txt", "UTF-8");
+			    writer.println(projects.size() + " " + unassigned.size() + " " + lecturers.size());
+			    for(Project p : projects) {
+			    	writer.println(p.name + " " + p.capacity);
+			    }
+			    for (Student s : unassigned) {
+			    	String prefListString = "";
+			    	for (Project p : s.preferenceList) {
+			    		prefListString += p.name + " ";
+			    	}
+			    	writer.println(s.name + ": " + prefListString);
+			    }
+			    for (Lecturer l : lecturers) {
+			    	String projectListString = "";
+			    	for (Project p : l.projects) {
+			    		projectListString += p.name + " ";
+			    	}
+			    	writer.println(l.name + ": " + l.capacity + ": " + projectListString);
+			    }
+			    writer.close();
+		  } catch (IOException e) {
+			   // do something
+		  }
 	}
-
+		  
 	protected void findNextFavouriteProject(Student currentStudent) {
 		int max = -1;
 
@@ -125,7 +148,7 @@ public class Algorithm implements Cloneable {
 
 	void printStudents() {
 		System.out.println("PRINTING STUDENTS");
-		for (Student st: assignedStudents) {
+		for (Student st: untouchedStudents) {
 			System.out.print(st.name + " : ");
 			for (Project p: st.preferenceList) {
 				System.out.print(p.name + " ");
