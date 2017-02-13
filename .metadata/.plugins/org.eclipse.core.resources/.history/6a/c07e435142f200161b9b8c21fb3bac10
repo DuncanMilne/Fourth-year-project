@@ -191,13 +191,7 @@ public class mygooey {
 				  } else if (btnIpProgrammingModel.getSelection()) {
 					  Algorithm algorithm3 = main.instanceGenerator(txtAlternatively.getText());
 			    	  GurobiModel gurobiModel = new GurobiModel(algorithm3);
-			    	  try {
-						gurobiModel.assignConstraints(gurobiModel);
-						gurobiModel.printInstance(1);
-					} catch (GRBException e1) {
-						// TODO Auto-generated catch block
-						e1.printStackTrace();
-					}
+			    	  gurobiModel.assignConstraints(gurobiModel);
 				  }
 			  
 				  					

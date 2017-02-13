@@ -16,6 +16,8 @@ public class Approx extends Algorithm{
   		this.projectlessStudents = new ArrayList<Student>(algorithm.projectlessStudents);
   		this.untouchedStudents = new ArrayList<Student>(algorithm.untouchedStudents);
   		this.s = new StabilityChecker(this);
+  		//testing variables
+  		
 	}
   	
 	protected void assignProjectsToStudents() {

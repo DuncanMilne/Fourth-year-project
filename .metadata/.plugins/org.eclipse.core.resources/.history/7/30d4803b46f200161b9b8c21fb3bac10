@@ -90,7 +90,6 @@ public class GurobiModel extends Algorithm {
         for (GRBVar v: UCPTracker) {
         	System.out.println(v.get(GRB.DoubleAttr.X));
         }
-        
         // write model then dispose of model and environment
         //m.setInfoString(infoString);
         //grbmodel.write("SPA_IP_HR.lp");

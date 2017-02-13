@@ -188,16 +188,7 @@ public class mygooey {
 			    	  Approx approx = new Approx(algorithm1);
 			    	  approx.assignProjectsToStudents();
 			          approx.s.stabilityChecker(approx.assignedStudents, approx.emptyProject);
-				  } else if (btnIpProgrammingModel.getSelection()) {
-					  Algorithm algorithm3 = main.instanceGenerator(txtAlternatively.getText());
-			    	  GurobiModel gurobiModel = new GurobiModel(algorithm3);
-			    	  try {
-						gurobiModel.assignConstraints(gurobiModel);
-						gurobiModel.printInstance(1);
-					} catch (GRBException e1) {
-						// TODO Auto-generated catch block
-						e1.printStackTrace();
-					}
+			    	  
 				  }
 			  
 				  					
@@ -239,8 +230,8 @@ public class mygooey {
 				// TODO Auto-generated catch block
 				e1.printStackTrace();
 			}
-			}
-		  }
-		});
-}
+			}}
+	
+		);
+	}
 }

@@ -48,6 +48,7 @@ public class GurobiModel extends Algorithm {
 		int countOfMatched = 0;
 		for (Student s:assignedStudents) {
 			if (s.proj != null) {
+				//System.out.println(s.name + " " + s.proj.name);
 				if (s.proj != emptyProject) {
 					countOfMatched++;
 				}
@@ -80,16 +81,6 @@ public class GurobiModel extends Algorithm {
         else {
             setStudentAssignments(a);
         }
-        /*
-        for (GRBLinExpr v : lhsvars) {
-        	System.out.println(v.getValue());
-        }
-        for (GRBLinExpr v : rhsvars) {
-        	System.out.println(v.getValue());
-        }*/
-        for (GRBVar v: UCPTracker) {
-        	System.out.println(v.get(GRB.DoubleAttr.X));
-        }
         
         // write model then dispose of model and environment
         //m.setInfoString(infoString);
@@ -111,6 +102,7 @@ public class GurobiModel extends Algorithm {
 		}
 		
 		//need to make variables a b c and d for each student/project/lecturer combo. projects + lecturers will obv be matched
+		
 
 		for (Student s:assignedStudents){
 			
@@ -157,6 +149,8 @@ public class GurobiModel extends Algorithm {
 				 
 				GRBLinExpr Cijk = new GRBLinExpr();
 				
+				// this was causing errors at some point, it shouldnt. seems to be causing errors when # lects < # projs < # studs. 6,4,2 fails
+				//believe this works, not put too much thought in but seems to make sense
 				for (Project q:p.lecturer.projects) {
 					if (s.preferenceList.contains(q) && p!=q) {
 						Cijk.addTerm(1.0, s.grbvars.get(s.preferenceList.indexOf(q)));
@@ -184,7 +178,10 @@ public class GurobiModel extends Algorithm {
 				threeA.multAdd(1.0, Dijk);
 
 				lhsvars.add(Aijk);
+				//rhsvars.add(BijkRHS);
 				
+				//rhsvars.add(Dijk);
+				UCPTracker.add(underCapacityProjects.get(a.projects.indexOf(p)));
 				grbmodel.addConstr(threeA, GRB.LESS_EQUAL, 3, "constraint 3a");
 				i++;
 			}
@@ -255,17 +252,29 @@ public class GurobiModel extends Algorithm {
 
           grbmodel.setObjective(sumAllVariables, GRB.MAXIMIZE);
 
+          /*
+          grbmodel.optimize();
+         
+          int status = grbmodel.get(GRB.IntAttr.Status); 
+          
+          // if there is a feasible solution
+          if (status == GRB.Status.OPTIMAL) {
+              double maxSize = grbmodel.get(GRB.DoubleAttr.ObjVal);
+              // add a new constraint into the model to say that the size of matching must be at least the bound found above
+              grbmodel.addConstr(sumAllVariables, GRB.GREATER_EQUAL, (double) maxSize, "ConstraintSize");
+          }*/
      }
 
      private void blockingCoalitionConstraints(Algorithm a) throws GRBException {
     	 // First we create an envy graph
     	 
+    	 // all of the v variables are being set to 1 which shouldn't happen because everyone shouldnt envy everyone
+     	 
     	 for (Student i1:a.assignedStudents){
     		 for (Student i2: a.assignedStudents) {
     			 if (i1!=i2){
     				 GRBVar v = grbmodel.addVar(0.0, 1.0, 0.0, GRB.BINARY, i1 + " envies " + i2.name + " if this is 1.0");  
     				 v.set(GRB.DoubleAttr.Start, 0.0); // Ei,i'
-    				 UCPTracker.add(v);
     				 i1.envyList.add(v);
     				 for (Project j1:i1.preferenceList) {
     					 // for every project i1 prefers to j1
@@ -279,8 +288,6 @@ public class GurobiModel extends Algorithm {
     					     	 rhs.addTerm(1, i1.grbvars.get(i1.preferenceList.indexOf(j1)));
     					     	 rhs.addTerm(1, i2.grbvars.get(i2.preferenceList.indexOf(j2)));	
     					     	 grbmodel.addConstr(lhs, GRB.GREATER_EQUAL, rhs, "creates envygraph"); // this will set v to be 1 for any student that envies any other
-    					     	 lhsvars.add(lhs);
-    					     	 rhsvars.add(rhs);
     					     }
     					 }
     				 }
@@ -291,6 +298,7 @@ public class GurobiModel extends Algorithm {
     	 ArrayList<Integer> vertexLabels = new ArrayList<Integer>();
     	 
     	 for (int i = 0; i< a.assignedStudents.size(); i++) {
+    		 //GRBVar v = grbmodel.addVar(0, assignedStudents.size(), 0, GRB.INTEGER, "label " + i1.name);
     		 vertexLabels.add(i);
     	 }
     	 
@@ -323,7 +331,7 @@ public class GurobiModel extends Algorithm {
     	 }
      }
      
-    // The assignments have already been chosen by the constraints, this is just setting them
+    // duncans comment - the assignments have already been chosen by the constraints, this is just setting them
     public void setStudentAssignments(Algorithm a) throws GRBException {
     	// ready to save the assigned students to the studentAssignments array in the model
 
