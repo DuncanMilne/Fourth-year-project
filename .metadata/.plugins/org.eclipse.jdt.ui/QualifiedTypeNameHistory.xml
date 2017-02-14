@@ -3,8 +3,8 @@
 <fullyQualifiedTypeName name="java.util.ArrayList"/>
 <fullyQualifiedTypeName name="gurobi.GRB"/>
 <fullyQualifiedTypeName name="gurobi.GRB.IntAttr"/>
-<fullyQualifiedTypeName name="gurobi.GRB.DoubleAttr"/>
 <fullyQualifiedTypeName name="java.io.PrintWriter"/>
 <fullyQualifiedTypeName name="ApproxPromotion"/>
 <fullyQualifiedTypeName name="java.io.IOException"/>
+<fullyQualifiedTypeName name="gurobi.GRB.DoubleAttr"/>
 </qualifiedTypeNameHistroy>

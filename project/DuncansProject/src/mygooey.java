@@ -193,7 +193,7 @@ public class mygooey {
 			    	  GurobiModel gurobiModel = new GurobiModel(algorithm3);
 			    	  try {
 						gurobiModel.assignConstraints(gurobiModel);
-						gurobiModel.printInstance(1);
+						//gurobiModel.printInstance(1);
 					} catch (GRBException e1) {
 						// TODO Auto-generated catch block
 						e1.printStackTrace();

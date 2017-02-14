@@ -97,33 +97,32 @@ public class StabilityChecker {
 	
 	void IProgrammingBlockingPairs(ArrayList<Student> students) {
 		Project currentProj;
-
+		
+		//checks 3a
 		for (Student s:students) {
 			if (s.proj!=algorithm.emptyProject){
 				for (int p = 0; p < s.untouchedPreferenceList.indexOf(s.proj); p++){
 					currentProj = s.untouchedPreferenceList.get(p);
 					if (currentProj.capacity > currentProj.unpromoted.size()){
-						if (s.proj.lecturer.projects.indexOf(s.proj) > currentProj.lecturer.projects.indexOf(currentProj) && s.proj.lecturer == currentProj.lecturer){		// if the lecturer supervises both projects, and prefers one that the student also prefers
-							algorithm.printInstance(1);
-							System.out.println("DOES NOT COMPUTE, blocking pair condition 3a has been TRIGGERED"); // 3a fails
-							System.exit(1);
+						if (s.proj.lecturer == currentProj.lecturer){		// if the lecturer supervises both projects, and prefers one that the student also prefers
+							if (s.proj.lecturer.projects.indexOf(s.proj) > currentProj.lecturer.projects.indexOf(currentProj)){
+								algorithm.printInstance(1);
+								System.out.println("DOES NOT COMPUTE, blocking pair condition 3a"); // 3a fails
+								System.exit(1);
+							}
+							if (s.proj.lecturer != currentProj.lecturer){ // 3b
+								if (currentProj.lecturer.assigned < currentProj.lecturer.capacity) {
+									System.out.println("DOES NOT COMPUTE, blocking pair condition 3b");
+								}
+							}
 						}
 					}
-					
 				}
-			} else {
-				//if unassigned iterate through them all
-				// irrelevant atm cos we're just looking @ 3a.
-				/*for (Project p:s.preferenceList) {
-					if (p.capacity > p.unpromoted.size()){
-						System.out.println(s.proj.lecturer.name);
-						if (s.proj.lecturer.projects.indexOf(s.proj) < p.lecturer.projects.indexOf(p)){
-							System.out.println("DOES NOT COMPUTE"); // 3a fails
-						}
-					}
-				}*/
+			} else { // fill with 3b
+				
 			}
 		}
+		
 	}
 }
 
