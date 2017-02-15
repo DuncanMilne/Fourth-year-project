@@ -67,7 +67,7 @@ public class GurobiModel extends Algorithm {
 		
 		blockingCoalitionConstraints(a);
 		
-		assign3aConstraints(a);
+		//assign3aConstraints(a);
 		
 		assign3bConstraints(a);
 		
@@ -115,12 +115,6 @@ public class GurobiModel extends Algorithm {
 		
 		// first condition Si is unassigned or Si prefers Pj to M(Si)
 
-		
-		for (Project p: projects) {
-				GRBVar v = grbmodel.addVar(0.0, 1.0, 0.0, GRB.BINARY, p.name + " under capacity");
-				v.set(GRB.DoubleAttr.Start, 0.0);
-				underCapacityProjects.add(v); // Ei,i'
-		}
 		//need to make variables a b c and d for each student/project/lecturer combo. projects + lecturers will obv be matched
 
 		for (Student s:assignedStudents){
@@ -202,10 +196,18 @@ public class GurobiModel extends Algorithm {
 	// this condition asserts that 4/4 conditions are not true, if they are that is bad so we stop that from happening
 	private void assign3bConstraints(Algorithm a) throws GRBException {
 		
+		GRBVar v;
+		
+		for (Project p: projects) {
+				v = grbmodel.addVar(0.0, 1.0, 0.0, GRB.BINARY, p.name + " under capacity");
+				v.set(GRB.DoubleAttr.Start, 0.0);
+				underCapacityProjects.add(v); // Ei,i'
+		}
+		
 		ArrayList<GRBVar> underCapacityLecturers = new ArrayList<GRBVar>();
 		
 		for (Lecturer l: a.lecturers) {
-				GRBVar v = grbmodel.addVar(0.0, 1.0, 0.0, GRB.BINARY, l.name + " under capacity");
+				v = grbmodel.addVar(0.0, 1.0, 0.0, GRB.BINARY, l.name + " under capacity");
 				v.set(GRB.DoubleAttr.Start, 0.0);	// probably pointless
 				underCapacityLecturers.add(v); // Ei,i'
 		}
@@ -253,7 +255,7 @@ public class GurobiModel extends Algorithm {
 				GRBLinExpr sumXij = new GRBLinExpr();
 				
 				for (Project q:p.lecturer.projects) {
-					if (s.preferenceList.contains(q)) {
+					if (s.preferenceList.contains(q) && p!=q) {
 						sumXij.addTerm(1.0, s.grbvars.get(s.preferenceList.indexOf(q)));
 					}
 				}

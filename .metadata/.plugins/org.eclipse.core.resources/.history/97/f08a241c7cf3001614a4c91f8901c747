@@ -69,7 +69,7 @@ public class GurobiModel extends Algorithm {
 		
 		assign3aConstraints(a);
 		
-		assign3bConstraints(a);
+		//assign3bConstraints(a);
 		
         grbmodel.optimize();
 	   	 

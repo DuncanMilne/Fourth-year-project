@@ -1,4 +1,12 @@
-i believe a b and c are working in 3b.. not checked d extensively yet
+GRBLinExpr Cijk = new GRBLinExpr();
+				
+for (Project q:p.lecturer.projects) {
+	if (s.preferenceList.contains(q) && p!=q) {
+		Cijk.addTerm(1.0, s.grbvars.get(s.preferenceList.indexOf(q)));
+	}
+}
+
+
 
 
 
