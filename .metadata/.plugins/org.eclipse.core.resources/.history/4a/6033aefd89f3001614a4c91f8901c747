@@ -386,11 +386,9 @@ public class GurobiModel extends Algorithm {
 				
 				GRBLinExpr EijkRHS = new GRBLinExpr();
 				
-				GRBLinExpr EijkLHS = new GRBLinExpr();
-				
 				GRBLinExpr EijkBracketed = new GRBLinExpr();
 				
-				EijkRHS.addConstant(p.lecturer.capacity);
+				EijkRHS.addTerm(1.0, arg1);
 				
 				for (int j = 0; j < p.lecturer.projects.indexOf(p); j++) { // for every project lecturer prefers to j 
 					for (Student t: assignedStudents) {
@@ -402,10 +400,6 @@ public class GurobiModel extends Algorithm {
 				
 				EijkRHS.multAdd(-1.0, EijkBracketed);
 				
-				GRBVar delta = grbmodel.addVar(0.0, 1.0, 0.0, GRB.BINARY, "delta");
-				
-				EijkLHS.addTerm(p.lecturer.capacity, delta);
-				
 				GRBLinExpr threeC = new GRBLinExpr();
 				
 				threeC.multAdd(1.0, Aijk);
@@ -416,7 +410,7 @@ public class GurobiModel extends Algorithm {
 				
 				threeC.addTerm(1.0, fullLecturers.get(lecturers.indexOf(p.lecturer)));
 
-				threeC.addTerm(1.0, delta); 
+				 
 				
 				
 				grbmodel.addConstr(threeC, GRB.LESS_EQUAL, 4, "constraint 3c");

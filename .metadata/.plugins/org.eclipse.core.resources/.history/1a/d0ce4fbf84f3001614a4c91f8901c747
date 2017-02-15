@@ -378,33 +378,11 @@ public class GurobiModel extends Algorithm {
 							DijkRHS.addTerm(1.0, t.grbvars.get(t.preferenceList.indexOf(q)));
 						}
 					}
+					
 				}
 				
-				DijkRHS.addConstant(-1.0);
 				
 				grbmodel.addConstr(fullLecturers.get(lecturers.indexOf(p.lecturer)), GRB.GREATER_EQUAL, DijkRHS, "lk if full");	
-				
-				GRBLinExpr EijkRHS = new GRBLinExpr();
-				
-				GRBLinExpr EijkLHS = new GRBLinExpr();
-				
-				GRBLinExpr EijkBracketed = new GRBLinExpr();
-				
-				EijkRHS.addConstant(p.lecturer.capacity);
-				
-				for (int j = 0; j < p.lecturer.projects.indexOf(p); j++) { // for every project lecturer prefers to j 
-					for (Student t: assignedStudents) {
-						if (t.preferenceList.contains(p.lecturer.projects.indexOf(j))) {
-							EijkBracketed.addTerm(1.0, t.grbvars.get(t.preferenceList.indexOf(p.lecturer.projects.indexOf(j)))); // get whether or not a student is assigned a project the lecturer prefers to their worstnonemptyproject
-						}
-					}
-				}
-				
-				EijkRHS.multAdd(-1.0, EijkBracketed);
-				
-				GRBVar delta = grbmodel.addVar(0.0, 1.0, 0.0, GRB.BINARY, "delta");
-				
-				EijkLHS.addTerm(p.lecturer.capacity, delta);
 				
 				GRBLinExpr threeC = new GRBLinExpr();
 				
@@ -416,9 +394,6 @@ public class GurobiModel extends Algorithm {
 				
 				threeC.addTerm(1.0, fullLecturers.get(lecturers.indexOf(p.lecturer)));
 
-				threeC.addTerm(1.0, delta); 
-				
-				
 				grbmodel.addConstr(threeC, GRB.LESS_EQUAL, 4, "constraint 3c");
 
 				i++;

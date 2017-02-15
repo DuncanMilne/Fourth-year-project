@@ -402,7 +402,7 @@ public class GurobiModel extends Algorithm {
 				
 				EijkRHS.multAdd(-1.0, EijkBracketed);
 				
-				GRBVar delta = grbmodel.addVar(0.0, 1.0, 0.0, GRB.BINARY, "delta");
+				GRBVar delta = grbmodel.addVar(0.0, 1.0, 0.0, GRB.BINARY, l.name + " under capacity");
 				
 				EijkLHS.addTerm(p.lecturer.capacity, delta);
 				

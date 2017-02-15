@@ -109,14 +109,11 @@ public class StabilityChecker {
 								System.out.println("DOES NOT COMPUTE, blocking pair condition 3a"); // 3a fails
 								System.exit(1);
 							}
-							if (s.proj.lecturer != currentProj.lecturer){
+							if (s.proj.lecturer != currentProj.lecturer){ // 3b
+								if (currentProj.lecturer.assigned < currentProj.lecturer.capacity) {
+									System.out.println("DOES NOT COMPUTE, blocking pair condition 3b");
+								}
 							}
-						} else { 
-							 // 3b
-							if (currentProj.lecturer.assigned < currentProj.lecturer.capacity) {
-								System.out.println("DOES NOT COMPUTE, blocking pair condition 3b");
-							}
-							// 3c
 						}
 					}
 				}
