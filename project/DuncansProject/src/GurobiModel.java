@@ -21,6 +21,7 @@ public class GurobiModel extends Algorithm {
     boolean feasible = true;
 	ArrayList<GRBVar> underCapacityProjects = new ArrayList<GRBVar>();
 	ArrayList<GRBVar> underCapacityLecturers = new ArrayList<GRBVar>();
+	ArrayList<GRBVar> fullLecturers = new ArrayList<GRBVar>();
 	
     public GurobiModel() {
 		super();
@@ -110,7 +111,7 @@ public class GurobiModel extends Algorithm {
         //m.setInfoString(infoString);
         //grbmodel.write("SPA_IP_HR.lp");
         grbmodel.dispose();
-        env.dispose();    
+        env.dispose(); 
 	}
 	
 	// this condition asserts that 4/4 conditions are not true, if they are that is bad so we stop that from happening
@@ -310,12 +311,10 @@ public class GurobiModel extends Algorithm {
 	// this condition asserts that 4/4 conditions are not true, if they are that is bad so we stop that from happening
 	private void assign3cConstraints(Algorithm a) throws GRBException {
 
-		ArrayList<GRBVar> fullLecturers = new ArrayList<GRBVar>();
 		
 		for (Lecturer l: a.lecturers) {
-			GRBVar v = grbmodel.addVar(0.0, 1.0, 0.0, GRB.BINARY, l.name + " under capacity");
-			v.set(GRB.DoubleAttr.Start, 0.0);	// probably pointless
-			fullLecturers.add(v); // Ei,i'
+			GRBVar v = grbmodel.addVar(0.0, 1.0, 0.0, GRB.BINARY, l.name + " full");
+			fullLecturers.add(v); // Ei, i'
 		}
 		
 		for (Student s:assignedStudents){
@@ -344,16 +343,15 @@ public class GurobiModel extends Algorithm {
 				BijkRHS.addConstant(p.capacity); // instead of dividing Eijk by capacity of project, times everything else by capacity of project
 				
 				// 1- (students assigned to projects/capacity of project
-				GRBLinExpr Eijk = new GRBLinExpr();
+				GRBLinExpr bracketRHS = new GRBLinExpr();
 				
 				// Eijk is used to count how many students are subscribed to p
 				for (Student t:assignedStudents) {
-					if (t.preferenceList.contains(p)) {
-						Eijk.addTerm(1.0, t.grbvars.get(t.preferenceList.indexOf(p)));
-					}
+					if (t.preferenceList.contains(p))
+						bracketRHS.addTerm(1.0, t.grbvars.get(t.preferenceList.indexOf(p)));
 				}
 					
-				BijkRHS.multAdd(-1.0, Eijk);
+				BijkRHS.multAdd(-1.0, bracketRHS);
 					
 				grbmodel.addConstr(BijkLHS, GRB.GREATER_EQUAL, BijkRHS, "constraintname");
 
@@ -372,15 +370,19 @@ public class GurobiModel extends Algorithm {
 
 				GRBLinExpr DijkRHS = new GRBLinExpr();
 				
+				GRBLinExpr sumOfRHS = new GRBLinExpr();
+				
 				for (Student t:assignedStudents) {
 					for (Project q: t.preferenceList) {
 						if (q.lecturer == p.lecturer) {
-							DijkRHS.addTerm(1.0, t.grbvars.get(t.preferenceList.indexOf(q)));
+							sumOfRHS.addTerm(1.0, t.grbvars.get(t.preferenceList.indexOf(q)));
 						}
 					}
 				}
+
+				DijkRHS.multAdd(1.0, sumOfRHS);
 				
-				DijkRHS.addConstant(-1.0);
+				DijkRHS.addConstant(-(p.lecturer.capacity-1));
 				
 				grbmodel.addConstr(fullLecturers.get(lecturers.indexOf(p.lecturer)), GRB.GREATER_EQUAL, DijkRHS, "lk if full");	
 				
@@ -392,19 +394,21 @@ public class GurobiModel extends Algorithm {
 				
 				EijkRHS.addConstant(p.lecturer.capacity);
 				
-				for (int j = 0; j < p.lecturer.projects.indexOf(p); j++) { // for every project lecturer prefers to j 
+				for (int j = 0; j < p.lecturer.projects.indexOf(p) + 1; j++) { // for every project lecturer prefers to j 
 					for (Student t: assignedStudents) {
-						if (t.preferenceList.contains(p.lecturer.projects.indexOf(j))) {
-							EijkBracketed.addTerm(1.0, t.grbvars.get(t.preferenceList.indexOf(p.lecturer.projects.indexOf(j)))); // get whether or not a student is assigned a project the lecturer prefers to their worstnonemptyproject
+						if (t.preferenceList.contains(p.lecturer.projects.get(j))) {
+							EijkBracketed.addTerm(1.0, t.grbvars.get(t.preferenceList.indexOf(p.lecturer.projects.get(j)))); // get whether or not a student is assigned a project the lecturer prefers to their worstnonemptyproject
 						}
 					}
 				}
-				
+
 				EijkRHS.multAdd(-1.0, EijkBracketed);
 				
-				GRBVar delta = grbmodel.addVar(0.0, 1.0, 0.0, GRB.BINARY, "delta");
+				GRBVar delta = grbmodel.addVar(0.0, 1.0, 0.0, GRB.BINARY, "delta for student " + s.name + " and project " + p.name);
 				
 				EijkLHS.addTerm(p.lecturer.capacity, delta);
+				
+				grbmodel.addConstr(EijkLHS, GRB.GREATER_EQUAL, EijkRHS, "delta constraint");
 				
 				GRBLinExpr threeC = new GRBLinExpr();
 				

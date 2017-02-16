@@ -114,9 +114,18 @@ public class StabilityChecker {
 						} else { 
 							 // 3b
 							if (currentProj.lecturer.assigned < currentProj.lecturer.capacity) {
-								System.out.println("DOES NOT COMPUTE, blocking pair condition 3b");
+								algorithm.printInstance(1);
+								System.out.println("DOES NOT COMPUTE, blocking pair condition 3b"); // 3a fails
+								System.exit(1);
 							}
 							// 3c
+							if (currentProj.lecturer.assigned == currentProj.lecturer.capacity) {
+								if (currentProj.lecturer.projects.indexOf(currentProj) < s.proj.lecturer.projects.indexOf(s.proj)) {
+									algorithm.printInstance(1);
+									System.out.println("DOES NOT COMPUTE, blocking pair condition 3c"); // 3a fails
+									System.exit(1);
+								}
+							}
 						}
 					}
 				}
@@ -127,6 +136,12 @@ public class StabilityChecker {
 						if (currentProj.lecturer.capacity > currentProj.lecturer.assigned) { //if lecturer is under subscribed
 							algorithm.printInstance(1);
 							System.out.println("DOES NOT COMPUTE, blocking pair condition 3b -- empty student");
+						}
+					} else {
+						if (currentProj.lecturer.projects.indexOf(currentProj) < s.proj.lecturer.projects.indexOf(s.proj)) {
+							algorithm.printInstance(1);
+							System.out.println("DOES NOT COMPUTE, blocking pair condition 3c"); // 3a fails
+							System.exit(1);
 						}
 					}
 				}

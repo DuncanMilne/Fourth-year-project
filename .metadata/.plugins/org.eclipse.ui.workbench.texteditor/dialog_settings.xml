@@ -1,13 +1,18 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <section name="Workbench">
+	<section name="org.eclipse.ui.texteditor.GotoLineAction$GotoLineDialog_dialogBounds">
+		<item value="729" key="DIALOG_X_ORIGIN"/>
+		<item value="408" key="DIALOG_Y_ORIGIN"/>
+	</section>
 	<section name="org.eclipse.ui.texteditor.FindReplaceDialog">
 		<item value="false" key="isRegEx"/>
-		<item value="printInstance" key="selection"/>
+		<item value="EijkRHS" key="selection"/>
 		<item value="false" key="casesensitive"/>
 		<item value="false" key="incremental"/>
 		<item value="true" key="wrap"/>
 		<item value="false" key="wholeword"/>
 		<list key="findhistory">
+			<item value="eijkrhs"/>
 			<item value="printinstance"/>
 			<item value="print"/>
 			<item value="i1 i"/>
@@ -15,7 +20,6 @@
 			<item value="object"/>
 			<item value="FEASIBLE"/>
 			<item value="optimize"/>
-			<item value="ucptracker"/>
 		</list>
 		<list key="replacehistory">
 			<item value="assignedStudents"/>
