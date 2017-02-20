@@ -195,19 +195,19 @@ public class Main {
 	      if (promotion == 0) {
 	          algorithm = new ApproxPromotion(algorithm);
 	          algorithm.spaPApproxPromotion();
-	          algorithm.s.blockingCoalitionDetector(algorithm.assignedStudents, algorithm.emptyProject);      
+	          algorithm.s.stabilityChecker(algorithm.assignedStudents, algorithm.emptyProject);      
 	          algorithm.s.checkAssignedStudentsForBlockingPairs(algorithm.assignedStudents);      
 	          algorithm.s.checkUnassignedStudentsForBlockingPairs(algorithm.unassigned);
 	      } else if (promotion == 1){
 	          algorithm = new Approx(algorithm);
 	          algorithm.assignProjectsToStudents();
-	          algorithm.s.blockingCoalitionDetector(algorithm.assignedStudents, algorithm.emptyProject);
+	          algorithm.s.stabilityChecker(algorithm.assignedStudents, algorithm.emptyProject);
 	          algorithm.s.checkAssignedStudentsForBlockingPairs(algorithm.assignedStudents);      
 	          algorithm.s.checkUnassignedStudentsForBlockingPairs(algorithm.unassigned);
 	      } else if (promotion == 2){
 	    	  algorithm = new GurobiModel(algorithm);
 	    	  algorithm.assignConstraints(algorithm);
-	          algorithm.s.blockingCoalitionDetector(algorithm.untouchedStudents, algorithm.emptyProject);
+	          algorithm.s.stabilityChecker(algorithm.untouchedStudents, algorithm.emptyProject);
 	          algorithm.s.IProgrammingBlockingPairs(algorithm.assignedStudents);
 	      } else if (promotion == 3) {
 	    	  algorithm.writeToFile();
@@ -216,9 +216,9 @@ public class Main {
 	    	  Algorithm algorithm2 = instanceGenerator("the-instance.txt");
 	    	  Approx approx = new Approx(algorithm2);
 	          approx.assignProjectsToStudents();
-	          approx.s.blockingCoalitionDetector(algorithm2.assignedStudents, algorithm2.emptyProject);
+	          approx.s.stabilityChecker(algorithm2.assignedStudents, algorithm2.emptyProject);
 	          approxPromotion.spaPApproxPromotion();
-	          approxPromotion.s.blockingCoalitionDetector(approxPromotion.assignedStudents, approxPromotion.emptyProject);
+	          approxPromotion.s.stabilityChecker(approxPromotion.assignedStudents, approxPromotion.emptyProject);
 	      } else {
 	    	  algorithm.writeToFile();
 	    	  try {
@@ -229,28 +229,18 @@ public class Main {
 	    	  ApproxPromotion approxPromotion = new ApproxPromotion(algorithm2);
 	    	  GurobiModel gurobiModel = new GurobiModel(algorithm3);
 	    	  approx.assignProjectsToStudents();
-	          approx.s.blockingCoalitionDetector(approx.assignedStudents, approx.emptyProject);
+	          approx.s.stabilityChecker(approx.assignedStudents, approx.emptyProject);
 	    	  approxPromotion.spaPApproxPromotion();
-	          approxPromotion.s.blockingCoalitionDetector(approxPromotion.assignedStudents, approxPromotion.emptyProject);
+	          approxPromotion.s.stabilityChecker(approxPromotion.assignedStudents, approxPromotion.emptyProject);
 	    	  gurobiModel.assignConstraints(gurobiModel);
 	          gurobiModel.s.IProgrammingBlockingPairs(algorithm.assignedStudents);
 	    	  System.out.println("approx size " + approx.assignedStudents.size() + " approxpromotion size " + approxPromotion.assignedStudents.size() + " ip programming size: " + gurobiModel.sizeOfMatching());
 	    	  if (gurobiModel.sizeOfMatching() < approxPromotion.assignedStudents.size() || gurobiModel.sizeOfMatching() < approx.assignedStudents.size()) {
 	    		  System.out.println("ERROR ERROR APPROX/APPROXPROMOTION IS FINDING A MATCHING LARGER THAN OPTIMAL!!!!!");
-	    		  //approx.printInstance(0);
-	    		  //approxPromotion.printInstance(0);
-	    		  //gurobiModel.printInstance(1);
-	    		  System.exit(1);
-	    	  }
-	    	  if (((gurobiModel.sizeOfMatching()/3)*2) > approxPromotion.assignedStudents.size()){ 
-	    		  System.out.println("ERROR ERROR APPROXPROMOTION FOUND INSTANCE WITH A SIZE LESS THAN 2/3 OF OPTIMAL MATCHING!!");
-	    		  //gurobiModel.printInstance(1);
-	    		  //approxPromotion.printInstance(0);
-	    	  }
-	    	  if (((gurobiModel.sizeOfMatching()/2) > approx.assignedStudents.size())){ 
-	    		  System.out.println("ERROR ERROR APPROX FOUND INSTANCE WITH A SIZE LESS THAN 2/3 OF OPTIMAL MATCHING!!");
+	    		  approx.printInstance(0);
+	    		  approxPromotion.printInstance(0);
 	    		  gurobiModel.printInstance(1);
-	    		  //approx.printInstance(0);
+	    		  System.exit(1);
 	    	  }
 	    	  } catch (NumberFormatException e) {
 	    		  e.printStackTrace();

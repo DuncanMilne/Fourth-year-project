@@ -88,6 +88,25 @@ public class GurobiModel extends Algorithm {
             setStudentAssignments(a);
         }
         
+        /*
+        int x = 0;
+        for (GRBLinExpr v : lhsvars) {
+        	if (x%2 == 0)
+        		System.out.println("lhs " + v.getValue());
+        	else {
+        		System.out.println("rhs " +v.getValue());
+        	}
+        	x++;
+        }
+        
+        for (GRBLinExpr v : rhsvars) {
+        	System.out.println("rhs " + v.getValue());
+        }
+        
+        for (GRBVar v: UCPTracker) {
+        	System.out.println(v.get(GRB.DoubleAttr.X));
+        }*/
+        
         // write model then dispose of model and environment
         //m.setInfoString(infoString);
         //grbmodel.write("SPA_IP_HR.lp");

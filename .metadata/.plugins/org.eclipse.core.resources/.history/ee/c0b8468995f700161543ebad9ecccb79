@@ -154,9 +154,9 @@ public class mygooey {
 				    	  ApproxPromotion approxPromotion = new ApproxPromotion(algorithm2);
 				    	  GurobiModel gurobiModel = new GurobiModel(algorithm3);
 				    	  approx.assignProjectsToStudents();
-				          approx.s.blockingCoalitionDetector(approx.assignedStudents, approx.emptyProject);
+				          approx.s.stabilityChecker(approx.assignedStudents, approx.emptyProject);
 				    	  approxPromotion.spaPApproxPromotion();
-				          approxPromotion.s.blockingCoalitionDetector(approxPromotion.assignedStudents, approxPromotion.emptyProject);
+				          approxPromotion.s.stabilityChecker(approxPromotion.assignedStudents, approxPromotion.emptyProject);
 				    	  gurobiModel.assignConstraints(gurobiModel);
 						  gurobiModel.s.IProgrammingBlockingPairs(gurobiModel.assignedStudents);
 				    	  System.out.println("approx size " + approx.assignedStudents.size() + " approxpromotion size " + approxPromotion.assignedStudents.size() + " ip programming size: " + gurobiModel.sizeOfMatching());
@@ -176,19 +176,19 @@ public class mygooey {
 			    	  Approx approx = new Approx(algorithm1);
 			    	  ApproxPromotion approxPromotion = new ApproxPromotion(algorithm2);
 			    	  approx.assignProjectsToStudents();
-			          approx.s.blockingCoalitionDetector(approx.assignedStudents, approx.emptyProject);
+			          approx.s.stabilityChecker(approx.assignedStudents, approx.emptyProject);
 			    	  approxPromotion.spaPApproxPromotion();
-			          approxPromotion.s.blockingCoalitionDetector(approxPromotion.assignedStudents, approxPromotion.emptyProject);
+			          approxPromotion.s.stabilityChecker(approxPromotion.assignedStudents, approxPromotion.emptyProject);
 				  } else if (btnSpapapproxpromotion.getSelection()) {
 					  Algorithm algorithm1 = main.instanceGenerator(txtAlternatively.getText());
 			    	  ApproxPromotion approxPromotion = new ApproxPromotion(algorithm1);
 			    	  approxPromotion.spaPApproxPromotion();
-			          approxPromotion.s.blockingCoalitionDetector(approxPromotion.assignedStudents, approxPromotion.emptyProject);			  
+			          approxPromotion.s.stabilityChecker(approxPromotion.assignedStudents, approxPromotion.emptyProject);			  
 				  } else if (btnSpapapprox.getSelection()) {
 					  Algorithm algorithm1 = main.instanceGenerator(txtAlternatively.getText());
 			    	  Approx approx = new Approx(algorithm1);
 			    	  approx.assignProjectsToStudents();
-			          approx.s.blockingCoalitionDetector(approx.assignedStudents, approx.emptyProject);
+			          approx.s.stabilityChecker(approx.assignedStudents, approx.emptyProject);
 				  } else if (btnIpProgrammingModel.getSelection()) {
 					  Algorithm algorithm3 = main.instanceGenerator(txtAlternatively.getText());
 			    	  GurobiModel gurobiModel = new GurobiModel(algorithm3);

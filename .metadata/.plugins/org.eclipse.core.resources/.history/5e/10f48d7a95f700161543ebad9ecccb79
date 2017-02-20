@@ -47,7 +47,7 @@ public class Student {
 	}
 
 	public void promote() {
-		// Effectively "promotes a student", allowing them to attempt to apply to each project in their preference list again. Only relevant for Spa-p-approx-promotion
+		// Effectively "promotes a student", only relevant for Spa-p-approx-promotion
 		promoted = true;
 		preferenceList = new ArrayList<Project>(untouchedPreferenceList);
 		rankingListTracker = 0;

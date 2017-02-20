@@ -19,13 +19,21 @@ public class StabilityChecker {
             for (Student x:assignedStudents) { // make digraph edge from current student to all currently assigned to preferred project
               if (x.proj == s.untouchedPreferenceList.get(p)) {
             	  digraph.add(s, x);
+            	  System.out.println("test");
               }
             }
         }
       }
     }
-    
-    if (!digraph.isDag()) {
+    //	System.out.println("current graph " + digraph);
+    if (digraph.isDag()){
+      //System.out.println("The graph is a dag");
+      if (algorithm.instances == 1){ // if there is only one instance requested, print the instance
+    	  algorithm.printInstance(0);
+      }
+      //algorithm.printInstance(0);
+      //System.out.println("dag");
+    } else {
       System.out.println("The graph is not a dag");
       algorithm.printInstance(0);
       System.exit(0);

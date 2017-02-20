@@ -8,24 +8,32 @@ public class StabilityChecker {
     this.algorithm = algorithm;
   }
 
-  protected void blockingCoalitionDetector(ArrayList<Student> assignedStudents, Project emptyProject) {
+  protected void stabilityChecker(ArrayList<Student> assignedStudents, Project emptyProject) {
+    /* BLOCKING COALITIONS */
     Digraph digraph = new Digraph();
     for (Student s:assignedStudents) {
-      digraph.add(s); // add all students as nodes
-    }
-    for (Student s:assignedStudents) { // for every student add edges to other students who have a preferable project
-      for (int p = 0; p < s.rankingList.length; p++) { // for every project they have
-          if (s.rankingList[p] < s.untouchedPreferenceList.indexOf(s.proj)) { // If student prefers this project to their current project
-            for (Student x:assignedStudents) { // make digraph edge from current student to all currently assigned to preferred project
-              if (x.proj == s.untouchedPreferenceList.get(p)) {
+      digraph.add(s);			// add al students as nodes
+    }	// if this stab checker working or using pref lists with empty projects?@!?!@?!@?!@!?@!?@!?@!? #NOTE #TODO
+    for (Student s:assignedStudents) {			// for every student add edges to other students who have a preferable project
+      for (int p = 0; p < s.rankingList.length; p++) {	// for every project they have
+          if (s.rankingList[p] < s.untouchedPreferenceList.indexOf(s.proj)) { //if student prefers this project and the project is not empty and
+            for (Student x:assignedStudents) {	 // make di edge from current student to all currently assigned
+              if (x.proj == s.untouchedPreferenceList.get(p) && x.proj != emptyProject) {
             	  digraph.add(s, x);
               }
             }
         }
       }
     }
-    
-    if (!digraph.isDag()) {
+    //	System.out.println("current graph " + digraph);
+    if (digraph.isDag()){
+      //System.out.println("The graph is a dag");
+      if (algorithm.instances == 1){ // if there is only one instance requested, print the instance
+    	  algorithm.printInstance(0);
+      }
+      //algorithm.printInstance(0);
+      //System.out.println("dag");
+    } else {
       System.out.println("The graph is not a dag");
       algorithm.printInstance(0);
       System.exit(0);
