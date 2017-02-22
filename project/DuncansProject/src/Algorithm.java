@@ -2,10 +2,7 @@ import java.io.IOException;
 import java.io.PrintWriter;
 import java.util.ArrayList;
 import java.util.Random;
-
-import gurobi.GRB;
 import gurobi.GRBException;
-import gurobi.GRBVar;
 
 public class Algorithm implements Cloneable {
 
@@ -80,7 +77,6 @@ public class Algorithm implements Cloneable {
 				}
 			}
 		}
-
 		// if we didn't find a contender
 		if (max == -1) {
 
@@ -202,15 +198,17 @@ public class Algorithm implements Cloneable {
 			}
 			// remove a random student from the lecturersWorstNonEmptyProject
 			removeStudent = worstNonEmptyProject.unpromoted.get(removeInt);
+			worstNonEmptyProject.unpromoted.remove(removeStudent);
 		} else {
-	 	 int removeInt = random.nextInt((worstNonEmptyProject.promoted.size())-1);
-	 	 if (removeInt != 0) {
-	 		 removeInt--; // allows access to each student
-	 	 }
-	 	 // remove a random student from the lecturersWorstNonEmptyProject
-	 	 removeStudent = worstNonEmptyProject.promoted.get(removeInt);
-	  }
-		worstNonEmptyProject.unpromoted.remove(removeStudent);
+		 	 int removeInt = random.nextInt((worstNonEmptyProject.promoted.size()));
+		 	 if (removeInt != 0) {
+		 		 removeInt--; // allows access to each student
+		 	 }
+		 	 // remove a random student from the lecturersWorstNonEmptyProject
+		 	removeStudent = worstNonEmptyProject.promoted.get(removeInt);
+			worstNonEmptyProject.promoted.remove(removeStudent);
+		}
+		
 		removeStudent.proj = null;
 
 		removeStudent.preferenceList.set(removeStudent.preferenceList.indexOf(worstNonEmptyProject), emptyProject);

@@ -12,6 +12,7 @@
 		<item value="true" key="wrap"/>
 		<item value="false" key="wholeword"/>
 		<list key="findhistory">
+			<item value="sta"/>
 			<item value="eijkrhs"/>
 			<item value="printinstance"/>
 			<item value="print"/>
@@ -19,7 +20,6 @@
 			<item value="obj"/>
 			<item value="object"/>
 			<item value="FEASIBLE"/>
-			<item value="optimize"/>
 		</list>
 		<list key="replacehistory">
 			<item value="assignedStudents"/>

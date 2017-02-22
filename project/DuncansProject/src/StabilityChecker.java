@@ -25,6 +25,7 @@ public class StabilityChecker {
       }
     }
     
+    // If a blocking coalition is found, print the instance and halt execution
     if (!digraph.isDag()) {
       System.out.println("The graph is not a dag");
       algorithm.printInstance(0);
@@ -33,16 +34,19 @@ public class StabilityChecker {
   }
 
   void checkAssignedStudentsForBlockingPairs(ArrayList<Student> assignedStudents){
-    Project currentProj;
+    
+	Project currentProj;
     Project lecturersWorstNonEmptyProject=null;
+    
     int rLT; // finds rating of current project
-    /* BLOCKING PAIRS */
+    
     for (Student s:assignedStudents) {
-      rLT = s.rankingList[s.rankingListTracker];
+      rLT = s.preferenceList.indexOf(s.proj);
       for (int p = 0; p < s.rankingList.length; p++) {
-        if (s.rankingList[p] < rLT &&  s.rankingListTracker != p) { //finds all preferred projects by student
+        if (s.rankingList[p] < rLT &&  s.preferenceList.indexOf(s.proj) != p) { //finds all preferred projects by student
           currentProj = s.untouchedPreferenceList.get(p);
-          if (currentProj.capacity != currentProj.unpromoted.size()){
+          if (currentProj.capacity != (currentProj.unpromoted.size()+currentProj.promoted.size())){
+        	  System.out.println("test");
             if (currentProj.lecturer.capacity == currentProj.lecturer.assigned) {
               //currently just use location in lecturers list of projects to determine which they prefers #TODO FIX
               lecturersWorstNonEmptyProject = Algorithm.lecturersWorstNonEmptyProject(currentProj.lecturer, currentProj);
@@ -51,7 +55,7 @@ public class StabilityChecker {
                 algorithm.printInstance(0);
               }
             } else {
-              //System.out.println("ERROR: Assigned student with under capacity teacher");
+              System.out.println("ERROR: Assigned student with under capacity teacher");
               algorithm.printInstance(0);
 
             }
@@ -94,7 +98,8 @@ public class StabilityChecker {
 			if (s.proj!=algorithm.emptyProject){
 				for (int p = 0; p < s.untouchedPreferenceList.indexOf(s.proj); p++){
 					currentProj = s.untouchedPreferenceList.get(p);
-					if (currentProj.capacity > currentProj.unpromoted.size()){
+					if (currentProj.capacity > currentProj.unpromoted.size()){ // do we even use unpromoted in ip programming?? 
+						System.out.println("this should print at some point??");
 						if (s.proj.lecturer == currentProj.lecturer){		// if the lecturer supervises both projects, and prefers one that the student also prefers
 							if (s.proj.lecturer.projects.indexOf(s.proj) > currentProj.lecturer.projects.indexOf(currentProj)){
 								algorithm.printInstance(1);

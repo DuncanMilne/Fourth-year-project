@@ -80,7 +80,7 @@ public class Approx extends Algorithm{
 					Student removeStudent = lecturersWorstNonEmptyProject.unpromoted.get(removeInt);
 					lecturersWorstNonEmptyProject.unpromoted.remove(removeStudent);
 					removeStudent.proj = null;
-					System.out.println("remove studewnt name " + removeStudent.name);
+					//System.out.println("remove student name " + removeStudent.name);
 					removeStudent.preferenceList.set(removeStudent.preferenceList.indexOf(lecturersWorstNonEmptyProject), emptyProject);
 
 					findNextFavouriteProject(removeStudent);
