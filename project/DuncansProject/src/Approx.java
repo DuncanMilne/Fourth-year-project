@@ -48,13 +48,13 @@ public class Approx extends Algorithm{
 
 			if (fPL.assigned != 0) {
 				//iterate over all lecturers projects backwards to find worst nonEmptyProject
-				lecturersWorstNonEmptyProject = lecturersWorstNonEmptyProject(fPL, lecturersWorstNonEmptyProject);
+				lecturersWorstNonEmptyProject = fPL.worstNonEmptyProject(lecturersWorstNonEmptyProject);
 			}
 
 			// if project is full || lecturer is full and this is lecturers worst project
-			if (studentsFirstProject.unpromoted.size() == studentsFirstProject.capacity || (fPL.assigned == fPL.capacity && lecturersWorstNonEmptyProject == studentsFirstProject)) {
+			if (studentsFirstProject.unpromoted.size() == studentsFirstProject.capacity || (fPL.isFull() && lecturersWorstNonEmptyProject == studentsFirstProject)) {
 				student.preferenceList.set(currentIndex, emptyProject);
-				findNextFavouriteProject(student);
+				student.findNextFavouriteProject(this);
 			} else {
 
 				// temporarily set project as students assigned project
@@ -65,7 +65,7 @@ public class Approx extends Algorithm{
 				unassigned.remove(student);
 				fPL.assigned++;
 
-				lecturersWorstNonEmptyProject = lecturersWorstNonEmptyProject(fPL, lecturersWorstNonEmptyProject);
+				lecturersWorstNonEmptyProject = fPL.worstNonEmptyProject(lecturersWorstNonEmptyProject);
 				
 				if (fPL.assigned > fPL.capacity) { // if lecturer is over subscribed
 					
@@ -83,7 +83,7 @@ public class Approx extends Algorithm{
 					//System.out.println("remove student name " + removeStudent.name);
 					removeStudent.preferenceList.set(removeStudent.preferenceList.indexOf(lecturersWorstNonEmptyProject), emptyProject);
 
-					findNextFavouriteProject(removeStudent);
+					removeStudent.findNextFavouriteProject(this);
 
 					if (removeStudent.rankingListTracker != -1){	//if they dont only have rejected projects
 						unassigned.add(removeStudent);
@@ -93,7 +93,7 @@ public class Approx extends Algorithm{
 					fPL.assigned--;
 				}
 		
-				if (fPL.capacity == fPL.assigned) {
+				if (fPL.isFull()) {
 					
 					for (int i = (fPL.projects.indexOf(lecturersWorstNonEmptyProject)+1); i < fPL.projects.size(); i++){
 						redundantProject = fPL.projects.get(i);
@@ -112,7 +112,7 @@ public class Approx extends Algorithm{
 
 							if (location!= -1) {
 								s.preferenceList.set(location, emptyProject);
-								findNextFavouriteProject(s);
+								s.findNextFavouriteProject(this);
 							}
 					}
 						
@@ -131,7 +131,7 @@ public class Approx extends Algorithm{
 						if (location!= -1) {
 							if (s.preferenceList.get(location)!= s.proj){
 								s.preferenceList.set(location, emptyProject);
-								findNextFavouriteProject(s);
+								s.findNextFavouriteProject(this);
 							}
 						}
 				}

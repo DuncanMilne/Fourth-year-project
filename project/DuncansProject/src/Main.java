@@ -11,73 +11,6 @@ public class Main {
 
   public static void main(String[] args) {
 	  mygooey.main(args);
-	/*
-	Scanner standardInput = new Scanner(System.in);
-	System.out.print("Enter a file name or x to generate random instances: ");
-	String choice = standardInput.nextLine();
-
-    // #NOTE for all cases project students wants to be assigned is undersubscribed
-    // pass in a 1 as an argument if u want to run this version
-
-    if (!choice.equals("x")) {
-
-      algorithm = instanceGenerator(choice);
-
-      createRankingLists();
-
-      algorithm.s.stabilityChecker(algorithm.assignedStudents, algorithm.unassigned, algorithm.emptyProject);
-      algorithm.s.checkAssignedStudentsForBlockingPairs(algorithm.assignedStudents);
-      algorithm.s.checkUnassignedStudentsForBlockingPairs(algorithm.unassigned);
-
-    } else {
-      // Done so we know what the arguments actually do
-      System.out.print("Enter how many instances you would like to generate ");
-      int numberOfInstances = Integer.parseInt(standardInput.nextLine());
-
-      System.out.print("Enter how many projects you would like to generate ");
-      int numberOfProjects = Integer.parseInt(standardInput.nextLine());
-
-      System.out.print("Enter how many students you would like to generate ");
-      int numberOfStudents = Integer.parseInt(standardInput.nextLine());
-
-      System.out.print("Enter how many lecturers you would like to generate ");
-      int numberOfLecturers = Integer.parseInt(standardInput.nextLine());
-
-      System.out.print("Enter how much extra capacity for lecturers you would like ");
-      int lecturerCapacity = Integer.parseInt(standardInput.nextLine());
-
-      System.out.print("Enter how much extra capacity for projects you would like ");
-      int projectCapacity = Integer.parseInt(standardInput.nextLine());
-
-      int[] arguments = new int[] {numberOfProjects, numberOfStudents, numberOfLecturers, lecturerCapacity, projectCapacity};
-
-      if (numberOfLecturers + lecturerCapacity < numberOfProjects) {
-
-        while (numberOfLecturers + lecturerCapacity < numberOfProjects) {
-
-          System.out.println("Lecturer + lecturer capacity must be larger than number of projects");
-
-          System.out.print("Enter how many projects you would like to generate ");
-          numberOfProjects = Integer.parseInt(standardInput.nextLine());
-
-          System.out.print("Enter how many lecturers you would like to generate ");
-          numberOfLecturers = Integer.parseInt(standardInput.nextLine());
-
-          System.out.print("Enter how much extra capacity for lecturers you would like ");
-          lecturerCapacity = Integer.parseInt(standardInput.nextLine());
-        }
-      }
-      
-      standardInput.close();
-
-      int i = 0;
-
-      while (i<numberOfInstances) {
-        go(arguments, args[0]);
-        i++;
-      }
-    }
-	*/
   }
 
   Algorithm instanceGenerator(String fileName) {
@@ -364,23 +297,27 @@ public class Main {
           s.rankingList[i] = i;  // Initially set rankings so index 0 is favourite, 1 is second favourite etc..
         }
       }
+      
       for (Student s: algorithm.assignedStudents) {
           s.rankingList = new int[s.preferenceList.size()];
           for (int i = 0; i < s.rankingList.length; i++) {
             s.rankingList[i] = i;  // Initially set rankings so index 0 is favourite, 1 is second favourite etc..
           }
-        }
+      }
+      
       for (Student s: algorithm.untouchedStudents) {
           s.rankingList = new int[s.preferenceList.size()];
           for (int i = 0; i < s.rankingList.length; i++) {
             s.rankingList[i] = i;  // Initially set rankings so index 0 is favourite, 1 is second favourite etc..
           }
-        }
+      }
+      
       for (Lecturer l: algorithm.lecturers) {
         l.rankingList = new int[l.projects.size()];
         for (int i = 0; i < l.rankingList.length; i++) {
           l.rankingList[i] = i;
         }
       }
+      
     }
 }

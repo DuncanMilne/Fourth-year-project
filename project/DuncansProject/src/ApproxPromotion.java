@@ -70,11 +70,11 @@ protected void spaPApproxPromotion() {
 
         fPL = firstProj.lecturer;
 
-        wNEP = lecturersWorstNonEmptyProject(fPL, wNEP);
+        wNEP = fPL.worstNonEmptyProject(wNEP);
 
 
         // Checks to see if project is full OR lecturer is full and the favourite project is the lecturer's worst non empty project
-        if (((firstProj.unpromoted.size() + firstProj.promoted.size()) == firstProj.capacity || (fPL.assigned == fPL.capacity && wNEP == firstProj))){
+        if (((firstProj.unpromoted.size() + firstProj.promoted.size()) == firstProj.capacity || (fPL.isFull() && wNEP == firstProj))){
 
           // if student is unpromoted or there is no unpromoted student assigned to firstProj
           if (!stud.promoted || firstProj.unpromoted.size()==0){
@@ -97,7 +97,7 @@ protected void spaPApproxPromotion() {
             
             assignStudentToProj(stud, firstProj, fPL, wNEP);
           }
-        } else if (fPL.assigned==fPL.capacity&& fPL.rankingList[fPL.projects.indexOf(wNEP)] < fPL.rankingList[fPL.projects.indexOf(firstProj)]) {
+        } else if (fPL.isFull() && fPL.rankingList[fPL.projects.indexOf(wNEP)] < fPL.rankingList[fPL.projects.indexOf(firstProj)]) {
             	stud.preferenceList.set(currentIndex, emptyProject);
                 findNextFavouriteProject(stud);
               
@@ -117,7 +117,7 @@ protected void spaPApproxPromotion() {
     assignedStudents.add(stud);
     unassigned.remove(stud);
     fPL.assigned++;
-    wNEP = lecturersWorstNonEmptyProject(fPL, wNEP);
+    wNEP = fPL.worstNonEmptyProject(wNEP);
     // if lecturer is oversubscribed
     if (fPL.assigned > fPL.capacity) {
       removeStudentFromArrayList(fPL, wNEP);

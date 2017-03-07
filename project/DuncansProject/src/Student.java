@@ -52,5 +52,40 @@ public class Student {
 		preferenceList = new ArrayList<Project>(untouchedPreferenceList);
 		rankingListTracker = 0;
 	}
+	
+	protected void findNextFavouriteProject(Algorithm a) {
+		int max = -1;
+
+		// iterates over students full ranking list
+		for (int k = 0; k < rankingList.length; k++) {
+
+			// found potential next favourite project
+			if (preferenceList.get(k) != a.emptyProject){
+
+				// if previous contender has been found
+				if (max !=-1){
+
+					// compare current with max
+ 					if (rankingList[k] < rankingList[max]) {
+						max = k;
+					}
+				} else { // no contender found, this must be favourite
+					max = k;
+				}
+			}
+		}
+		// if we didn't find a contender
+		if (max == -1) {
+
+			// student is now projectless
+			a.unassigned.remove(this);
+			a.projectlessStudents.add(this);
+			rankingListTracker = -1;
+		} else {
+
+			// set students favourite project tracker to max
+			rankingListTracker = max;
+		}
+	}
 
 }

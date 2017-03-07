@@ -56,46 +56,46 @@ public class mygooey {
 	 */
 	protected void createContents() {
 		shell = new Shell();
-		shell.setSize(615, 328);
+		shell.setSize(543, 308);
 		shell.setText("SWT Application");
 
 		Label lblNumberOfStudents = new Label(shell, SWT.NONE);
-		lblNumberOfStudents.setBounds(10, 10, 144, 15);
+		lblNumberOfStudents.setBounds(30, 10, 144, 15);
 		lblNumberOfStudents.setText("Number of Students");
 
 		Label lblNumberOfProjects = new Label(shell, SWT.NONE);
-		lblNumberOfProjects.setBounds(151, 10, 109, 15);
+		lblNumberOfProjects.setBounds(170, 10, 109, 15);
 		lblNumberOfProjects.setText("Number of Projects");
 
 		Label lblNumberOfLecturers = new Label(shell, SWT.NONE);
-		lblNumberOfLecturers.setBounds(283, 10, 163, 15);
+		lblNumberOfLecturers.setBounds(298, 10, 163, 15);
 		lblNumberOfLecturers.setText("Number of Lecturers");
 
 		Label lblAdditionalCapacityFor = new Label(shell, SWT.NONE);
-		lblAdditionalCapacityFor.setBounds(10, 58, 190, 15);
+		lblAdditionalCapacityFor.setBounds(21, 58, 190, 15);
 		lblAdditionalCapacityFor.setText("Additional Capacity for Lecturers");
 
 		Label lblAdditionalCapacityFor_1 = new Label(shell, SWT.NONE);
-		lblAdditionalCapacityFor_1.setBounds(206, 58, 190, 15);
+		lblAdditionalCapacityFor_1.setBounds(217, 58, 190, 15);
 		lblAdditionalCapacityFor_1.setText("Additional Capacity for Projects");
 
 		text = new Text(shell, SWT.BORDER);
-		text.setBounds(30, 31, 76, 21);
+		text.setBounds(45, 31, 76, 21);
 
 		text_1 = new Text(shell, SWT.BORDER);
-		text_1.setBounds(172, 31, 76, 21);
+		text_1.setBounds(184, 31, 76, 21);
 
 		text_2 = new Text(shell, SWT.BORDER);
-		text_2.setBounds(293, 31, 76, 21);
+		text_2.setBounds(320, 31, 76, 21);
 
 		text_3 = new Text(shell, SWT.BORDER);
-		text_3.setBounds(48, 79, 76, 21);
+		text_3.setBounds(78, 79, 76, 21);
 
 		text_4 = new Text(shell, SWT.BORDER);
-		text_4.setBounds(253, 79, 76, 21);
+		text_4.setBounds(261, 79, 76, 21);
 
 		Button btnRunAlgorithm = new Button(shell, SWT.NONE);
-		btnRunAlgorithm.setBounds(158, 236, 102, 25);
+		btnRunAlgorithm.setBounds(209, 234, 102, 25);
 		btnRunAlgorithm.setText("Run Algorithm");
 
 		Label lblHowManyTimes = new Label(shell, SWT.NONE);
@@ -103,14 +103,14 @@ public class mygooey {
 		lblHowManyTimes.setText("How many times would you like the algorithm to run?");
 
 		text_5 = new Text(shell, SWT.BORDER);
-		text_5.setBounds(30, 209, 76, 21);
+		text_5.setBounds(108, 209, 76, 21);
 
 		Button btnSpapapprox = new Button(shell, SWT.RADIO);
-		btnSpapapprox.setBounds(10, 112, 102, 16);
+		btnSpapapprox.setBounds(30, 110, 102, 16);
 		btnSpapapprox.setText("SPA-P-APPROX");
 
 		Button btnSpapapproxpromotion = new Button(shell, SWT.RADIO);
-		btnSpapapproxpromotion.setBounds(10, 134, 185, 16);
+		btnSpapapproxpromotion.setBounds(30, 132, 185, 16);
 		btnSpapapproxpromotion.setText("SPA-P-APPROX-PROMOTION");
 
 		Button btnBoth = new Button(shell, SWT.RADIO);
@@ -119,22 +119,27 @@ public class mygooey {
 			public void widgetSelected(SelectionEvent e) {
 			}
 		});
-		btnBoth.setBounds(10, 156, 224, 16);
+		btnBoth.setBounds(30, 154, 224, 16);
 		btnBoth.setText("Compare approximation algorithms");
 		
 		Button btnIpProgrammingModel = new Button(shell, SWT.RADIO);
-		btnIpProgrammingModel.setBounds(228, 112, 146, 16);
+		btnIpProgrammingModel.addSelectionListener(new SelectionAdapter() {
+			@Override
+			public void widgetSelected(SelectionEvent e) {
+			}
+		});
+		btnIpProgrammingModel.setBounds(248, 110, 146, 16);
 		btnIpProgrammingModel.setText("IP programming model");
 		
 		Button btnCompareThreeImplementations = new Button(shell, SWT.RADIO);
-		btnCompareThreeImplementations.setBounds(228, 134, 196, 16);
+		btnCompareThreeImplementations.setBounds(248, 132, 196, 16);
 		btnCompareThreeImplementations.setText("Compare Three Implementations");
 		
 		txtAlternatively = new Text(shell, SWT.BORDER);
-		txtAlternatively.setBounds(448, 209, 76, 21);
+		txtAlternatively.setBounds(365, 209, 76, 21);
 		
 		Label lblAlternativelyEnterAn = new Label(shell, SWT.NONE);
-		lblAlternativelyEnterAn.setBounds(383, 187, 206, 15);
+		lblAlternativelyEnterAn.setBounds(318, 187, 206, 15);
 		lblAlternativelyEnterAn.setText("Alternatively, enter an input file name");
 
 		btnRunAlgorithm.addMouseListener(new MouseAdapter() {

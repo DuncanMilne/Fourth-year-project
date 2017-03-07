@@ -30,6 +30,28 @@ public class Lecturer {
 		this.assigned = 0;
 	}
 	
-}
+	public boolean isFull(){
+		return capacity == assigned;
+	}
+	
+	// Returns lecturersWorstNonEmptyProject
+	public Project worstNonEmptyProject(Project lecturersWorstNonEmptyProject) {
+		boolean foundNonEmpty = false;
+		// iterate from the end as the last entry will contain the worst project
+		for (int i = projects.size()-1; i>-1; i--){
 
-// should create full method in lecturer that returns true if lecturer.capacity = lecturer.assigned
+			// if project is not empty
+			if (projects.get(i).unpromoted.size() + projects.get(i).promoted.size()>0){
+					lecturersWorstNonEmptyProject = projects.get(i);
+					i=-1;
+					foundNonEmpty = true;
+			}
+		}
+		if (foundNonEmpty == true) {
+			return lecturersWorstNonEmptyProject;
+		} else { 
+			return projects.get(projects.size()-1); // we return their worst as opposed to returning their optimal, if optimal is the only option
+		}
+	}
+	
+}

@@ -56,60 +56,7 @@ public class Algorithm implements Cloneable {
 		  }
 	}
 		  
-	protected void findNextFavouriteProject(Student currentStudent) {
-		int max = -1;
 
-		// iterates over students full ranking list
-		for (int k = 0; k < currentStudent.rankingList.length; k++) {
-
-			// found potential next favourite project
-			if (currentStudent.preferenceList.get(k) != emptyProject){
-
-				// if previous contender has been found
-				if (max !=-1){
-
-					// compare current with max
- 					if (currentStudent.rankingList[k] < currentStudent.rankingList[max]) {
-						max = k;
-					}
-				} else { // no contender found, this must be favourite
-					max = k;
-				}
-			}
-		}
-		// if we didn't find a contender
-		if (max == -1) {
-
-			// student is now projectless
-			unassigned.remove(currentStudent);
-			projectlessStudents.add(currentStudent);
-			currentStudent.rankingListTracker = -1;
-		} else {
-
-			// set students favourite project tracker to max
-			currentStudent.rankingListTracker = max;
-		}
-	}
-
-	// Returns lecturersWorstNonEmptyProject
-	public static Project lecturersWorstNonEmptyProject(Lecturer fPL, Project lecturersWorstNonEmptyProject) {
-		boolean foundNonEmpty = false;
-		// iterate from the end as the last entry will contain the worst project
-		for (int i = fPL.projects.size()-1; i>-1; i--){
-
-			// if project is not empty
-			if (fPL.projects.get(i).unpromoted.size() + fPL.projects.get(i).promoted.size()>0){
-					lecturersWorstNonEmptyProject = fPL.projects.get(i);
-					i=-1;
-					foundNonEmpty = true;
-			}
-		}
-		if (foundNonEmpty == true) {
-			return lecturersWorstNonEmptyProject;
-		} else { 
-			return fPL.projects.get(fPL.projects.size()-1); // we return their worst as opposed to returning their optimal, if optimal is the only option
-		}
-	}
 
 	public void printInstance(int constraint) {
 		
@@ -213,7 +160,7 @@ public class Algorithm implements Cloneable {
 
 		removeStudent.preferenceList.set(removeStudent.preferenceList.indexOf(worstNonEmptyProject), emptyProject);
 
-		findNextFavouriteProject(removeStudent);
+		removeStudent.findNextFavouriteProject(this);
 
 		if (removeStudent.rankingListTracker != -1){	//if they don't only have rejected projects
 			unassigned.add(removeStudent);
@@ -223,7 +170,7 @@ public class Algorithm implements Cloneable {
 		firstProjectsLecturer.assigned--;
 	}
 
-	protected void  spaPApproxPromotion(){} //#TODO work out how to make these abstract?
+	protected void spaPApproxPromotion(){} //#TODO work out how to make these abstract?
 
 	protected void assignProjectsToStudents() {}
 	

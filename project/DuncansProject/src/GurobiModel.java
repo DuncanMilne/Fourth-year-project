@@ -22,6 +22,7 @@ public class GurobiModel extends Algorithm {
 	ArrayList<GRBVar> underCapacityProjects = new ArrayList<GRBVar>();
 	ArrayList<GRBVar> underCapacityLecturers = new ArrayList<GRBVar>();
 	ArrayList<GRBVar> fullLecturers = new ArrayList<GRBVar>();
+	ArrayList<GRBVar> gammas = new ArrayList<GRBVar>();
 	
     public GurobiModel() {
 		super();
@@ -86,6 +87,10 @@ public class GurobiModel extends Algorithm {
         }
         else {
             setStudentAssignments(a);
+        }
+        
+        for (GRBVar v: deltas){
+        	System.out.println(v.get(DoubleAttr.X))
         }
         
         // write model then dispose of model and environment
@@ -298,6 +303,12 @@ public class GurobiModel extends Algorithm {
 			fullLecturers.add(v); // Ei, i'
 		}
 		
+		
+		for (Lecturer l: a.lecturers) {
+			GRBVar v = grbmodel.addVar(0.0, 1.0, 0.0, GRB.BINARY, l.name + " gamma");
+			gammas.add(v); 
+		}
+		
 		for (Student s:assignedStudents){
 
 			int i = 0; //tracks current project location in pref list
@@ -373,8 +384,8 @@ public class GurobiModel extends Algorithm {
 				
 				GRBLinExpr EijkBracketed = new GRBLinExpr();
 				
-				EijkRHS.addConstant(p.lecturer.capacity);
-				
+				// \gamma_k >= (\sum_{i’=1}^{n_1}\sum_{p_j’\in P_k} x_{i’,j’}) + 1 – d_k.  
+
 				for (int j = 0; j < p.lecturer.projects.indexOf(p) + 1; j++) { // for every project lecturer prefers to j 
 					for (Student t: assignedStudents) {
 						if (t.preferenceList.contains(p.lecturer.projects.get(j))) {
@@ -383,27 +394,42 @@ public class GurobiModel extends Algorithm {
 					}
 				}
 
-				EijkRHS.multAdd(-1.0, EijkBracketed);
+				EijkRHS.multAdd(1.0, EijkBracketed);
+
+				EijkRHS.addConstant(1.0);
 				
-				GRBVar delta = grbmodel.addVar(0.0, 1.0, 0.0, GRB.BINARY, "delta for student " + s.name + " and project " + p.name);
+				EijkRHS.addConstant(-p.lecturer.capacity);
 				
-				EijkLHS.addTerm(p.lecturer.capacity, delta);
-				
+				EijkLHS.addTerm(1.0, gammas.get(lecturers.indexOf(p.lecturer)));
+
 				grbmodel.addConstr(EijkLHS, GRB.GREATER_EQUAL, EijkRHS, "delta constraint");
-				
+
 				GRBLinExpr threeC = new GRBLinExpr();
-				
+
 				threeC.multAdd(1.0, Aijk);
-				
+
 				threeC.addTerm(1.0, underCapacityProjects.get(a.projects.indexOf(p)));
-				
+
 				threeC.multAdd(1.0, Cijk);
-				
+
 				threeC.addTerm(1.0, fullLecturers.get(lecturers.indexOf(p.lecturer)));
 
-				threeC.addTerm(1.0, delta); 
-				
-				
+				threeC.addTerm(1.0, gammas.get(lecturers.indexOf(p.lecturer))); 
+
+				/* 
+				 * We noticed a slight issue with the constraint for case 3(c) of a blocking pair 
+				 * which is intended to enforce \gamma_k=1 if l_k is full.  This was based on an 
+				 * inequality with d_k-1 in the denominator in my original notes.  I think we 
+				 * multiplied both sides through by d_k-1 to eliminate fractions from the 
+				 * inequality.  However there is still a problem which emerged from my discussion 
+				 * with Sofiat just now: what if d_k=1!  My suggestion is to replace the constraint 
+				 * for \gamma_k that you have implemented with the following one: 
+				 * \gamma_k >= (\sum_{i’=1}^{n_1}\sum_{p_j’\in P_k} x_{i’,j’}) + 1 – d_k.  
+				 * If the lecturer is full, the double summation is d_k, so this reduces to 
+				 * \gamma_k>=1.  If the lecturer is under-subscribed then the double summation is 
+				 * at most d_k-1 so the right-hand side is at most 0.	
+				*/
+
 				grbmodel.addConstr(threeC, GRB.LESS_EQUAL, 4, "constraint 3c");
 
 				i++;

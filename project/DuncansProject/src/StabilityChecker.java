@@ -49,7 +49,7 @@ public class StabilityChecker {
         	  System.out.println("test");
             if (currentProj.lecturer.capacity == currentProj.lecturer.assigned) {
               //currently just use location in lecturers list of projects to determine which they prefers #TODO FIX
-              lecturersWorstNonEmptyProject = Algorithm.lecturersWorstNonEmptyProject(currentProj.lecturer, currentProj);
+              lecturersWorstNonEmptyProject = currentProj.lecturer.worstNonEmptyProject(currentProj);
               if (currentProj.lecturer.projects.indexOf(currentProj) < currentProj.lecturer.projects.indexOf(lecturersWorstNonEmptyProject)) {
                 System.out.println("ERROR: Assigned student with full teacher who prefers this project");
                 algorithm.printInstance(0);
@@ -77,7 +77,7 @@ public class StabilityChecker {
 					currentProj = s.untouchedPreferenceList.get(p);
 					if (currentProj.lecturer.capacity == currentProj.lecturer.assigned) {
 						//currently just use location in lecturers list of projects to determine which they prefers #TODO FIX
-						lecturersWorstNonEmptyProject = Algorithm.lecturersWorstNonEmptyProject(currentProj.lecturer, currentProj);
+						lecturersWorstNonEmptyProject = currentProj.lecturer.worstNonEmptyProject(currentProj);
 						if (currentProj.lecturer.projects.indexOf(currentProj) < currentProj.lecturer.projects.indexOf(lecturersWorstNonEmptyProject)) {
 							System.out.println("ERROR: unassigned student with full teacher who prefers this project");
 							algorithm.printInstance(0);
@@ -147,15 +147,3 @@ public class StabilityChecker {
 		
 	}
 }
-
-/*if (currentProj.lecturer.capacity == currentProj.lecturer.assigned) {
-					//currently just use location in lecturers list of projects to determine which they prefers #TODO FIX
-					lecturersWorstNonEmptyProject = Algorithm.lecturersWorstNonEmptyProject(currentProj.lecturer, currentProj);
-					if (currentProj.lecturer.projects.indexOf(currentProj) < currentProj.lecturer.projects.indexOf(lecturersWorstNonEmptyProject)) {
-						System.out.println("ERROR: unassigned student with full teacher who prefers this project");
-						algorithm.printInstance(0);
-					}
-				} else {
-					System.out.println("ERROR: unassigned student with under capacity teacher");
-					algorithm.printInstance(0);
-				*/
