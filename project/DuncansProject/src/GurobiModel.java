@@ -21,7 +21,7 @@ public class GurobiModel extends Algorithm {
     boolean feasible = true;
 	ArrayList<GRBVar> underCapacityProjects = new ArrayList<GRBVar>();
 	ArrayList<GRBVar> underCapacityLecturers = new ArrayList<GRBVar>();
-	ArrayList<GRBVar> fullLecturers = new ArrayList<GRBVar>();
+	ArrayList<GRBVar> delta = new ArrayList<GRBVar>();
 	ArrayList<GRBVar> gammas = new ArrayList<GRBVar>();
 	
     public GurobiModel() {
@@ -87,10 +87,7 @@ public class GurobiModel extends Algorithm {
         }
         else {
             setStudentAssignments(a);
-        }
-        
-        for (GRBVar v: deltas){
-        	System.out.println(v.get(DoubleAttr.X))
+            System.out.println("success");
         }
         
         // write model then dispose of model and environment
@@ -300,13 +297,13 @@ public class GurobiModel extends Algorithm {
 		
 		for (Lecturer l: a.lecturers) {
 			GRBVar v = grbmodel.addVar(0.0, 1.0, 0.0, GRB.BINARY, l.name + " full");
-			fullLecturers.add(v); // Ei, i'
+			delta.add(v); // Ei, i'
 		}
 		
-		
+		GRBVar currentDelta;
 		for (Lecturer l: a.lecturers) {
-			GRBVar v = grbmodel.addVar(0.0, 1.0, 0.0, GRB.BINARY, l.name + " gamma");
-			gammas.add(v); 
+			currentDelta = grbmodel.addVar(0.0, 1.0, 0.0, GRB.BINARY, l.name + " gamma");
+			gammas.add(currentDelta); 
 		}
 		
 		for (Student s:assignedStudents){
@@ -324,6 +321,7 @@ public class GurobiModel extends Algorithm {
 				for (int j = 0; j < i; j ++) {
 					sumOf.addTerm(1.0, s.grbvars.get(j));
 				}
+				
 				Aijk.multAdd(-1.0, sumOf);
 
 				GRBLinExpr BijkRHS = new GRBLinExpr();
@@ -364,19 +362,23 @@ public class GurobiModel extends Algorithm {
 				
 				GRBLinExpr sumOfRHS = new GRBLinExpr();
 				
-				for (Student t:assignedStudents) {
-					for (Project q: t.preferenceList) {
-						if (q.lecturer == p.lecturer) {
-							sumOfRHS.addTerm(1.0, t.grbvars.get(t.preferenceList.indexOf(q)));
+				for (int j = 0; j <= p.lecturer.projects.indexOf(p); j++) { // this should be for every proj they prefer to Pk
+					for (Student t: assignedStudents) {
+						if (t.preferenceList.contains(p.lecturer.projects.get(j))) {
+							sumOfRHS.addTerm(1.0, t.grbvars.get(t.preferenceList.indexOf(p.lecturer.projects.get(j)))); // get whether or not a student is assigned a project the lecturer prefers to their worstnonemptyproject
 						}
 					}
 				}
 
-				DijkRHS.multAdd(1.0, sumOfRHS);
+				DijkRHS.multAdd(-1.0, sumOfRHS);
+
+				DijkRHS.addConstant(p.lecturer.capacity);
 				
-				DijkRHS.addConstant(-(p.lecturer.capacity-1));
+				GRBLinExpr DijkLHS = new GRBLinExpr();
+				 
+				DijkLHS.addTerm(p.lecturer.capacity, delta.get(lecturers.indexOf(p.lecturer)));
 				
-				grbmodel.addConstr(fullLecturers.get(lecturers.indexOf(p.lecturer)), GRB.GREATER_EQUAL, DijkRHS, "lk if full");	
+				grbmodel.addConstr(DijkLHS, GRB.GREATER_EQUAL, DijkRHS, "lk if full");	
 				
 				GRBLinExpr EijkRHS = new GRBLinExpr();
 				
@@ -385,8 +387,9 @@ public class GurobiModel extends Algorithm {
 				GRBLinExpr EijkBracketed = new GRBLinExpr();
 				
 				// \gamma_k >= (\sum_{i’=1}^{n_1}\sum_{p_j’\in P_k} x_{i’,j’}) + 1 – d_k.  
-
-				for (int j = 0; j < p.lecturer.projects.indexOf(p) + 1; j++) { // for every project lecturer prefers to j 
+				// this should be for Dijk as opposed to Eijk, should change Eijk back to what was before
+				// how many students does the lecturer have
+				for (int j = 0; j < p.lecturer.projects.size(); j++) { // this should be every proj they offer
 					for (Student t: assignedStudents) {
 						if (t.preferenceList.contains(p.lecturer.projects.get(j))) {
 							EijkBracketed.addTerm(1.0, t.grbvars.get(t.preferenceList.indexOf(p.lecturer.projects.get(j)))); // get whether or not a student is assigned a project the lecturer prefers to their worstnonemptyproject
@@ -400,9 +403,10 @@ public class GurobiModel extends Algorithm {
 				
 				EijkRHS.addConstant(-p.lecturer.capacity);
 				
+				
 				EijkLHS.addTerm(1.0, gammas.get(lecturers.indexOf(p.lecturer)));
 
-				grbmodel.addConstr(EijkLHS, GRB.GREATER_EQUAL, EijkRHS, "delta constraint");
+				grbmodel.addConstr(EijkLHS, GRB.GREATER_EQUAL, EijkRHS, "gamma constraint");
 
 				GRBLinExpr threeC = new GRBLinExpr();
 
@@ -412,10 +416,18 @@ public class GurobiModel extends Algorithm {
 
 				threeC.multAdd(1.0, Cijk);
 
-				threeC.addTerm(1.0, fullLecturers.get(lecturers.indexOf(p.lecturer)));
+				threeC.addTerm(1.0, delta.get(lecturers.indexOf(p.lecturer)));
 
 				threeC.addTerm(1.0, gammas.get(lecturers.indexOf(p.lecturer))); 
 
+				
+				/* 
+				 * david suggest to print out more diagnostic information such as
+				 * <= 5 instead of objective minimise summation of all alphas gammas and deltas from 3c only
+				 * can throw away objective to maximise stable matching
+				 * should find a stable matching 
+				*/
+				
 				/* 
 				 * We noticed a slight issue with the constraint for case 3(c) of a blocking pair 
 				 * which is intended to enforce \gamma_k=1 if l_k is full.  This was based on an 
