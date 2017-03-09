@@ -1,4 +1,0 @@
-<?xml version="1.0" encoding="UTF-8"?>
-<session version="1.0">
-<refactoring comment="Copy element &apos;DM_book_example_HR_adapted.txt&apos; to &apos;SWT PROJECT/src/IPProgrammingExamples&apos;&#x0D;&#x0A;- Original project: &apos;SWT PROJECT&apos;&#x0D;&#x0A;- Destination element: &apos;SWT PROJECT/src/IPProgrammingExamples&apos;&#x0D;&#x0A;- Original element: &apos;DM_book_example_HR_adapted.txt&apos;" description="Copy file" destination="/src&lt;IPProgrammingExamples" element1="DM_book_example_HR_adapted.txt" files="1" flags="589830" folders="0" id="org.eclipse.jdt.ui.copy" policy="org.eclipse.jdt.ui.copyResources" stamp="1485121628665" units="0" version="1.0"/>
-</session>
