@@ -184,23 +184,26 @@ public class mygooey {
 			          approx.s.blockingCoalitionDetector(approx.assignedStudents, approx.emptyProject);
 			    	  approxPromotion.spaPApproxPromotion();
 			          approxPromotion.s.blockingCoalitionDetector(approxPromotion.assignedStudents, approxPromotion.emptyProject);
+			    	  System.out.println("approx size " + approx.assignedStudents.size() + " approxpromotion size " + approxPromotion.assignedStudents.size());
 				  } else if (btnSpapapproxpromotion.getSelection()) {
 					  Algorithm algorithm1 = main.instanceGenerator(txtAlternatively.getText());
 			    	  ApproxPromotion approxPromotion = new ApproxPromotion(algorithm1);
 			    	  approxPromotion.spaPApproxPromotion();
-			          approxPromotion.s.blockingCoalitionDetector(approxPromotion.assignedStudents, approxPromotion.emptyProject);			  
+			          approxPromotion.s.blockingCoalitionDetector(approxPromotion.assignedStudents, approxPromotion.emptyProject);
+			          approxPromotion.printInstance(0);
 				  } else if (btnSpapapprox.getSelection()) {
 					  Algorithm algorithm1 = main.instanceGenerator(txtAlternatively.getText());
 			    	  Approx approx = new Approx(algorithm1);
 			    	  approx.assignProjectsToStudents();
 			          approx.s.blockingCoalitionDetector(approx.assignedStudents, approx.emptyProject);
+			          approx.printInstance(0);
 				  } else if (btnIpProgrammingModel.getSelection()) {
 					  Algorithm algorithm3 = main.instanceGenerator(txtAlternatively.getText());
 			    	  GurobiModel gurobiModel = new GurobiModel(algorithm3);
 			    	  try {
 						gurobiModel.assignConstraints(gurobiModel);
 						gurobiModel.s.IProgrammingBlockingPairs(gurobiModel.assignedStudents);
-						//gurobiModel.printInstance(1);
+						gurobiModel.printInstance(1);
 					} catch (GRBException e1) {
 						// TODO Auto-generated catch block
 						e1.printStackTrace();

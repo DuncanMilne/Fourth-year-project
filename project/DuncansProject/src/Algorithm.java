@@ -29,9 +29,9 @@ public class Algorithm implements Cloneable {
 		untouchedStudents = new ArrayList<Student>();
 	}
 	 
-	public void writeToFile() {
+	public void writeToFile(String filename) {
 		  try{
-			    PrintWriter writer = new PrintWriter("the-instance.txt", "UTF-8");
+			    PrintWriter writer = new PrintWriter(filename, "UTF-8");
 			    writer.println(projects.size() + " " + unassigned.size() + " " + lecturers.size());
 			    for(Project p : projects) {
 			    	writer.println(p.name + " " + p.capacity);
@@ -66,7 +66,7 @@ public class Algorithm implements Cloneable {
 
 		this.printLecturers();
 		
-		if (constraint == 0 ) { 
+		if (constraint == 0) { 
 			this.printMatching();
 		} else  {
 			this.printConstraintMatching();
@@ -118,11 +118,11 @@ public class Algorithm implements Cloneable {
 	}
 	
 	void printConstraintMatching() {
-		System.out.println("PRINTING MATCHING");
+		System.out.println("PRINTING CONSTRAINT MATCHING");
+		
 		int countOfMatched = 0;
 		for (Student s:assignedStudents) {
 			if (s.proj != null) {
-				//System.out.println(s.name + " " + s.proj.name);
 				if (s.proj != emptyProject) {
 					countOfMatched++;
 					System.out.println(s.name + " " + s.proj.name);

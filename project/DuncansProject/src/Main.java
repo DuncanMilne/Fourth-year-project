@@ -116,8 +116,13 @@ public class Main {
   }
 
   public void go(int[] arguments, int promotion) throws GRBException, CloneNotSupportedException {
-	  
-	  for (int i=0; i< arguments[5]; i++) {
+
+	  int iterations = arguments[5];
+	  int avgCardinalityApprox = 0;
+	  long avgTimeApprox = 0;
+	  long avgTimePromotion = 0;
+	  int avgCardinalityPromotion = 0;
+	  for (int i=0; i < iterations; i++) {
 		  algorithm = new Algorithm();
 	      populate(arguments); // args0 is number of students to generate
 	      assignCapacity(arguments[3], arguments[4]);	//assigns capacity to the projects, args are lecturer capacity and project capacity
@@ -131,29 +136,43 @@ public class Main {
 	          algorithm.s.blockingCoalitionDetector(algorithm.assignedStudents, algorithm.emptyProject);      
 	          algorithm.s.checkAssignedStudentsForBlockingPairs(algorithm.assignedStudents);      
 	          algorithm.s.checkUnassignedStudentsForBlockingPairs(algorithm.unassigned);
+	          algorithm.printInstance(0);
 	      } else if (promotion == 1){
 	          algorithm = new Approx(algorithm);
 	          algorithm.assignProjectsToStudents();
 	          algorithm.s.blockingCoalitionDetector(algorithm.assignedStudents, algorithm.emptyProject);
 	          algorithm.s.checkAssignedStudentsForBlockingPairs(algorithm.assignedStudents);      
 	          algorithm.s.checkUnassignedStudentsForBlockingPairs(algorithm.unassigned);
+	          algorithm.printInstance(0);
 	      } else if (promotion == 2){
+	    	  algorithm.writeToFile("the-instance.txt");
 	    	  algorithm = new GurobiModel(algorithm);
 	    	  algorithm.assignConstraints(algorithm);
 	          algorithm.s.blockingCoalitionDetector(algorithm.untouchedStudents, algorithm.emptyProject);
 	          algorithm.s.IProgrammingBlockingPairs(algorithm.assignedStudents);
 	      } else if (promotion == 3) {
-	    	  algorithm.writeToFile();
+	    	  algorithm.writeToFile("the-instance.txt");
+	    	  algorithm.writeToFile("n" + algorithm.unassigned.size() + "instance" + i + ".txt");
 	    	  Algorithm algorithm1 = instanceGenerator("the-instance.txt");
 	    	  ApproxPromotion approxPromotion = new ApproxPromotion(algorithm1);
 	    	  Algorithm algorithm2 = instanceGenerator("the-instance.txt");
 	    	  Approx approx = new Approx(algorithm2);
+	    	  Date startDateForApprox = new java.util.Date();
 	          approx.assignProjectsToStudents();
+	    	  Date endDateForApprox = new java.util.Date();
 	          approx.s.blockingCoalitionDetector(algorithm2.assignedStudents, algorithm2.emptyProject);
+	    	  Date startDateForPromotion = new java.util.Date();
 	          approxPromotion.spaPApproxPromotion();
+	    	  Date endDateForPromotion = new java.util.Date();
 	          approxPromotion.s.blockingCoalitionDetector(approxPromotion.assignedStudents, approxPromotion.emptyProject);
+	          avgCardinalityApprox += approx.assignedStudents.size();
+	          avgTimeApprox += endDateForApprox.getTime() - startDateForApprox.getTime();
+	          avgCardinalityPromotion += approxPromotion.assignedStudents.size();
+	          avgTimePromotion += endDateForPromotion.getTime() - startDateForPromotion.getTime();
+	          if (i == iterations-1)
+	        	  System.out.println("Average approx size " + avgCardinalityApprox/iterations + " which took " + (double) avgTimeApprox/iterations + " milliseconds\nAverage approxpromotion size " + avgCardinalityPromotion/iterations + " which took " + (double) avgTimePromotion/iterations + " milliseconds");
 	      } else {
-	    	  algorithm.writeToFile();
+	    	  algorithm.writeToFile("the-instance.txt");
 	    	  try {
 	    	  Algorithm algorithm1 = instanceGenerator("the-instance.txt");
 	    	  Algorithm algorithm2 = instanceGenerator("the-instance.txt");

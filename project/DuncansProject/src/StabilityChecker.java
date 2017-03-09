@@ -99,7 +99,6 @@ public class StabilityChecker {
 				for (int p = 0; p < s.untouchedPreferenceList.indexOf(s.proj); p++){
 					currentProj = s.untouchedPreferenceList.get(p);
 					if (currentProj.capacity > currentProj.unpromoted.size()){ // do we even use unpromoted in ip programming?? 
-						System.out.println("this should print at some point??");
 						if (s.proj.lecturer == currentProj.lecturer){		// if the lecturer supervises both projects, and prefers one that the student also prefers
 							if (s.proj.lecturer.projects.indexOf(s.proj) > currentProj.lecturer.projects.indexOf(currentProj)){
 								algorithm.printInstance(1);
@@ -113,13 +112,16 @@ public class StabilityChecker {
 							if (currentProj.lecturer.assigned < currentProj.lecturer.capacity) {
 								algorithm.printInstance(1);
 								System.out.println("DOES NOT COMPUTE, blocking pair condition 3b"); // 3a fails
+								System.out.println("lecturer "+ currentProj.lecturer.name);
+								System.out.println("project "+ currentProj.name);
+								System.out.println("student "+ s.name);
 								System.exit(1);
 							}
 							// 3c
 							if (currentProj.lecturer.assigned == currentProj.lecturer.capacity) {
 								if (currentProj.lecturer.projects.indexOf(currentProj) < s.proj.lecturer.projects.indexOf(s.proj)) {
 									algorithm.printInstance(1);
-									System.out.println("DOES NOT COMPUTE, blocking pair condition 3c"); // 3a fails
+									System.out.println("DOES NOT COMPUTE, blocking pair condition 3c"); // 3c fails
 									System.exit(1);
 								}
 							}
@@ -137,7 +139,7 @@ public class StabilityChecker {
 					} else {
 						if (currentProj.lecturer.projects.indexOf(currentProj) < s.proj.lecturer.projects.indexOf(s.proj)) {
 							algorithm.printInstance(1);
-							System.out.println("DOES NOT COMPUTE, blocking pair condition 3c"); // 3a fails
+							System.out.println("DOES NOT COMPUTE, blocking pair condition 3c here"); // 3c fails
 							System.exit(1);
 						}
 					}
